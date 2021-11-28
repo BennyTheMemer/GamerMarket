@@ -5,6 +5,14 @@ const theme = extendTheme({
     outline: "0 0 0 1px",
   },
   colors: {
+    grey: {
+      400: "#E3E3E3",
+      500: "#D3D3D3",
+      600: "#B9B9B9",
+      700: "#8D8D8D",
+      800: "#707070",
+      900: "4F4F4F",
+    },
     red: {
       500: "#ff0000",
       600: "#b80000",
@@ -59,6 +67,20 @@ const theme = extendTheme({
     },
     Button: {
       variants: {
+        register: {
+          borderRadius: "50",
+          _hover: {
+            bgColor: "grey.400",
+          },
+        },
+        items: {
+          color: "grey.700",
+          _hover: {
+            bgColor: "pink",
+            color: "black",
+          },
+        },
+
         gamer: {
           color: "white",
           bgColor: "red.600",

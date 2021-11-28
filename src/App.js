@@ -8,6 +8,7 @@ import ReactDOM from "react-dom";
 import Header from "./layouts/Header";
 import Explore from "./views/explore";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import SellerPage from "./views/SellerPage";
 import {
   Modal,
   ModalOverlay,
@@ -32,96 +33,95 @@ function App() {
 
   return (
     <ThemeProvider>
-      <Box w="100%" h="100vh">
-        <Router>
-          <>
-            <Modal
-              finalFocusRef={finalRef}
-              initialFocusRef={initialRef}
-              isCentered
-              isOpen={isOpen}
-              onClose={onClose}
-            >
-              <ModalOverlay />
-              <ModalContent bg="black" border="1px" borderColor="red.800">
-                <ModalHeader>Register</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                  <Input
-                    border="0px"
-                    borderRight="1px"
-                    borderBottom="1px"
-                    focusBorderColor="white"
-                    ref={initialRef}
-                    type="username"
-                    placeholder="username"
-                    mb="5%"
-                  />
-                  <Input
-                    border="0px"
-                    borderRight="1px"
-                    borderBottom="1px"
-                    focusBorderColor="white"
-                    type="email"
-                    placeholder="email"
-                    mb="5%"
-                  />
-                  <Input
-                    border="0px"
-                    borderRight="1px"
-                    borderBottom="1px"
-                    focusBorderColor="white"
-                    type="password"
-                    placeholder="password"
-                    mb="5%"
-                  />
-                  <Input
-                    border="0px"
-                    borderRight="1px"
-                    borderBottom="1px"
-                    focusBorderColor="white"
-                    type="password"
-                    mb="5%"
-                    placeholder="confirm password"
-                    shadow="0px"
-                  />
-                </ModalBody>
+      <Router>
+        <>
+          <Modal
+            finalFocusRef={finalRef}
+            initialFocusRef={initialRef}
+            isCentered
+            isOpen={isOpen}
+            onClose={onClose}
+          >
+            <ModalOverlay />
+            <ModalContent bg="black" border="1px" borderColor="red.800">
+              <ModalHeader>Register</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Input
+                  border="0px"
+                  borderRight="1px"
+                  borderBottom="1px"
+                  focusBorderColor="white"
+                  ref={initialRef}
+                  type="username"
+                  placeholder="username"
+                  mb="5%"
+                />
+                <Input
+                  border="0px"
+                  borderRight="1px"
+                  borderBottom="1px"
+                  focusBorderColor="white"
+                  type="email"
+                  placeholder="email"
+                  mb="5%"
+                />
+                <Input
+                  border="0px"
+                  borderRight="1px"
+                  borderBottom="1px"
+                  focusBorderColor="white"
+                  type="password"
+                  placeholder="password"
+                  mb="5%"
+                />
+                <Input
+                  border="0px"
+                  borderRight="1px"
+                  borderBottom="1px"
+                  focusBorderColor="white"
+                  type="password"
+                  mb="5%"
+                  placeholder="confirm password"
+                  shadow="0px"
+                />
+              </ModalBody>
 
-                <ModalFooter>
-                  <Button variant="gamer">Register</Button>
-                </ModalFooter>
-              </ModalContent>
-            </Modal>
-          </>
+              <ModalFooter>
+                <Button variant="gamer">Register</Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+        </>
 
-          <Routes>
-            {/* If the current URL is /about, this route is rendered
+        <Routes>
+          {/* If the current URL is /about, this route is rendered
             while the rest are ignored */}
-            <Route path="/about"></Route>
+          <Route path="/about"></Route>
 
-            {/* Note how these two routes are ordered. The more specific
+          {/* Note how these two routes are ordered. The more specific
             path="/contact/:id" comes before path="/contact" so that
             route will render when viewing an individual contact */}
-            <Route path="/contact/:id"></Route>
-            <Route path="/contact"></Route>
+          <Route path="/contact/:id"></Route>
+          <Route path="/contact"></Route>
 
-            {/* If none of the previous routes render anything,
+          {/* If none of the previous routes render anything,
             this route acts as a fallback.
 
             Important: A route with path="/" will *always* match
             the URL because all URLs begin with a /. So that's
             why we put this one last of all */}
-            <Route
-              element={<LandingPage onClick={handleChange} />}
-              path="/"
-            ></Route>
-            <Route
-              element={<Explore onClick={handleChange} />}
-              path="/home"
-            ></Route>
-          </Routes>
-        </Router>
-      </Box>
+          <Route
+            element={<LandingPage onClick={handleChange} />}
+            path="/"
+          ></Route>
+          <Route
+            element={<Explore onClick={handleChange} />}
+            path="/home"
+          ></Route>
+          <Route element={<SellerPage />} path="/user/:id" />
+        </Routes>
+      </Router>
     </ThemeProvider>
   );
 }
