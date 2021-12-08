@@ -18,6 +18,7 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  Tooltip,
 } from "@chakra-ui/react";
 import "./landingpage.css";
 import Header from "../layouts/Header";
@@ -33,6 +34,7 @@ import Seller from "../assets/Seller.jpg";
 import NoAuthHeader from "../components/NoAuthHeader";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import "./productpage.css";
+import { TiTick } from "react-icons/ti";
 
 export default function Article(props) {
   const [userNumber, setUserNumber] = useState("Número");
@@ -119,9 +121,16 @@ export default function Article(props) {
                 </NavLink>
 
                 <Flex ml="5%" mb="7%" flexDirection="column">
-                  <Text fontWeight="semibold" fontSize="1.3rem">
-                    {item.seller}
-                  </Text>
+                  <Flex flexDirection="row">
+                    <Text fontWeight="semibold" fontSize="1.3rem">
+                      {item.seller}
+                    </Text>
+                    <Tooltip hasArrow label="Este user está certificado!">
+                      <span>
+                        <Icon h="7" color="red" as={TiTick} />
+                      </span>
+                    </Tooltip>
+                  </Flex>
                   <Text>Registado desde:</Text>
                   <Text>Last time online:</Text>
                 </Flex>
@@ -138,6 +147,9 @@ export default function Article(props) {
                   <ModalBody>
                     <Input h="30vh"></Input>
                   </ModalBody>
+                  <ModalFooter>
+                    <Button>Send</Button>
+                  </ModalFooter>
                 </ModalContent>
               </Modal>
               <Button onClick={onOpen}>Mensagem</Button>

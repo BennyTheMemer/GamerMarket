@@ -91,7 +91,7 @@ const theme = extendTheme({
           textTransform: "uppercase",
           letterSpacing: "tight",
           _hover: {
-            bgColor: "red.800",
+            bgColor: "red.700",
             color: "white",
           },
         },

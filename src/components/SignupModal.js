@@ -114,7 +114,13 @@ export default function SignUp() {
             </ModalBody>
 
             <ModalFooter>
-              <Button onClick={changeSignIn} bg="white">
+              <Button
+                _hover={{ bg: "white" }}
+                _focus={{ outline: "none" }}
+                _active={{ bg: "white" }}
+                onClick={changeSignIn}
+                bg="white"
+              >
                 <Text textDecoration="underline">Já tens conta?</Text>
               </Button>
               <Button onClick={useEffect} variant="gamer">
@@ -158,12 +164,33 @@ export default function SignUp() {
               placeholder="password"
               mb="5%"
             />
-            <a>Esqueceste-te da password?</a>
+            <Button
+              _focus={{ outline: "none" }}
+              p="0"
+              _hover={{ bg: "white" }}
+              _pressed={{ bg: "white" }}
+              _active={{ bg: "white" }}
+              bg="white"
+            >
+              <Text _hover={{ textDecoration: "underline" }}>
+                Esqueceste-te da password?
+              </Text>
+            </Button>
           </ModalBody>
 
           <ModalFooter>
-            <Button onClick={changeRegister} bg="white">
-              <Text textDecoration="underline">Ainda não tens conta?</Text>
+            <Button
+              p="0"
+              _hover={{ bg: "white" }}
+              _pressed={{ bg: "white" }}
+              _active={{ bg: "white" }}
+              bg="white"
+              onClick={changeRegister}
+              _focus={{ outline: "none" }}
+            >
+              <Text mr="20%" _hover={{ textDecoration: "underline" }}>
+                Ainda não tens conta?
+              </Text>
             </Button>
             <Button variant="gamer">Sign In</Button>
           </ModalFooter>
