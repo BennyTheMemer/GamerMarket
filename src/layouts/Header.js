@@ -23,7 +23,7 @@ export default function Header() {
       </NavLink>
       <NavLink style={{ marginRight: "5%" }} to="/home">
         <Button fontSize="1rem" h="4vh" variant="gamer">
-          Let's Explore
+          Explorar
         </Button>
       </NavLink>
     </HStack>

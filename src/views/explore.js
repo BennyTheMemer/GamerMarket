@@ -203,7 +203,7 @@ export default function Explore() {
         <GridItem colSpan={1}>
           <VStack align="flex-start">
             <Heading color="black" size="md">
-              Core Components
+              Componentes
             </Heading>
             <Button p="0" variant="items">
               <Text>RAM</Text>

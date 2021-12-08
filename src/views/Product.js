@@ -103,7 +103,7 @@ export default function Article(props) {
             w="30%"
           >
             <Flex
-              h="35%"
+              h="28%"
               bg="white"
               p="5"
               borderRadius="5px"

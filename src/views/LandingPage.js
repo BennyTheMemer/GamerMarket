@@ -19,9 +19,6 @@ import { Image } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
 
 export default function LandingPage(props) {
-  function handleClick(event) {
-    props.onClick(event.target.value);
-  }
   return (
     <Box w="100%">
       <Header />
@@ -29,28 +26,29 @@ export default function LandingPage(props) {
       <Flex justify="space-between" mt="5%">
         <Box w={["40%"]} ml="5%" mr="5%">
           <Heading size="3xl">
-            Welcome to the best P2P gaming marketplace
+            Bem-vindo ao melhor mercado P2P de gaming
           </Heading>
           <Text
             color="grey"
             fontWeight="semi-bold"
             fontSize="1.5rem"
-            w={["60%"]}
+            w={["65%"]}
             mt="4%"
           >
-            Built from gamers, to gamers. No fees. No ads. Build your dream
-            setup right now
+            Construído de gamers, para gamers. Sem taxas. Sem ads. Constrói o
+            teu setup de sonho
           </Text>
-          <Button
-            value={props.isOpen}
-            onClick={handleClick}
-            fontSize="1rem"
-            h="4vh"
-            variant="gamer"
-            mt="7vh"
-          >
-            Let's Explore
-          </Button>
+          <NavLink to="/home">
+            <Button
+              value={props.isOpen}
+              fontSize="1rem"
+              h="4vh"
+              variant="gamer"
+              mt="7vh"
+            >
+              Explorar
+            </Button>
+          </NavLink>
         </Box>
         <Image mr="5%" src={imageLandingPage} />
       </Flex>
