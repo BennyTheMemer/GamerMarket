@@ -7,7 +7,7 @@ import Footer from "./Footer";
 
 function MainLayout({ children }) {
   return (
-    <Flex bg="pink">
+    <Flex>
       <Header />
     </Flex>
   );

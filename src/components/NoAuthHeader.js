@@ -29,15 +29,16 @@ import SignupModal from "./SignupModal";
 export default function NoAuthHeader() {
   return (
     <HStack
-      boxShadow="0px 1px 15px red"
+      boxShadow="0px 1px 2px red"
       h="10vh"
+      w="100%"
       align="center"
-      justify="space-between"
+      justify="space-evenly"
     >
       <NavLink style={{ marginLeft: "5%" }} to="/">
         <Image src={gamerretail} />
       </NavLink>
-      <InputGroup w="30%">
+      <InputGroup w="60%">
         <Input
           placeholder="search for a product"
           _placeholder={{ color: "grey" }}

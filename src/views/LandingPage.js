@@ -1,4 +1,4 @@
-  import {
+import {
   Button,
   Heading,
   Box,
@@ -6,6 +6,10 @@
   Text,
   Flex,
   Spacer,
+  HStack,
+  SimpleGrid,
+  GridItem,
+  AspectRatio,
 } from "@chakra-ui/react";
 import "./landingpage.css";
 import Header from "../layouts/Header";
@@ -86,13 +90,66 @@ export default function LandingPage(props) {
           bottom="0"
         ></path>
       </svg>
-      <Box
-        m={["2%", "0%", "0%", "5%"]}
-        w="80%"
-        aling="center"
-        flexDirection="column"
-      >
+      <Box m={["2%", "0%", "0%", "5%"]} aling="center" flexDirection="column">
         <Heading size="2xl">Some of the products being sold</Heading>
+        <HStack
+          minH={{ base: "160px", md: "200px", lg: "240px" }}
+          mt="5"
+          spacing={{ base: "2", lg: "4" }}
+          overflowX={{ base: "auto", xl: "hidden" }}
+          justify="space-evenly"
+        >
+          <AspectRatio
+            ratio={1 / 1}
+            h="100%"
+            w="50%"
+            minW={{ base: "160px", md: "200px", lg: "240px" }}
+          >
+            <Box borderRadius="xl" bg="white">
+              Produto aqui
+            </Box>
+          </AspectRatio>
+          <AspectRatio
+            ratio={1 / 1}
+            h="100%"
+            w="50%"
+            minW={{ base: "160px", md: "200px", lg: "240px" }}
+          >
+            <Box borderRadius="xl" bg="white">
+              Produto aqui
+            </Box>
+          </AspectRatio>
+          <AspectRatio
+            ratio={1 / 1}
+            h="100%"
+            w="50%"
+            minW={{ base: "160px", md: "200px", lg: "240px" }}
+          >
+            <Box borderRadius="xl" bg="white">
+              Produto aqui
+            </Box>
+          </AspectRatio>
+          <AspectRatio
+            ratio={1 / 1}
+            h="100%"
+            w="50%"
+            minW={{ base: "160px", md: "200px", lg: "240px" }}
+          >
+            <Box borderRadius="xl" bg="white">
+              Produto aqui
+            </Box>
+          </AspectRatio>
+          <AspectRatio
+            ratio={1 / 1}
+            h="100%"
+            w="50%"
+            minW={{ base: "160px", md: "200px", lg: "240px" }}
+          >
+            <Box borderRadius="xl" bg="white">
+              Produto aqui
+            </Box>
+          </AspectRatio>
+        </HStack>
       </Box>
     </Box>
   );

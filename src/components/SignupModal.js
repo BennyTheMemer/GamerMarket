@@ -66,6 +66,7 @@ export default function SignUp() {
           isCentered
           isOpen={registerIsOpen}
           onClose={registerOnClose}
+          blockScrollOnMount={false}
         >
           <ModalOverlay />
           <ModalContent bg="white" border="1px" borderColor="red.800">
@@ -114,7 +115,7 @@ export default function SignUp() {
 
             <ModalFooter>
               <Button onClick={changeSignIn} bg="white">
-                <Text textDecoration="underline">Already have an account?</Text>
+                <Text textDecoration="underline">Já tens conta?</Text>
               </Button>
               <Button onClick={useEffect} variant="gamer">
                 Register
@@ -131,6 +132,7 @@ export default function SignUp() {
         isCentered
         isOpen={isOpen}
         onClose={onClose}
+        blockScrollOnMount={false}
       >
         <ModalOverlay />
         <ModalContent bg="white" border="1px" borderColor="red.800">
@@ -156,11 +158,12 @@ export default function SignUp() {
               placeholder="password"
               mb="5%"
             />
+            <a>Esqueceste-te da password?</a>
           </ModalBody>
 
           <ModalFooter>
             <Button onClick={changeRegister} bg="white">
-              <Text textDecoration="underline">Don't have an account?</Text>
+              <Text textDecoration="underline">Ainda não tens conta?</Text>
             </Button>
             <Button variant="gamer">Sign In</Button>
           </ModalFooter>
@@ -170,14 +173,29 @@ export default function SignUp() {
   }
 
   return (
-    <Container>
+    <Container align="center" w={{ base: "100%", sm: "50%" }}>
       <>{isModal()}</>
       <Button onClick={onOpen} variant="register">
-        <Flex w="100%" align="center" h="100%">
-          <Icon h={12} w={12} as={MdPersonOutline} color="black" />
-          <Box w="100%">
-            <Text color="grey">Welcome</Text>
-            <Text color="black">Sign In / Register</Text>
+        <Flex w="100%" align="center">
+          <Icon
+            h={{ base: 12, sm: 8 }}
+            w={{ base: 12, sm: 8 }}
+            as={MdPersonOutline}
+            color="black"
+          />
+          <Box w="90%">
+            <Text
+              fontSize={{ base: "1rem", md: "0.9rem", xl: "1rem" }}
+              color="grey"
+            >
+              Welcome
+            </Text>
+            <Text
+              fontSize={{ base: "1rem", md: "0.9rem", xl: "1rem" }}
+              color="black"
+            >
+              Sign In / Register
+            </Text>
           </Box>
         </Flex>
       </Button>
