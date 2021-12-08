@@ -1,5 +1,7 @@
 import { Divider, Flex, Image, Box, Heading, Text } from "@chakra-ui/react";
 import { NavLink, useLocation } from "react-router-dom";
+import { Link } from 'react-router-dom';
+
 
 export default function Card({
   name,
@@ -11,9 +13,12 @@ export default function Card({
   sellerId,
   ...props
 }) {
+
+console.log(name)
+
   return (
     <Flex borderRadius="10" bg="grey.400" color="black" flexDirection="column">
-      <NavLink to={`/user/${sellerId}`}>
+      
         <Box p="2" h="20%">
           <Image h="30%" src={image} alt="product" />
 
@@ -28,7 +33,6 @@ export default function Card({
             {price}
           </Text>
         </Box>
-      </NavLink>
     </Flex>
   );
 }
