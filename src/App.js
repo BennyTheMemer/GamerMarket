@@ -9,6 +9,7 @@ import ReactDOM from "react-dom";
 import Header from "./layouts/Header";
 import Explore from "./views/explore";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Dashboard from "./views/Dashboard";
 import SellerPage from "./views/SellerPage";
 import {
   Modal,
@@ -39,6 +40,7 @@ function App() {
           <Route element={<LandingPage />} path="/"></Route>
           <Route element={<Explore />} path="/home"></Route>
           <Route element={<Article />} path="/article"></Route>
+          <Route element={<Dashboard />} path="/dashboard"></Route>
           <Route element={<SellerPage />} path="/user/:id" />
         </Routes>
       </Router>

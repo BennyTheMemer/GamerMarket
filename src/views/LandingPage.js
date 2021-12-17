@@ -25,7 +25,7 @@ export default function LandingPage(props) {
 
       <Flex justify="space-between" mt="5%">
         <Box w={["40%"]} ml="5%" mr="5%">
-          <Heading size="3xl">
+          <Heading color="black" size="3xl">
             Bem-vindo ao melhor mercado P2P de gaming
           </Heading>
           <Text
@@ -89,7 +89,9 @@ export default function LandingPage(props) {
         ></path>
       </svg>
       <Box m={["2%", "0%", "0%", "5%"]} aling="center" flexDirection="column">
-        <Heading size="2xl">Some of the products being sold</Heading>
+        <Heading color="black" size="2xl">
+          Highlights
+        </Heading>
         <HStack
           minH={{ base: "160px", md: "200px", lg: "240px" }}
           mt="5"
