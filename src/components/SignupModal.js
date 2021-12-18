@@ -11,8 +11,12 @@ import {
   Spacer,
   HStack,
   InputGroup,
-  Input,
   InputRightElement,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  FormHelperText,
+  Input,
 } from "@chakra-ui/react";
 import {
   Modal,
@@ -24,10 +28,9 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
+import { Formik, Field, Form } from "formik";
 import { isEmail } from "validator";
 import AuthService from "../services/authservice";
-import Form from "react-validation/build/form";
-import CheckButton from "react-validation/build/button";
 import { TriangleUpIcon } from "@chakra-ui/icons";
 
 const required = (value) => {
@@ -40,7 +43,7 @@ const required = (value) => {
   }
 };
 
-const email = (value) => {
+const vemail = (value) => {
   if (!isEmail(value)) {
     return (
       <div className="alert alert-danger" role="alert">
@@ -173,80 +176,94 @@ export default function SignUp() {
             <ModalHeader>Register</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <Form onSubmit={handleRegister} ref={form}>
-                {successful && (
-                  <div>
-                    <div className="form-group">
-                      <label htmlFor="username">Username</label>
-                      <Input
-                        type="text"
-                        className="form-control"
-                        name="username"
-                        value={username}
-                        onChange={onChangeUsername}
-                        validations={[required, vusername]}
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="email">Email</label>
-                      <Input
-                        type="text"
-                        className="form-control"
-                        name="email"
-                        value={email}
-                        onChange={onChangeEmail}
-                        validations={[required, email]}
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="password">Password</label>
-                      <Input
-                        type="password"
-                        className="form-control"
-                        name="password"
-                        value={password}
-                        onChange={onChangePassword}
-                        validations={[required, vpassword]}
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label htmlFor="password">Confirm Password</label>
-                      <Input
-                        type="password"
-                        className="form-control"
-                        name="password2"
-                        value={password2}
-                        onChange={onChangePassword2}
-                        validations={[required, vpassword]}
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <button className="btn btn-primary btn-block">
-                        Sign Up
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {message && (
-                  <div className="form-group">
-                    <div
-                      className={
-                        successful
-                          ? "alert alert-success"
-                          : "alert alert-danger"
-                      }
-                      role="alert"
+              <Formik
+                initialValues={{ username: "", password: "", email: "" }}
+                onSubmit={(values, actions) => {
+                  setTimeout(() => {
+                    alert(JSON.stringify(values, null, 2));
+                    actions.setSubmitting(false);
+                  }, 1000);
+                }}
+              >
+                {(props) => (
+                  <Form>
+                    <Field name="username" validate={vusername}>
+                      {({ field, form }) => (
+                        <FormControl
+                          isInvalid={
+                            form.errors.username && form.touched.username
+                          }
+                        >
+                          <FormLabel htmlFor="name">Username</FormLabel>
+                          <Input
+                            {...field}
+                            id="username"
+                            placeholder="username"
+                          />
+                          <FormErrorMessage>
+                            {form.errors.username}
+                          </FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
+                    <Field name="email" validate={vemail}>
+                      {({ field, form }) => (
+                        <FormControl
+                          isInvalid={form.errors.email && form.touched.email}
+                        >
+                          <FormLabel htmlFor="name">Email</FormLabel>
+                          <Input {...field} id="email" placeholder="email" />
+                          <FormErrorMessage>
+                            {form.errors.email}
+                          </FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
+                    <Field name="password" validate={vpassword}>
+                      {({ field, form }) => (
+                        <FormControl
+                          isInvalid={form.errors.name && form.touched.name}
+                        >
+                          <FormLabel htmlFor="password">Password</FormLabel>
+                          <Input
+                            {...field}
+                            id="password"
+                            placeholder="password"
+                          />
+                          <FormErrorMessage>
+                            {form.errors.name}
+                          </FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
+                    <Field name="password" validate={vpassword}>
+                      {({ field, form }) => (
+                        <FormControl
+                          isInvalid={form.errors.name && form.touched.name}
+                        >
+                          <FormLabel htmlFor="password">Password</FormLabel>
+                          <Input
+                            {...field}
+                            id="password"
+                            placeholder="password"
+                          />
+                          <FormErrorMessage>
+                            {form.errors.name}
+                          </FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
+                    <Button
+                      mt={4}
+                      colorScheme="teal"
+                      isLoading={props.isSubmitting}
+                      type="submit"
                     >
-                      {message}
-                    </div>
-                  </div>
+                      Submit
+                    </Button>
+                  </Form>
                 )}
-                <CheckButton style={{ display: "none" }} ref={checkBtn} />
-              </Form>
+              </Formik>
             </ModalBody>
 
             <ModalFooter>
