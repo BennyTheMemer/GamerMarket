@@ -2,14 +2,8 @@ import {
   Button,
   Heading,
   Box,
-  Container,
   Text,
   Flex,
-  Spacer,
-  Input,
-  HStack,
-  InputGroup,
-  InputRightElement,
   Grid,
   GridItem,
   VStack,
@@ -17,20 +11,8 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuIcon,
-  MenuCommand,
-  MenuDivider,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
 } from "@chakra-ui/react";
 import "./landingpage.css";
-import Header from "../layouts/Header";
 import Card from "../components/card";
 import imageLandingPage from "../assets/imageLandingPage.png";
 import { Image } from "@chakra-ui/react";
@@ -40,12 +22,14 @@ import { ArrowBackIcon, ArrowDownIcon, SearchIcon } from "@chakra-ui/icons";
 import geforce from "../assets/GEFORCE.jpg";
 import { Link } from "react-router-dom";
 import NoAuthHeader from "../components/NoAuthHeader";
+import Header from "../components/AuthHeader";
 import caixa from "../assets/cscitf3blackred_1__13000.1500474634.1280.1280-removebg-preview.png";
 import processador from "../assets/image.jpg";
 import { FaFilter } from "react-icons/fa";
 import { Icon } from "@chakra-ui/react";
 import { AiOutlineArrowUp } from "react-icons/ai";
 import { AiOutlineArrowDown } from "react-icons/ai";
+import authservice from "../services/authservice";
 
 export default function Explore() {
   const items = [
@@ -165,7 +149,8 @@ export default function Explore() {
 
   return (
     <Box h="100%" w="100%">
-      <NoAuthHeader />
+      <Header />
+
       <Flex justify="flex-end">
         <Menu placement="right" bg="red">
           <MenuButton mr="5%" mt="5%" mb="1%" p="0" variant="items" as={Button}>

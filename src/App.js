@@ -6,7 +6,6 @@ import LandingPage from "./views/LandingPage";
 import Article from "./views/Product";
 import { ThemeProvider } from "./ThemeProvider";
 import ReactDOM from "react-dom";
-import Header from "./layouts/Header";
 import Explore from "./views/explore";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./views/Dashboard";
@@ -23,15 +22,12 @@ import {
   useDisclosure,
   Input,
 } from "@chakra-ui/react";
+import Header from "./components/AuthHeader";
 
 function App() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef();
   const finalRef = React.useRef();
-
-  function handleChange() {
-    onOpen();
-  }
 
   return (
     <ThemeProvider>

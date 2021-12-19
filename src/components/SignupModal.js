@@ -1,23 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Icon } from "@chakra-ui/react";
 import { MdPersonOutline } from "react-icons/md";
-import {
-  Button,
-  Heading,
-  Box,
-  Container,
-  Text,
-  Flex,
-  Spacer,
-  HStack,
-  InputGroup,
-  InputRightElement,
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-  Input,
-} from "@chakra-ui/react";
+import { Button, Box, Container, Text, Flex } from "@chakra-ui/react";
 import {
   Modal,
   ModalOverlay,
@@ -26,52 +10,19 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  useDisclosure,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  CloseButton,
 } from "@chakra-ui/react";
-import { Formik, Field, Form } from "formik";
 import { isEmail } from "validator";
 import AuthService from "../services/authservice";
-import { TriangleUpIcon } from "@chakra-ui/icons";
-
-const required = (value) => {
-  if (!value) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        This field is required!
-      </div>
-    );
-  }
-};
-
-const vemail = (value) => {
-  if (!isEmail(value)) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        This is not a valid email.
-      </div>
-    );
-  }
-};
-
-const vusername = (value) => {
-  if (value.length < 3 || value.length > 20) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        The username must be between 3 and 20 characters.
-      </div>
-    );
-  }
-};
-
-const vpassword = (value) => {
-  if (value.length < 6 || value.length > 40) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        The password must be between 6 and 40 characters.
-      </div>
-    );
-  }
-};
+import Form from "react-validation/build/form";
+import Input from "react-validation/build/input";
+import CheckButton from "react-validation/build/button";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
   const [isOpen, setOpen] = useState(false);
@@ -79,18 +30,69 @@ export default function SignUp() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [password2, setPassword2] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [successful, setSuccessful] = useState(true);
-  const form = React.useRef();
-  const checkBtn = React.useRef();
-
+  const [loading, setLoading] = useState(false);
+  var form = React.useRef();
+  var checkBtn = React.useRef();
   const initialRef = React.useRef();
   const finalRef = React.useRef();
+  const history = useNavigate();
+
+  console.log(AuthService.getCurrentUser());
+
+  const required = (value) => {
+    if (!value) {
+      return (
+        <div className="alert alert-danger" role="alert">
+          This field is required!
+        </div>
+      );
+    }
+  };
+
+  const vemail = (value) => {
+    if (!isEmail(value)) {
+      return (
+        <div className="alert alert-danger" role="alert">
+          This is not a valid email.
+        </div>
+      );
+    }
+  };
+
+  const vusername = (value) => {
+    if (value.length < 3 || value.length > 20) {
+      return (
+        <div className="alert alert-danger" role="alert">
+          The username must be between 3 and 20 characters.
+        </div>
+      );
+    }
+  };
+
+  const vpassword = (value) => {
+    if (value.length < 6 || value.length > 40) {
+      return (
+        <div className="alert alert-danger" role="alert">
+          The password must be between 6 and 40 characters.
+        </div>
+      );
+    }
+  };
+  const vconfirmPassword = (value) => {
+    if (value.length < 6 || value.length > 40) {
+      return (
+        <div className="alert alert-danger" role="alert">
+          The password must be between 6 and 40 characters.
+        </div>
+      );
+    }
+  };
 
   function onChangeUsername(e) {
     setUsername(e.target.value);
-    console.log(username);
   }
 
   function onChangeEmail(e) {
@@ -101,8 +103,8 @@ export default function SignUp() {
     setPassword(e.target.value);
   }
 
-  function onChangePassword2(e) {
-    setPassword2(e.target.value);
+  function onChangeconfirmPassword(e) {
+    setConfirmPassword(e.target.value);
   }
 
   function handleRegister(e) {
@@ -110,14 +112,13 @@ export default function SignUp() {
 
     setMessage("");
     setSuccessful(false);
-
-    form.current.validateAll();
-
-    if (checkBtn.current.context._errors.length === 0) {
+    form.validateAll();
+    console.log(checkBtn);
+    if (checkBtn.context._errors.length === 0) {
       AuthService.register(username, email, password).then(
         (response) => {
           setMessage(response.data.message);
-          setSuccessful(TriangleUpIcon);
+          setSuccessful(true);
         },
         (error) => {
           const resMessage =
@@ -127,13 +128,43 @@ export default function SignUp() {
             error.message ||
             error.toString();
 
-          setMessage(resMessage);
           setSuccessful(false);
+          setMessage(resMessage);
         }
       );
     }
   }
 
+  function handleLogin(e) {
+    e.preventDefault();
+
+    setMessage("");
+    setLoading(true);
+
+    form.validateAll();
+
+    if (checkBtn.context._errors.length === 0) {
+      AuthService.login(username, password).then(
+        () => {
+          history("/dashboard");
+          window.location.reload();
+        },
+        (error) => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+
+          setLoading(false);
+          setMessage(resMessage);
+        }
+      );
+    } else {
+      setLoading(false);
+    }
+  }
   function changeRegister() {
     onClose();
     registerOnOpen();
@@ -176,94 +207,75 @@ export default function SignUp() {
             <ModalHeader>Register</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <Formik
-                initialValues={{ username: "", password: "", email: "" }}
-                onSubmit={(values, actions) => {
-                  setTimeout(() => {
-                    alert(JSON.stringify(values, null, 2));
-                    actions.setSubmitting(false);
-                  }, 1000);
+              <Form
+                onSubmit={handleRegister}
+                ref={(c) => {
+                  form = c;
                 }}
               >
-                {(props) => (
-                  <Form>
-                    <Field name="username" validate={vusername}>
-                      {({ field, form }) => (
-                        <FormControl
-                          isInvalid={
-                            form.errors.username && form.touched.username
-                          }
-                        >
-                          <FormLabel htmlFor="name">Username</FormLabel>
-                          <Input
-                            {...field}
-                            id="username"
-                            placeholder="username"
-                          />
-                          <FormErrorMessage>
-                            {form.errors.username}
-                          </FormErrorMessage>
-                        </FormControl>
-                      )}
-                    </Field>
-                    <Field name="email" validate={vemail}>
-                      {({ field, form }) => (
-                        <FormControl
-                          isInvalid={form.errors.email && form.touched.email}
-                        >
-                          <FormLabel htmlFor="name">Email</FormLabel>
-                          <Input {...field} id="email" placeholder="email" />
-                          <FormErrorMessage>
-                            {form.errors.email}
-                          </FormErrorMessage>
-                        </FormControl>
-                      )}
-                    </Field>
-                    <Field name="password" validate={vpassword}>
-                      {({ field, form }) => (
-                        <FormControl
-                          isInvalid={form.errors.name && form.touched.name}
-                        >
-                          <FormLabel htmlFor="password">Password</FormLabel>
-                          <Input
-                            {...field}
-                            id="password"
-                            placeholder="password"
-                          />
-                          <FormErrorMessage>
-                            {form.errors.name}
-                          </FormErrorMessage>
-                        </FormControl>
-                      )}
-                    </Field>
-                    <Field name="password" validate={vpassword}>
-                      {({ field, form }) => (
-                        <FormControl
-                          isInvalid={form.errors.name && form.touched.name}
-                        >
-                          <FormLabel htmlFor="password">Password</FormLabel>
-                          <Input
-                            {...field}
-                            id="password"
-                            placeholder="password"
-                          />
-                          <FormErrorMessage>
-                            {form.errors.name}
-                          </FormErrorMessage>
-                        </FormControl>
-                      )}
-                    </Field>
-                    <Button
-                      mt={4}
-                      colorScheme="teal"
-                      isLoading={props.isSubmitting}
-                      type="submit"
-                    >
-                      Submit
-                    </Button>
-                  </Form>
+                <div>
+                  <div className="form-group">
+                    <label htmlFor="username">Username</label>
+                    <Input
+                      type="text"
+                      className="form-control"
+                      name="username"
+                      value={username}
+                      onChange={onChangeUsername}
+                      validations={[required, vusername]}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="email">Email</label>
+                    <Input
+                      type="text"
+                      className="form-control"
+                      name="email"
+                      value={email}
+                      onChange={onChangeEmail}
+                      validations={[required, vemail]}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="password">Password</label>
+                    <Input
+                      type="password"
+                      className="form-control"
+                      name="password"
+                      value={password}
+                      onChange={onChangePassword}
+                      validations={[required, vpassword]}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <button className="btn btn-primary btn-block">
+                      Sign Up
+                    </button>
+                  </div>
+                </div>
+
+                {message && successful && (
+                  <Alert status="success">
+                    <AlertIcon />
+                    {message}
+                  </Alert>
                 )}
-              </Formik>
+                {message && !successful && (
+                  <Alert status="error">
+                    <AlertIcon />
+                    {message}
+                  </Alert>
+                )}
+                <CheckButton
+                  style={{ display: "none" }}
+                  ref={(c) => {
+                    checkBtn = c;
+                  }}
+                />
+              </Form>
             </ModalBody>
 
             <ModalFooter>
@@ -298,37 +310,62 @@ export default function SignUp() {
           <ModalHeader>Sign In</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Input
-              border="0px"
-              borderRight="1px"
-              borderBottom="1px"
-              focusBorderColor="white"
-              ref={initialRef}
-              type="email"
-              placeholder="email"
-              mb="5%"
-            />
-            <Input
-              border="0px"
-              borderRight="1px"
-              borderBottom="1px"
-              focusBorderColor="white"
-              type="password"
-              placeholder="password"
-              mb="5%"
-            />
-            <Button
-              _focus={{ outline: "none" }}
-              p="0"
-              _hover={{ bg: "white" }}
-              _pressed={{ bg: "white" }}
-              _active={{ bg: "white" }}
-              bg="white"
+            <Form
+              onSubmit={handleLogin}
+              ref={(c) => {
+                form = c;
+              }}
             >
-              <Text _hover={{ textDecoration: "underline" }}>
-                Esqueceste-te da password?
-              </Text>
-            </Button>
+              <div className="form-group">
+                <label htmlFor="username">Username</label>
+                <Input
+                  type="text"
+                  className="form-control"
+                  name="username"
+                  value={username}
+                  onChange={onChangeUsername}
+                  validations={[required]}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <Input
+                  type="password"
+                  className="form-control"
+                  name="password"
+                  value={password}
+                  onChange={onChangePassword}
+                  validations={[required]}
+                />
+              </div>
+
+              <div className="form-group">
+                <button
+                  className="btn btn-primary btn-block"
+                  disabled={loading}
+                >
+                  {loading && (
+                    <span className="spinner-border spinner-border-sm"></span>
+                  )}
+                  <span>Login</span>
+                </button>
+              </div>
+
+              {message && (
+                <div className="form-group">
+                  <div className="alert alert-danger" role="alert">
+                    {message}
+                  </div>
+                </div>
+              )}
+              <CheckButton
+                style={{ display: "none" }}
+                ref={(c) => {
+                  checkBtn = c;
+                }}
+              />
+            </Form>
           </ModalBody>
 
           <ModalFooter>
@@ -345,7 +382,6 @@ export default function SignUp() {
                 Ainda não tens conta?
               </Text>
             </Button>
-            <Button variant="gamer">Sign In</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

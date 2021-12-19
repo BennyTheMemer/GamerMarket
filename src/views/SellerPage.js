@@ -30,6 +30,7 @@ import { MdPersonOutline } from "react-icons/md";
 import StarRating from "../components/rating";
 import { TiTick } from "react-icons/ti";
 import NoAuthHeader from "../components/NoAuthHeader";
+import Header from "../components/AuthHeader";
 
 export default function SellerPage() {
   const seller = {
@@ -83,7 +84,8 @@ export default function SellerPage() {
 
   return (
     <Box align="center">
-      <NoAuthHeader />
+      <Header />
+
       <Box w="80%" align="center" justify="center">
         <Box mt="5%" color="black">
           <Flex flexDirection="row">

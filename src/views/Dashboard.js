@@ -20,7 +20,6 @@ import {
   Input,
 } from "@chakra-ui/react";
 import "./landingpage.css";
-import Header from "../layouts/Header";
 import Card from "../components/card";
 import imageLandingPage from "../assets/imageLandingPage.png";
 import { Image } from "@chakra-ui/react";
@@ -28,13 +27,15 @@ import { NavLink } from "react-router-dom";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import NoAuthHeader from "../components/NoAuthHeader";
 import { useDisclosure } from "@chakra-ui/react";
+import Header from "../components/AuthHeader";
 
 export default function Dashboard(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <Box w="100%">
-      <NoAuthHeader />
+      <Header />
+
       <Tabs isFitted variant="enclosed">
         <TabList>
           <Tab p="5" _selected={{ color: "black", bg: "red" }} color="black">
@@ -127,7 +128,7 @@ export default function Dashboard(props) {
                             textAlign="left"
                             w="100%"
                           >
-                            <Text>Alterar email</Text>
+                            <Text p="5">Alterar email</Text>
                           </Flex>
                           <AccordionIcon />
                         </AccordionButton>
@@ -147,7 +148,7 @@ export default function Dashboard(props) {
                             textAlign="left"
                             w="100%"
                           >
-                            <Text>Alterar password</Text>
+                            <Text p="5">Alterar password</Text>
                           </Flex>
                           <AccordionIcon />
                         </AccordionButton>
@@ -172,12 +173,12 @@ export default function Dashboard(props) {
                             textAlign="left"
                             w="100%"
                           >
-                            <Text>Alterar username</Text>
+                            <Text p="5">Alterar username</Text>
                           </Flex>
                           <AccordionIcon />
                         </AccordionButton>
                       </h2>
-                      <AccordionPanel bg="white" pb={4}>
+                      <AccordionPanel p="5" bg="white">
                         <Flex>
                           <Flex w="40%" textAlign="left" flexDirection="column">
                             <Text

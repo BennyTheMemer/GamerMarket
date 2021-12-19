@@ -12,11 +12,11 @@ import {
   AspectRatio,
 } from "@chakra-ui/react";
 import "./landingpage.css";
-import Header from "../layouts/Header";
 import Card from "../components/card";
 import imageLandingPage from "../assets/imageLandingPage.png";
 import { Image } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
+import Header from "../components/AuthHeader";
 
 export default function LandingPage(props) {
   return (

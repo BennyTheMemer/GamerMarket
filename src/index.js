@@ -5,7 +5,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider } from "@chakra-ui/react";
-import Header from "./layouts/Header";
+import Header from "./components/AuthHeader";
 import { BrowserRouter as Router } from "react-router-dom";
 
 ReactDOM.render(

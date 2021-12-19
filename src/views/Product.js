@@ -21,7 +21,6 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import "./landingpage.css";
-import Header from "../layouts/Header";
 import { Image } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
 import gamerretail from "../assets/logogamer-removebg-preview.png";
@@ -35,6 +34,7 @@ import NoAuthHeader from "../components/NoAuthHeader";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import "./productpage.css";
 import { TiTick } from "react-icons/ti";
+import Header from "../components/AuthHeader";
 
 export default function Article(props) {
   const [userNumber, setUserNumber] = useState("Número");
@@ -70,7 +70,8 @@ export default function Article(props) {
 
   return (
     <Box w="100%" h="100%">
-      <NoAuthHeader />
+      <Header />
+
       <Flex m="3%" justify="center" w="100%">
         <Flex textAlign="center" justifyItems="center" w="80%">
           <NavLink to={"/home"}>
