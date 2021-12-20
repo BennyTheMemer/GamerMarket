@@ -12,8 +12,6 @@ export default function Card({
   sellerId,
   ...props
 }) {
-  console.log(name);
-
   return (
     <Flex
       w="100%"
@@ -24,7 +22,7 @@ export default function Card({
       flexDirection="column"
     >
       <Box backgroundSize="contain" p="3" h="100%">
-        <Image src={image} alt="product" />
+        <Image boxSize={props.boxSize} src={image} alt="product" />
 
         <Text
           fontSize={{ base: "0.8rem", md: "0.7rem", xl: "1rem" }}

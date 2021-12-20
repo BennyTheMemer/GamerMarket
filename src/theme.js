@@ -124,6 +124,7 @@ const theme = extendTheme({
         bg: "white",
         h: "100%",
         w: "100%",
+        color: "black",
       },
     },
   },
