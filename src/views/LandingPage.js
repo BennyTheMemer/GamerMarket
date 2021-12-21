@@ -38,7 +38,7 @@ export default function LandingPage(props) {
             Construído de gamers, para gamers. Sem taxas. Sem ads. Constrói o
             teu setup de sonho
           </Text>
-          <NavLink to="/dashboard">
+          <NavLink to="/home">
             <Button
               value={props.isOpen}
               fontSize="1rem"

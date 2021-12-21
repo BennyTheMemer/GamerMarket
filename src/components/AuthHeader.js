@@ -63,8 +63,9 @@ export default function Header() {
         w="100%"
         align="center"
         justify="space-evenly"
+        bg="white"
       >
-        <NavLink style={{ marginLeft: "5%" }} to="/">
+        <NavLink style={{ marginLeft: "5%" }} to="/dashboard">
           <Image src={gamerretail} />
         </NavLink>
         <InputGroup w="60%">
