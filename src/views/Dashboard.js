@@ -21,6 +21,13 @@ import {
   Tooltip,
   Grid,
   Badge,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
 } from "@chakra-ui/react";
 import "./landingpage.css";
 import { useState } from "react";
@@ -64,21 +71,62 @@ export default function Dashboard(props) {
 
   return (
     <Box w="100%">
+      <Modal
+        size="5xl"
+        motionPreset="scale"
+        isCentered
+        isOpen={isOpen}
+        onClose={onClose}
+      >
+        <ModalOverlay />
+        <ModalContent bg="white">
+          <ModalHeader></ModalHeader>
+          <ModalCloseButton />
+          <ModalBody w="70%"></ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Vender
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
       <Header />
 
       <Tabs isFitted variant="enclosed">
         <TabList>
           <Tab
             p="5"
-            _selected={{ color: "black", bg: "red.500" }}
+            _hover={{ bg: "red.600" }}
+            _selected={{
+              bg: "red.600",
+              fontWeight: "semibold",
+            }}
+            _focus={{ fontWeight: "semibold" }}
             color="black"
           >
             Anúncios
           </Tab>
-          <Tab _selected={{ color: "black", bg: "red.500" }} color="black">
+          <Tab
+            _hover={{ bg: "red.600" }}
+            _selected={{
+              bg: "red.600",
+              fontWeight: "semibold",
+            }}
+            _focus={{ fontWeight: "semibold" }}
+            color="black"
+          >
             Mensagens
           </Tab>
-          <Tab _selected={{ color: "black", bg: "red.500" }} color="black">
+          <Tab
+            _hover={{ bg: "red.600" }}
+            _selected={{
+              bg: "red.600",
+              fontWeight: "semibold",
+            }}
+            _focus={{ fontWeight: "semibold" }}
+            color="black"
+          >
             Dados Pessoais
           </Tab>
         </TabList>
@@ -87,7 +135,12 @@ export default function Dashboard(props) {
             <Box align="center" w="100%">
               <SimpleGrid w="70%" spacing={10}>
                 <GridItem>
-                  <Flex p="5" bg="#f6f6f6">
+                  <Flex
+                    borderColor="#d2d3d4"
+                    borderWidth="1px"
+                    p="5"
+                    bg="white"
+                  >
                     <Image
                       boxSize="150px"
                       src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"
@@ -113,53 +166,25 @@ export default function Dashboard(props) {
                   </Flex>
                 </GridItem>
                 <GridItem>
-                  <NavLink to={{ to: "/draftitem" }}>
-                    <Button
-                      _hover={{ bg: "#f2f2f2" }}
-                      align="center"
-                      justify="center"
-                      w="150px"
-                      h="150px"
-                      bg="#f6f6f6"
-                    >
-                      <AddIcon color="red.500" boxSize="50%" />
-                    </Button>
-                  </NavLink>
+                  <Button
+                    _hover={{ bg: "#c3c3c3", p: "1" }}
+                    align="center"
+                    justify="center"
+                    w="150px"
+                    h="150px"
+                    bg="white"
+                    onClick={onOpen}
+                    borderColor="#d2d3d4"
+                    borderWidth="1px"
+                  >
+                    <AddIcon color="red.500" boxSize="50%" />
+                  </Button>
                 </GridItem>
               </SimpleGrid>
             </Box>
           </TabPanel>
           <TabPanel align="center">
-            <Box w="100%">
-              <SimpleGrid
-                borderColor="red"
-                borderWidth="1px"
-                borderRadius="md"
-                w="70%"
-                templateRows="repeat(2, 1fr)"
-                templateColumns="repeat(5, 1fr)"
-                mt="5%"
-                gap={4}
-              >
-                <GridItem rowSpan={2} colSpan={1}>
-                  <VStack>
-                    <Flex align="center" justify="center">
-                      <Image />
-                      <Text>Bernardo</Text>
-                    </Flex>
-                  </VStack>
-                </GridItem>
-                <GridItem colSpan={4} bg="tomato">
-                  <Box>
-                    <Text>
-                      Bue texto aqui Bue texto aqui Bue texto aqui Bue texto
-                      aqui Bue texto aqui Bue texto aqui Bue texto aqui Bue
-                      texto aqui Bue texto aqui Bue texto aqui Bue texto aqui
-                    </Text>
-                  </Box>
-                </GridItem>
-              </SimpleGrid>
-            </Box>
+            <Box w="100%"></Box>
           </TabPanel>
           <TabPanel>
             <Box align="center" w="100%">
@@ -175,11 +200,17 @@ export default function Dashboard(props) {
                 spacing="5"
               >
                 <Flex h="100%" w="100%">
-                  <Accordion h="60%" w="100%" allowToggle>
-                    <AccordionItem>
+                  <Accordion spacing="10" h="60%" w="100%" allowToggle>
+                    <AccordionItem
+                      bg="white"
+                      borderRadius="5"
+                      borderColor="#d2d3d4"
+                      borderWidth="1px"
+                      mb="4px"
+                    >
                       <h2>
                         <AccordionButton
-                          _expanded={{ bg: "tomato", color: "white" }}
+                          _expanded={{ bg: "red.600", color: "white" }}
                           color="black"
                         >
                           <Flex
@@ -196,10 +227,16 @@ export default function Dashboard(props) {
                       <AccordionPanel pb={4}></AccordionPanel>
                     </AccordionItem>
 
-                    <AccordionItem>
+                    <AccordionItem
+                      bg="white"
+                      borderRadius="5"
+                      borderColor="#d2d3d4"
+                      borderWidth="1px"
+                      mb="4px"
+                    >
                       <h2>
                         <AccordionButton
-                          _expanded={{ bg: "tomato", color: "white" }}
+                          _expanded={{ bg: "red.600", color: "white" }}
                           color="black"
                         >
                           <Flex
@@ -221,10 +258,16 @@ export default function Dashboard(props) {
                         commodo consequat.
                       </AccordionPanel>
                     </AccordionItem>
-                    <AccordionItem>
+                    <AccordionItem
+                      bg="white"
+                      borderRadius="5"
+                      borderColor="#d2d3d4"
+                      borderWidth="1px"
+                      mb="4px"
+                    >
                       <h2>
                         <AccordionButton
-                          _expanded={{ bg: "tomato", color: "white" }}
+                          _expanded={{ bg: "red.600", color: "white" }}
                           color="black"
                         >
                           <Flex
@@ -269,6 +312,7 @@ export default function Dashboard(props) {
                 </Flex>
               </Stack>
             </Box>
+            <Box h="200px"></Box>
           </TabPanel>
         </TabPanels>
       </Tabs>

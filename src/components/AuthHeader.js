@@ -35,6 +35,7 @@ export default function Header() {
     if (AuthService.getCurrentUser()) {
       return (
         <HStack
+          bg="white"
           boxShadow="0px 1px 2px red"
           h="10vh"
           w="100%"
