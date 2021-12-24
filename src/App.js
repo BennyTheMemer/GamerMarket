@@ -10,6 +10,7 @@ import Explore from "./views/explore";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./views/Dashboard";
 import SellerPage from "./views/SellerPage";
+import Selling from "./views/Selling";
 import {
   Modal,
   ModalOverlay,
@@ -38,6 +39,7 @@ function App() {
           <Route element={<Article />} path="/article"></Route>
           <Route element={<Dashboard />} path="/dashboard"></Route>
           <Route element={<SellerPage />} path="/user/:id" />
+          <Route element={<Selling />} path="/selling" />
         </Routes>
       </Router>
     </ThemeProvider>

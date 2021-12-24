@@ -30,7 +30,7 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import "./landingpage.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Card from "../components/card";
 import imageLandingPage from "../assets/imageLandingPage.png";
 import { Image } from "@chakra-ui/react";
@@ -47,6 +47,7 @@ import { Icon } from "@chakra-ui/react";
 import StarRating from "../components/rating";
 import { AiFillEdit } from "react-icons/ai";
 import UserInfo from "../components/userInfo";
+import { useLocation } from "react-router-dom";
 
 export default function Dashboard(props) {
   const seller = {
@@ -61,9 +62,16 @@ export default function Dashboard(props) {
     NumberofSells: "69",
     NumberofProducts: "69",
   };
+  let currentLocation = useLocation();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [editMode, setEditMode] = useState(false);
+  const [location, setLocation] = useState(currentLocation.state.index);
+  console.log(location);
+
+  useEffect(() => {
+    setLocation(currentLocation.state.index);
+  }, [currentLocation.state.index]);
 
   function changeToEditMode() {
     setEditMode(true);
@@ -71,29 +79,9 @@ export default function Dashboard(props) {
 
   return (
     <Box w="100%">
-      <Modal
-        size="5xl"
-        motionPreset="scale"
-        isCentered
-        isOpen={isOpen}
-        onClose={onClose}
-      >
-        <ModalOverlay />
-        <ModalContent bg="white">
-          <ModalHeader></ModalHeader>
-          <ModalCloseButton />
-          <ModalBody w="70%"></ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Vender
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
       <Header />
 
-      <Tabs isFitted variant="enclosed">
+      <Tabs defaultIndex={location} isFitted variant="enclosed">
         <TabList>
           <Tab
             p="5"
@@ -166,19 +154,20 @@ export default function Dashboard(props) {
                   </Flex>
                 </GridItem>
                 <GridItem>
-                  <Button
-                    _hover={{ bg: "#c3c3c3", p: "1" }}
-                    align="center"
-                    justify="center"
-                    w="150px"
-                    h="150px"
-                    bg="white"
-                    onClick={onOpen}
-                    borderColor="#d2d3d4"
-                    borderWidth="1px"
-                  >
-                    <AddIcon color="red.500" boxSize="50%" />
-                  </Button>
+                  <NavLink to={"/selling"}>
+                    <Button
+                      _hover={{ bg: "#c3c3c3", p: "1" }}
+                      align="center"
+                      justify="center"
+                      w="150px"
+                      h="150px"
+                      bg="white"
+                      borderColor="#d2d3d4"
+                      borderWidth="1px"
+                    >
+                      <AddIcon color="red.500" boxSize="50%" />
+                    </Button>
+                  </NavLink>
                 </GridItem>
               </SimpleGrid>
             </Box>

@@ -50,15 +50,24 @@ export default function UserBadge() {
             </Flex>
           </MenuButton>
         </Flex>
+
         <MenuList bg="white">
-          <NavLink to={"/dashboard"}>
-            <MenuItem>Perfil</MenuItem>
-          </NavLink>
-          <MenuItem>Vender</MenuItem>
-          <MenuDivider color="red" />
-          <MenuItem color="red" onClick={logout}>
-            LogOut
-          </MenuItem>
+          <MenuGroup title="Perfil">
+            <NavLink to={"/dashboard"} state={{ index: 0 }}>
+              <MenuItem>Vendas</MenuItem>
+            </NavLink>
+            <NavLink to={"/dashboard"} state={{ index: 1 }}>
+              <MenuItem>Mensagens </MenuItem>
+            </NavLink>
+            <NavLink to={"/dashboard"} state={{ index: 2 }}>
+              <MenuItem>Área do usuário</MenuItem>
+            </NavLink>
+          </MenuGroup>
+          <MenuDivider />
+          <MenuGroup title="Ajuda">
+            <MenuItem>Docs</MenuItem>
+            <MenuItem>FAQ</MenuItem>
+          </MenuGroup>
         </MenuList>
       </Menu>
     </Box>
