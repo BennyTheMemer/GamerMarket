@@ -66,13 +66,11 @@ export default function Dashboard(props) {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [editMode, setEditMode] = useState(false);
-  const [location, setLocation] = useState(currentLocation.state.index);
+  const [location, setLocation] = useState(
+    currentLocation.state ? currentLocation.state.index : 0
+  );
+
   console.log(location);
-
-  useEffect(() => {
-    setLocation(currentLocation.state.index);
-  }, [currentLocation.state.index]);
-
   function changeToEditMode() {
     setEditMode(true);
   }
@@ -128,28 +126,43 @@ export default function Dashboard(props) {
                     borderWidth="1px"
                     p="5"
                     bg="white"
+                    justify="space-between"
                   >
-                    <Image
-                      boxSize="150px"
-                      src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"
-                    />
+                    <Flex w="100%">
+                      <Image
+                        boxSize="150px"
+                        src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"
+                      />
+                      <Flex
+                        ml="1%"
+                        flexDirection="column"
+                        justify="space-between"
+                      >
+                        <Flex textAlign="left" flexDirection="column">
+                          <Text
+                            fontSize="xl"
+                            fontWeight="semibold"
+                            color="black"
+                          >
+                            Nome do artigo
+                          </Text>
+                          <Text fontWeight="bold" fontSize="large">
+                            Preço
+                          </Text>
+                        </Flex>
+                        <Flex textAlign="left" flexDirection="column">
+                          <Text>Localidade</Text>
+                          <Text>Data</Text>
+                        </Flex>
+                      </Flex>
+                    </Flex>
                     <Flex
-                      ml="1%"
-                      flexDirection="column"
                       justify="space-between"
+                      align="end"
+                      flexDirection="column"
                     >
-                      <Flex textAlign="left" flexDirection="column">
-                        <Text fontSize="xl" fontWeight="semibold" color="black">
-                          Nome do artigo
-                        </Text>
-                        <Text fontWeight="bold" fontSize="large">
-                          Preço
-                        </Text>
-                      </Flex>
-                      <Flex textAlign="left" flexDirection="column">
-                        <Text>Localidade</Text>
-                        <Text>Data</Text>
-                      </Flex>
+                      <Icon as={AiFillEdit} />
+                      <Button variant="gamer">Remover</Button>
                     </Flex>
                   </Flex>
                 </GridItem>

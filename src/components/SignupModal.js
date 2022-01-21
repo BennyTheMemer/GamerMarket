@@ -82,10 +82,10 @@ export default function SignUp() {
     }
   };
   const vconfirmPassword = (value) => {
-    if (value.length < 6 || value.length > 40) {
+    if (value != password) {
       return (
         <div className="alert alert-danger" role="alert">
-          The password must be between 6 and 40 characters.
+          The passwords do not match.
         </div>
       );
     }
@@ -247,6 +247,17 @@ export default function SignUp() {
                       value={password}
                       onChange={onChangePassword}
                       validations={[required, vpassword]}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="password">Password</label>
+                    <Input
+                      type="password"
+                      className="form-control"
+                      name="ConfirmPassword"
+                      value={confirmPassword}
+                      onChange={onChangeconfirmPassword}
+                      validations={[required, vconfirmPassword]}
                     />
                   </div>
 

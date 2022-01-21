@@ -1,6 +1,16 @@
-import { Divider, Flex, Image, Box, Heading, Text } from "@chakra-ui/react";
+import {
+  Button,
+  Divider,
+  Flex,
+  Image,
+  Box,
+  Heading,
+  Text,
+} from "@chakra-ui/react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { AiFillEdit } from "react-icons/ai";
+import { Icon } from "@chakra-ui/react";
 
 export default function Card({
   name,
@@ -14,42 +24,33 @@ export default function Card({
 }) {
   return (
     <Flex
-      w="100%"
-      h="100%"
-      borderRadius="10"
-      bg="grey.400"
-      color="black"
-      flexDirection="column"
+      borderColor="#d2d3d4"
+      borderWidth="1px"
+      p="5"
+      bg="white"
+      justify="space-between"
     >
-      <Box backgroundSize="contain" p="3" h="100%">
-        <Image boxSize={props.boxSize} src={image} alt="product" />
-
-        <Text
-          fontSize={{ base: "0.8rem", md: "0.7rem", xl: "1rem" }}
-          fontWeight="bold"
-          color="black"
-        >
-          {name}
-        </Text>
-        <Flex justify="space-between">
-          <Text
-            display={{ sm: "none", lg: "flex" }}
-            fontSize={{ base: "none", md: "0.7rem", lg: "0.8rem" }}
-          >
-            {" "}
-            {localidade}
-          </Text>
-          <Text fontSize={{ base: "none", md: "0.7rem", lg: "0.8rem" }}>
-            {createdAt}
-          </Text>
+      <Flex w="100%">
+        <Image boxSize="150px" src={image} />
+        <Flex ml="1%" flexDirection="column" justify="space-between">
+          <Flex textAlign="left" flexDirection="column">
+            <Text fontSize="xl" fontWeight="semibold" color="black">
+              {name}
+            </Text>
+            <Text fontWeight="bold" fontSize="large">
+              {price}
+            </Text>
+          </Flex>
+          <Flex textAlign="left" flexDirection="column">
+            <Text>{localidade}</Text>
+            <Text>{createdAt}</Text>
+          </Flex>
         </Flex>
-        <Text
-          color="black"
-          fontSize={{ base: "1rem", md: "0.9rem", xl: "1rem" }}
-        >
-          {price}
-        </Text>
-      </Box>
+      </Flex>
+      <Flex justify="space-between" align="end" flexDirection="column">
+        <Icon as={AiFillEdit} />
+        <Button variant="gamer">Remover</Button>
+      </Flex>
     </Flex>
   );
 }

@@ -68,6 +68,8 @@ export default function UserBadge() {
             <MenuItem>Docs</MenuItem>
             <MenuItem>FAQ</MenuItem>
           </MenuGroup>
+          <MenuDivider />
+          <MenuItem onClick={logout}>Sair</MenuItem>
         </MenuList>
       </Menu>
     </Box>

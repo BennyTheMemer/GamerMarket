@@ -7,11 +7,16 @@ import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider } from "@chakra-ui/react";
 import Header from "./components/AuthHeader";
 import { BrowserRouter as Router } from "react-router-dom";
+import store from "./store/store.js";
+
+import { Provider } from "react-redux";
 
 ReactDOM.render(
   <StrictMode>
-    <ColorModeScript />
-    <App />
+    <Provider store={store}>
+      <ColorModeScript />
+      <App />
+    </Provider>
   </StrictMode>,
   document.getElementById("root")
 );

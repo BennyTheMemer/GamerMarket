@@ -234,29 +234,18 @@ export default function Explore() {
           </VStack>
         </GridItem>
         <GridItem colSpan={5}>
-          <Grid
-            gap={10}
-            templateColumns={{ base: "repeat(3,1fr)", lg: "repeat(5,1fr)" }}
-            ml="4%"
-          >
+          <Grid gap={10} ml="4%">
             {items.map((item) => (
               <GridItem>
-                <NavLink
-                  to={{
-                    pathname: "/article",
-                    state: { name: "bernardo" },
-                  }}
-                >
-                  <Card
-                    name={item.name}
-                    image={item.image}
-                    price={item.price}
-                    localidade={item.localidade}
-                    createdAt={item.createdAt}
-                    seller={item.seller}
-                    sellerId={item.sellerId}
-                  />
-                </NavLink>
+                <Card
+                  name={item.name}
+                  image={item.image}
+                  price={item.price}
+                  localidade={item.localidade}
+                  createdAt={item.createdAt}
+                  seller={item.seller}
+                  sellerId={item.sellerId}
+                />
               </GridItem>
             ))}
           </Grid>
