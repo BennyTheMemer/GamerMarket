@@ -7,18 +7,19 @@ import React, {
   useState,
 } from "react";
 
-const API_URL = "http://localhost:8080/api/auth/";
+const API_URL = process.env.REACT_APP_API_URL;
 
 class AuthService {
-  login(username, password) {
+  login(email, password) {
     return axios
-      .post(API_URL + "signin", {
-        username,
+      .post(API_URL + "users/login", {
+        email,
         password,
       })
       .then((response) => {
-        if (response.data.accessToken) {
-          localStorage.setItem("user", JSON.stringify(response.data));
+        console.log(response);
+        if (response.data.Authorization) {
+          localStorage.setItem("token", response.data.Authorization);
         }
 
         return response.data;
@@ -26,11 +27,13 @@ class AuthService {
   }
 
   logout() {
-    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+
+    return axios.post(API_URL + "users/logout");
   }
 
   register(username, email, password) {
-    return axios.post(API_URL + "signup", {
+    return axios.post(API_URL + "users/register", {
       username,
       email,
       password,
@@ -38,7 +41,8 @@ class AuthService {
   }
 
   getCurrentUser() {
-    return JSON.parse(localStorage.getItem("user"));
+    console.log(localStorage.getItem("token"));
+    return localStorage.getItem("token");
   }
 }
 

@@ -30,17 +30,19 @@ export default function SignUp() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginEmail, setLoginEmail] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
   const [message, setMessage] = useState("");
   const [successful, setSuccessful] = useState(true);
   const [loading, setLoading] = useState(false);
   var form = React.useRef();
   var checkBtn = React.useRef();
+  var loginForm = React.useRef();
+  var loginCheckBtn = React.useRef();
   const initialRef = React.useRef();
   const finalRef = React.useRef();
   const history = useNavigate();
-
-  console.log(AuthService.getCurrentUser());
 
   const required = (value) => {
     if (!value) {
@@ -72,24 +74,15 @@ export default function SignUp() {
     }
   };
 
-  const vpassword = (value) => {
+  function vpassword(value) {
     if (value.length < 6 || value.length > 40) {
       return (
         <div className="alert alert-danger" role="alert">
-          The password must be between 6 and 40 characters.
+          The password tem de ter entre 6 a 40 caracteres
         </div>
       );
     }
-  };
-  const vconfirmPassword = (value) => {
-    if (value != password) {
-      return (
-        <div className="alert alert-danger" role="alert">
-          The passwords do not match.
-        </div>
-      );
-    }
-  };
+  }
 
   function onChangeUsername(e) {
     setUsername(e.target.value);
@@ -99,8 +92,16 @@ export default function SignUp() {
     setEmail(e.target.value);
   }
 
+  function onChangeLoginEmail(e) {
+    setLoginEmail(e.target.value);
+  }
+
   function onChangePassword(e) {
     setPassword(e.target.value);
+  }
+
+  function onChangeLoginPassword(e) {
+    setLoginPassword(e.target.value);
   }
 
   function onChangeconfirmPassword(e) {
@@ -113,7 +114,7 @@ export default function SignUp() {
     setMessage("");
     setSuccessful(false);
     form.validateAll();
-    console.log(checkBtn);
+    console.log(form.getValues());
     if (checkBtn.context._errors.length === 0) {
       AuthService.register(username, email, password).then(
         (response) => {
@@ -141,10 +142,11 @@ export default function SignUp() {
     setMessage("");
     setLoading(true);
 
-    form.validateAll();
+    loginForm.validateAll();
+    console.log(loginForm.getValues());
 
-    if (checkBtn.context._errors.length === 0) {
-      AuthService.login(username, password).then(
+    if (loginCheckBtn.context._errors.length === 0) {
+      AuthService.login(loginEmail, loginPassword).then(
         () => {
           history("/dashboard");
           window.location.reload();
@@ -166,11 +168,17 @@ export default function SignUp() {
     }
   }
   function changeRegister() {
+    setLoginPassword("");
+    setLoginEmail("");
     onClose();
     registerOnOpen();
   }
 
   function changeSignIn() {
+    setUsername("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
     onOpen();
     registerOnClose();
   }
@@ -257,13 +265,19 @@ export default function SignUp() {
                       name="ConfirmPassword"
                       value={confirmPassword}
                       onChange={onChangeconfirmPassword}
-                      validations={[required, vconfirmPassword]}
+                      validations={[required]}
                     />
                   </div>
 
                   <div className="form-group">
-                    <button className="btn btn-primary btn-block">
-                      Sign Up
+                    <button
+                      className="btn btn-primary btn-block"
+                      disabled={loading}
+                    >
+                      {loading && (
+                        <span className="spinner-border spinner-border-sm"></span>
+                      )}
+                      <span>Registar</span>
                     </button>
                   </div>
                 </div>
@@ -299,9 +313,6 @@ export default function SignUp() {
               >
                 <Text textDecoration="underline">Já tens conta?</Text>
               </Button>
-              <Button type="submit" onClick={handleRegister} variant="gamer">
-                Register
-              </Button>
             </ModalFooter>
           </ModalContent>
         </Modal>
@@ -309,8 +320,6 @@ export default function SignUp() {
     }
     return (
       <Modal
-        finalFocusRef={finalRef}
-        initialFocusRef={initialRef}
         isCentered
         isOpen={isOpen}
         onClose={onClose}
@@ -323,30 +332,29 @@ export default function SignUp() {
           <ModalBody>
             <Form
               onSubmit={handleLogin}
-              ref={(c) => {
-                form = c;
+              ref={(d) => {
+                loginForm = d;
               }}
             >
               <div className="form-group">
-                <label htmlFor="username">Username</label>
+                <label htmlFor="email">Email</label>
                 <Input
                   type="text"
                   className="form-control"
-                  name="username"
-                  value={username}
-                  onChange={onChangeUsername}
+                  name="loginEmail"
+                  value={loginEmail}
+                  onChange={onChangeLoginEmail}
                   validations={[required]}
                 />
               </div>
-
               <div className="form-group">
                 <label htmlFor="password">Password</label>
                 <Input
                   type="password"
                   className="form-control"
-                  name="password"
-                  value={password}
-                  onChange={onChangePassword}
+                  name="loginPassword"
+                  value={loginPassword}
+                  onChange={onChangeLoginPassword}
                   validations={[required]}
                 />
               </div>
@@ -372,8 +380,8 @@ export default function SignUp() {
               )}
               <CheckButton
                 style={{ display: "none" }}
-                ref={(c) => {
-                  checkBtn = c;
+                ref={(d) => {
+                  loginCheckBtn = d;
                 }}
               />
             </Form>
