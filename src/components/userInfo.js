@@ -19,10 +19,11 @@ import {
   AccordionIcon,
   Input,
   Tooltip,
-  Grid,
+  FormControl,
   Badge,
   Textarea,
 } from "@chakra-ui/react";
+import "./UserInfo.css";
 import { useState } from "react";
 import Card from "../components/card";
 import imageLandingPage from "../assets/imageLandingPage.png";
@@ -35,48 +36,89 @@ import Header from "../components/AuthHeader";
 import { AddIcon } from "@chakra-ui/icons";
 import { AiOutlineMail, AiOutlinePhone } from "react-icons/ai";
 import { HiOutlineLocationMarker } from "react-icons/hi";
-import Seller from "../assets/Seller.jpg";
 import { Icon } from "@chakra-ui/react";
 import StarRating from "../components/rating";
-import { AiFillEdit } from "react-icons/ai";
+import { AiFillEdit, AiFillSave, AiFillFileImage } from "react-icons/ai";
+import { useForm, Controller } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import AuthService from "../services/authservice";
 
 export default function UserInfo() {
-  const seller = {
-    Name: "Bernardo Alves",
-    Email: "bernardo_brg@hotmail.com",
-    Phone: "979797979",
-    Address: "Rua da paz, nº1",
-    City: "Braga",
-    Country: "Portugal",
-    ZipCode: "4200-000",
-    About: "Sou fixe",
-  };
-
+  const API_URL = process.env.REACT_APP_API_URL;
+  const { handleSubmit, register, control, reset, getValues } = useForm({
+    defaultValues: {
+      name: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+        ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.name
+        : "",
+      email: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+        ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.email
+        : "",
+      number: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+        ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.number
+        : "",
+      description: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+        ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.description
+        : "",
+    },
+  });
+  const [user, setUser] = useState({
+    name: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+      ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.name
+      : "",
+    email: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+      ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.email
+      : "",
+    number: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+      ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.number
+      : "",
+    description: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+      ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.description
+      : "",
+    //falta imagem, pedir ao Imp
+  });
+  const history = useNavigate();
   const [editMode, setEditMode] = useState(false);
-  const [description, setDescription] = useState(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duiseleifend libero at est egestas venenatis. Nullam scelerisque sollicitudin vehicula. Ut placerat ante est, fringilla mattis sem finibus non. Donec risus ligula, mollis ut nunc vitae,tempus lacinia arcu. Etiam odio magna, ultrices at lectus i"
-  );
-  const [name, setName] = useState(seller.Name);
-  const [number, setNumber] = useState(seller.Phone);
-  const [email, setEmail] = useState(seller.Email);
 
   function changeToEditMode() {
     setEditMode(!editMode);
   }
 
-  function onChangeName(e) {
-    setName(e.target.value);
+  function setUserImage(e) {
+    console.log(e.target.files);
+    setUser({ ...user, image: e.target.files[0] });
   }
 
-  function onChangeDescription(e) {
-    setDescription(e.target.value);
+  async function submitInfo(data) {
+    const token = localStorage.getItem("token");
+    const name = data.name;
+    const email = data.email;
+    const number = data.number;
+    const description = data.description;
+    const formData = new FormData();
+    formData.append("image", data.image[0]);
+    console.log(data.image[0]);
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = token;
+      try {
+        await axios.patch(API_URL + "users/public", {
+          name,
+          email,
+          number,
+          description,
+        });
+        await AuthService.myself();
+
+        changeToEditMode();
+        window.location.reload();
+      } catch (err) {
+        console.log(err);
+      } finally {
+        await axios.patch(API_URL + "users/image", formData);
+      }
+    }
   }
-  function onChangeNumber(e) {
-    setNumber(e.target.value);
-  }
-  function onChangeEmail(e) {
-    setEmail(e.target.value);
-  }
+
   return (
     <>
       {editMode ? (
@@ -91,108 +133,167 @@ export default function UserInfo() {
           w="60%"
           mt="3%"
         >
-          <Flex flexDirection="row">
-            <Flex flexDirection="column">
-              <Image
-                mt="10px"
-                borderRadius="full"
-                boxSize="20vh"
-                fallbackSrc="https://via.placeholder.com/150"
-                src={Seller}
-                alt="sup"
-              />
-              <Flex mt="5" flexDirection="column">
-                <Flex w="100%" align="center">
-                  <Icon as={AiOutlineMail} />{" "}
-                  <Input
-                    _active={{ borderColor: "red.600" }}
-                    _selected={{ borderColor: "red.600" }}
-                    _focus={{ borderColor: "red.600" }}
-                    m="0"
-                    p="0"
-                    borderWidth="1"
-                    borderColor="red.600"
-                    value={email}
-                    onChange={onChangeEmail}
-                    variant="filled"
-                    ml="2%"
-                  />
-                </Flex>
-                <Flex w="100%" align="center">
-                  <Icon as={AiOutlinePhone} />
-                  <Input
-                    variant="filled"
-                    _active={{ borderColor: "red.600" }}
-                    _selected={{ borderColor: "red.600" }}
-                    _focus={{ borderColor: "red.600" }}
-                    m="0"
-                    p="0"
-                    borderWidth="1"
-                    borderColor="red.600"
-                    value={number}
-                    onChange={onChangeNumber}
-                    ml="2%"
-                  />
-                </Flex>
-              </Flex>
-            </Flex>
-            <Flex
-              flexDirection="column"
-              align="flex-start"
-              ml="5%"
-              w="70%"
-              position="relative"
-            >
-              <Flex w="100%" justify="space-between">
-                <Flex justify="center" align="center">
-                  <Input
-                    _active={{ borderColor: "red.600" }}
-                    _selected={{ borderColor: "red.600" }}
-                    _focus={{ borderColor: "red.600" }}
-                    m="0"
-                    p="0"
-                    borderWidth="1"
-                    borderColor="red.600"
-                    fontWeight="bold"
-                    fontSize="4xl"
-                    value={name}
-                    onChange={onChangeName}
-                    variant="filled"
-                  />
-                  {name.length > 22 ? (
-                    <Text ml="5px" color="red">
-                      {name.length}/22
-                    </Text>
+          <form
+            key="publicInfoForm"
+            id="publicInfoForm"
+            onSubmit={handleSubmit(submitInfo)}
+            display="flex"
+          >
+            <Flex w="100%" flexDirection="column">
+              <Flex flexDirection="row">
+                <Flex flexDirection="column">
+                  {user.image ? (
+                    //mostrar aqui a imagem do user
+                    <VStack>
+                      <Image
+                        mt="10px"
+                        borderRadius="full"
+                        boxSize="20vh"
+                        fallbackSrc="https://via.placeholder.com/150"
+                        src={URL.createObjectURL(user.image)}
+                      />
+                    </VStack>
                   ) : (
-                    <Text ml="5px">{name.length}/22</Text>
+                    <VStack align="center">
+                      <Image
+                        mt="10px"
+                        borderRadius="full"
+                        boxSize="20vh"
+                        fallbackSrc="https://via.placeholder.com/150"
+                        alt="sup"
+                        mb="5px"
+                      />
+                    </VStack>
                   )}
-                </Flex>
+                  <Flex align="center" justify="center" flexDirection="row">
+                    <input
+                      {...register("image")}
+                      accept="image/*"
+                      type="file"
+                      id="file"
+                      className="inputfile"
+                      onChange={setUserImage}
+                    />
 
-                <Button w="8%" onClick={changeToEditMode}>
-                  <Icon boxSize="100%" as={AiFillEdit} />
-                </Button>
+                    <label htmlFor="file">
+                      Upload <Icon as={AiFillFileImage} size="20px" />
+                    </label>
+                  </Flex>
+                  <Flex mt="5" flexDirection="column">
+                    <Flex w="100%" align="center">
+                      <Icon as={AiOutlineMail} />{" "}
+                      <Controller
+                        name="email"
+                        control={control}
+                        rules={{ pattern: /^\S+@\S+\.\S+$/ }}
+                        render={({ field }) => (
+                          <Input
+                            _active={{ borderColor: "red.600" }}
+                            _selected={{ borderColor: "red.600" }}
+                            _focus={{ borderColor: "red.600" }}
+                            m="0"
+                            p="0"
+                            borderWidth="1"
+                            borderColor="red.600"
+                            variant="filled"
+                            ml="2%"
+                            {...field}
+                          />
+                        )}
+                      />
+                    </Flex>
+                    <Flex w="100%" align="center">
+                      <Icon as={AiOutlinePhone} />
+                      <Controller
+                        name="number"
+                        control={control}
+                        rules={{ pattern: /^\d{9}$/ }}
+                        render={({ field }) => (
+                          <Input
+                            variant="filled"
+                            _active={{ borderColor: "red.600" }}
+                            _selected={{ borderColor: "red.600" }}
+                            _focus={{ borderColor: "red.600" }}
+                            m="0"
+                            p="0"
+                            borderWidth="1"
+                            borderColor="red.600"
+                            ml="2%"
+                            value={user.number ? user.number : ""}
+                            placeholder={user.number ? "" : "Insira o numero"}
+                            {...field}
+                          />
+                        )}
+                      />
+                    </Flex>
+                  </Flex>
+                </Flex>
+                <Flex
+                  flexDirection="column"
+                  align="flex-start"
+                  ml="5%"
+                  w="70%"
+                  position="relative"
+                >
+                  <Flex w="100%" justify="space-between">
+                    <Flex justify="center" align="center">
+                      <Controller
+                        name="name"
+                        control={control}
+                        render={({ field }) => (
+                          <Input
+                            _active={{ borderColor: "red.600" }}
+                            _selected={{ borderColor: "red.600" }}
+                            _focus={{ borderColor: "red.600" }}
+                            m="0"
+                            p="0"
+                            borderWidth="1"
+                            borderColor="red.600"
+                            fontWeight="bold"
+                            fontSize="4xl"
+                            variant="filled"
+                            {...field}
+                          />
+                        )}
+                      />
+                    </Flex>
+
+                    <Button w="8%" onClick={changeToEditMode}>
+                      <Icon boxSize="100%" as={AiFillEdit} />
+                    </Button>
+                  </Flex>
+                  <Controller
+                    name="description"
+                    control={control}
+                    rules={{ maxLenght: 200 }}
+                    render={({ field }) => (
+                      <Textarea
+                        _active={{ borderColor: "red.600" }}
+                        _selected={{ borderColor: "red.600" }}
+                        _focus={{ borderColor: "red.600" }}
+                        m="0"
+                        p="0"
+                        borderWidth="1"
+                        borderColor="red.600"
+                        fontSize="md"
+                        placeholder="Here is a sample placeholder"
+                        align="start"
+                        mt="2%"
+                        h="100%"
+                        w="100%"
+                        variant="filled"
+                        size="sm"
+                        {...field}
+                      />
+                    )}
+                  />
+                </Flex>
               </Flex>
-              <Textarea
-                _active={{ borderColor: "red.600" }}
-                _selected={{ borderColor: "red.600" }}
-                _focus={{ borderColor: "red.600" }}
-                m="0"
-                p="0"
-                borderWidth="1"
-                borderColor="red.600"
-                fontSize="md"
-                value={description}
-                onChange={onChangeDescription}
-                placeholder="Here is a sample placeholder"
-                align="start"
-                mt="2%"
-                h="100%"
-                w="100%"
-                variant="filled"
-                size="sm"
-              />
+              <Button mt={4} type="submit">
+                Submit
+              </Button>
             </Flex>
-          </Flex>
+          </form>
         </Box>
       ) : (
         <Box
@@ -211,17 +312,28 @@ export default function UserInfo() {
                 borderRadius="full"
                 boxSize="20vh"
                 fallbackSrc="https://via.placeholder.com/150"
-                src={Seller}
-                alt="sup"
+                src={user.image ? user.image : ""}
               />
               <Flex mt="5" flexDirection="column">
                 <Flex w="100%" align="center">
-                  <Icon as={AiOutlineMail} />{" "}
-                  <Text ml="2%">{seller.Email}</Text>
+                  <Icon as={AiOutlineMail} />
+                  {user?.email ? (
+                    <Text ml="2%">{user?.email}</Text>
+                  ) : (
+                    <Text color="grey" ml="2%">
+                      Sem Email
+                    </Text>
+                  )}
                 </Flex>
                 <Flex w="100%" align="center">
                   <Icon as={AiOutlinePhone} />
-                  <Text ml="2%">{seller.Phone}</Text>
+                  {user?.number ? (
+                    <Text ml="2%">{user.number}</Text>
+                  ) : (
+                    <Text color="grey" ml="2%">
+                      Sem numero
+                    </Text>
+                  )}
                 </Flex>
               </Flex>
             </Flex>
@@ -234,34 +346,24 @@ export default function UserInfo() {
             >
               <Flex w="100%" justify="space-between">
                 <Flex justify="center" align="center">
-                  <Heading>
-                    {" "}
-                    {seller.Name}
-                    <Badge
-                      ml="6px"
-                      bg="red.500"
-                      color="red.700"
-                      colorScheme="red"
-                      fontSize="md"
-                    >
-                      Admin
-                    </Badge>
-                  </Heading>
+                  {user?.name ? (
+                    <Heading> {user.name} </Heading>
+                  ) : (
+                    <Heading color="grey"> Adiciona um nome </Heading>
+                  )}
                 </Flex>
                 <Button w="8%" onClick={changeToEditMode}>
                   <Icon boxSize="100%" as={AiFillEdit} />
                 </Button>
               </Flex>
               <Text align="start" mt="2%">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis
-                eleifend libero at est egestas venenatis. Nullam scelerisque
-                sollicitudin vehicula. Ut placerat ante est, fringilla mattis
-                sem finibus non. Donec risus ligula, mollis ut nunc vitae,
-                tempus lacinia arcu. Etiam odio magna, ultrices at lectus id,
-                mattis egestas lorem. Aliquam erat volutpat. Donec volutpat
-                vitae purus at posuere. Suspendisse rhoncus turpis vitae laoreet
-                posuere. Donec lorem nibh, venenatis vitae diam et, vestibulum
-                sagittis lectus. Morbi nec mauris odio.
+                {user?.description ? (
+                  <Text>{user.description}</Text>
+                ) : (
+                  <Text color="grey">
+                    Ainda não tens uma descrição! Edita o teu perfil
+                  </Text>
+                )}
               </Text>
             </Flex>
           </Flex>

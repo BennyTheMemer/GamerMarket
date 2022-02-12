@@ -62,8 +62,8 @@ export default function LandingPage(props) {
       >
         <defs>
           <linearGradient id="gradient" x1="49%" y1="0%" x2="51%" y2="100%">
-            <stop offset="5%" stop-color="#ff000088"></stop>
-            <stop offset="95%" stop-color="#00000088"></stop>
+            <stop offset="5%" stopColor="#ff000088"></stop>
+            <stop offset="95%" stopColor="#00000088"></stop>
           </linearGradient>
         </defs>
         <path
@@ -75,8 +75,8 @@ export default function LandingPage(props) {
         ></path>
         <defs>
           <linearGradient id="gradient" x1="49%" y1="0%" x2="51%" y2="100%">
-            <stop offset="5%" stop-color="#ff0000ff"></stop>
-            <stop offset="95%" stop-color="#000000ff"></stop>
+            <stop offset="5%" stopColor="#ff0000ff"></stop>
+            <stop offset="95%" stopColor="#000000ff"></stop>
           </linearGradient>
         </defs>
         <path

@@ -11,32 +11,22 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./views/Dashboard";
 import SellerPage from "./views/SellerPage";
 import Selling from "./views/Selling";
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Button,
-  useDisclosure,
-  Input,
-} from "@chakra-ui/react";
+import { useDisclosure } from "@chakra-ui/react";
 import Header from "./components/AuthHeader";
 
 function App() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const initialRef = React.useRef();
-  const finalRef = React.useRef();
-
   return (
     <ThemeProvider>
       <Router>
         <Routes>
           <Route element={<LandingPage />} path="/"></Route>
+          <Route
+            element={<Explore />}
+            path="/home/:category/:subcategory"
+          ></Route>
+          <Route element={<Explore />} path="/home/search/:query"></Route>
           <Route element={<Explore />} path="/home"></Route>
-          <Route element={<Article />} path="/article"></Route>
+          <Route element={<Article />} path="/article/:id"></Route>
           <Route element={<Dashboard />} path="/dashboard"></Route>
           <Route element={<SellerPage />} path="/user/:id" />
           <Route element={<Selling />} path="/selling" />

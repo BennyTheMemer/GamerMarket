@@ -1,0 +1,57 @@
+.inputnofile {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+.inputnofile + label {
+  border-radius: 5px;
+  padding-left: 3px;
+  padding-right: 3px;
+  font-size: 1.25em;
+  font-weight: 700;
+  color: black;
+  background-color: #edf2f7;
+  display: inline-block;
+  cursor: pointer; /* "hand" cursor */
+}
+
+.inputnofile:focus + label {
+  outline: 1px dotted #000;
+  outline: -webkit-focus-ring-color auto 5px;
+}
+
+.inputnofile + label:hover {
+  background-color: #b80000;
+}
+
+.inputfile {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+.inputfile + label {
+  border-radius: 5px;
+  padding-left: 3px;
+  padding-right: 3px;
+  font-size: 1.25em;
+  font-weight: 700;
+  color: black;
+  background-color: #edf2f7;
+  display: inline-block;
+  cursor: pointer; /* "hand" cursor */
+}
+
+.inputfile:focus + label {
+  outline: 1px dotted #000;
+  outline: -webkit-focus-ring-color auto 5px;
+}
+
+.inputfile + label:hover {
+  background-color: #b80000;
+}

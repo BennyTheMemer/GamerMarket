@@ -1,23 +1,16 @@
 import axios from "axios";
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import jwt_decode from "jwt-decode";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
 class AuthService {
-  login(email, password) {
-    return axios
+  async login(email, password) {
+    return await axios
       .post(API_URL + "users/login", {
         email,
         password,
       })
       .then((response) => {
-        console.log(response);
         if (response.data.Authorization) {
           localStorage.setItem("token", response.data.Authorization);
         }
@@ -27,9 +20,27 @@ class AuthService {
   }
 
   logout() {
-    localStorage.removeItem("token");
+    const token = jwt_decode(localStorage.getItem("token"));
 
-    return axios.post(API_URL + "users/logout");
+    return axios
+      .post(
+        API_URL + "users/logout",
+        {
+          _user: {
+            id: token.id,
+            iat: token.iat,
+          },
+        },
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      )
+      .then(() => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("currentUser");
+      });
   }
 
   register(username, email, password) {
@@ -41,8 +52,31 @@ class AuthService {
   }
 
   getCurrentUser() {
-    console.log(localStorage.getItem("token"));
-    return localStorage.getItem("token");
+    const token = localStorage.getItem("token");
+
+    return token;
+  }
+
+  decodeToken() {
+    const token = jwt_decode(localStorage.getItem("token"));
+    return token.id;
+  }
+
+  async myself() {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (token) {
+        axios.defaults.headers.common["Authorization"] = token;
+        axios.get(API_URL + "myself").then((response) => {
+          localStorage.setItem("currentUser", JSON.stringify(response.data));
+        });
+      } else {
+        console.log("No token");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
 

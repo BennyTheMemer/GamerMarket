@@ -4,21 +4,13 @@ import { ColorModeScript } from "@chakra-ui/react";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { ChakraProvider } from "@chakra-ui/react";
-import Header from "./components/AuthHeader";
-import { BrowserRouter as Router } from "react-router-dom";
-import store from "./redux/store/store.js";
-
-import { Provider } from "react-redux";
 
 require("dotenv").config();
 
 ReactDOM.render(
   <StrictMode>
-    <Provider store={store}>
-      <ColorModeScript />
-      <App />
-    </Provider>
+    <ColorModeScript />
+    <App />
   </StrictMode>,
   document.getElementById("root")
 );

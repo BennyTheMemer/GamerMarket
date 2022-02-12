@@ -19,6 +19,13 @@ import {
   ModalBody,
   ModalCloseButton,
   Tooltip,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+  VStack,
+  AspectRatio,
+  Textarea,
 } from "@chakra-ui/react";
 import "./landingpage.css";
 import { Image } from "@chakra-ui/react";
@@ -27,6 +34,7 @@ import gamerretail from "../assets/logogamer-removebg-preview.png";
 import { SearchIcon } from "@chakra-ui/icons";
 import { Icon } from "@chakra-ui/react";
 import { MdPersonOutline } from "react-icons/md";
+import { AiOutlineArrowRight, AiOutlineArrowLeft } from "react-icons/ai";
 import geforce from "../assets/GEFORCE.jpg";
 import { useLocation } from "react-router-dom";
 import Seller from "../assets/Seller.jpg";
@@ -35,10 +43,35 @@ import { ArrowBackIcon } from "@chakra-ui/icons";
 import "./productpage.css";
 import { TiTick } from "react-icons/ti";
 import Header from "../components/AuthHeader";
+import axios from "axios";
 
 export default function Article(props) {
   const [userNumber, setUserNumber] = useState("Número");
   const [isOpen, setOpen] = useState(false);
+  const [item, setItem] = useState([]);
+  const [selectedImage, setSelectImage] = useState(null);
+  const API_URL = process.env.REACT_APP_API_URL;
+  const [user, setUser] = useState(null);
+  const [numberShow, setNumberShow] = useState(false);
+
+  var [currentImageIndex, setCurrentImageIndex] = useState(0);
+  console.log(currentImageIndex);
+
+  async function getItems() {
+    let re = "[^/]+$";
+
+    let id = window.location.href.match(re)[0];
+
+    await axios.get(API_URL + "items/" + id).then((res) => {
+      setItem(res.data);
+      setUser(res.data.seller);
+      setSelectImage(res.data.images[0]);
+    });
+  }
+
+  useEffect(() => {
+    getItems();
+  }, []);
 
   function onOpen() {
     setOpen(true);
@@ -48,24 +81,34 @@ export default function Article(props) {
     setOpen(false);
   }
 
-  const item = {
-    name: "GeForce toda bombada",
-    image: geforce,
-    price: "1.000,00€",
-    localidade: "braga",
-    createdAt: "2020-05-05",
-    category: "Componentes Principais",
-    subcategory: "Placas gráficas",
-    seller: "benny",
-    sellerId: "12",
-  };
-
-  function numberOn() {
-    if (userNumber == "Número") {
-      setUserNumber("979797979");
-    } else {
-      setUserNumber("Número");
+  function controlDecrement() {
+    const index = currentImageIndex - 1;
+    console.log(index);
+    if (index >= 0) {
+      setCurrentImageIndex(index);
     }
+  }
+
+  function controlIncrement() {
+    const index = currentImageIndex + 1;
+    if (index < item.images.length) {
+      setCurrentImageIndex(index);
+    }
+  }
+
+  function sendMessage(e) {
+    console.log("É este o content?" + e.target.mensagem.value);
+
+    axios.defaults.headers.common["Authorization"] =
+      localStorage.getItem("token");
+    console.log(user.id);
+    axios
+      .post(API_URL + "messages/" + user.id, {
+        content: e.target.mensagem.value,
+      })
+      .then((res) => {
+        console.log(res);
+      });
   }
 
   return (
@@ -74,21 +117,39 @@ export default function Article(props) {
 
       <Flex m="3%" justify="center" w="100%">
         <Flex textAlign="center" justifyItems="center" w="80%">
-          <NavLink to={"/home"}>
-            <ArrowBackIcon />
-          </NavLink>
-          <a href="/home"> &nbsp; Home</a>
-          <span>&nbsp;&gt;</span>
-          <a href="/componentes">&nbsp; {item.category}</a>
-          <span>&nbsp;&gt;</span>
+          <Breadcrumb spacing="8px">
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/home">Home</BreadcrumbLink>
+            </BreadcrumbItem>
 
-          <a href="/components/graficas">&nbsp; {item.subcategory}</a>
+            <BreadcrumbItem>
+              <BreadcrumbLink href={`/home/${item.category}`}>
+                {item.category}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+
+            <BreadcrumbItem>
+              <BreadcrumbLink
+                href={`/home/${item.category}/${item.subcategory}`}
+              >
+                {item.subcategory}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          </Breadcrumb>
         </Flex>
       </Flex>
-      <Heading ml="12%">{item.name}</Heading>
-      <Flex justify="space-between" align="center" flexDirection="column">
+      <Heading ml="12%">{item.title}</Heading>
+      <Flex
+        mt="10px"
+        justify="space-between"
+        align="center"
+        flexDirection="column"
+      >
         <Flex justify="space-around" w="80%">
           <Box
+            bg="white"
+            borderColor="#d2d3d4"
+            borderWidth="1px"
             backgroundSize="contain"
             align="center"
             h={{ base: "80%", lg: "60%" }}
@@ -96,7 +157,36 @@ export default function Article(props) {
             p="5"
             bg="white"
           >
-            <Image w="100%" h="100%" src={geforce} />
+            {item.images ? (
+              <AspectRatio maxW="400px" minW="100px" ratio={1.4}>
+                <Image borderRadius="5" src={item.images[currentImageIndex]} />
+              </AspectRatio>
+            ) : (
+              ""
+            )}
+            {/* image slider */}
+            <Flex
+              mt="10px"
+              w="100%"
+              justify="center"
+              align="center"
+              flexDirection="row"
+            >
+              <Button onClick={controlDecrement}>
+                <Icon as={AiOutlineArrowLeft} size="20px" />
+              </Button>
+              {item.images
+                ? item.images.map((image, index) => (
+                    <AspectRatio ml="10px" minW="85px" ratio={1}>
+                      <Image src={image} />
+                    </AspectRatio>
+                  ))
+                : ""}
+
+              <Button onClick={controlIncrement} ml="10px">
+                <Icon as={AiOutlineArrowRight} size="20px" />
+              </Button>
+            </Flex>
           </Box>
           <Flex
             display={{ base: "none", lg: "flex" }}
@@ -104,72 +194,83 @@ export default function Article(props) {
             w="30%"
           >
             <Flex
-              h="28%"
               bg="white"
+              borderColor="#d2d3d4"
+              borderWidth="1px"
+              h="28%"
               p="5"
               borderRadius="5px"
               w="100%"
               flexDirection="column"
             >
-              <Flex flexDirection="row">
+              <Flex h="100%" w="100%" flexDirection="row">
                 <NavLink
                   to={{
-                    pathname: `/user/${item.sellerId}`,
+                    pathname: `/user/${user?.id}`,
                     state: { name: "bernardo" },
                   }}
-                >
-                  <Image boxSize="9vh" borderRadius="full" src={Seller} />
-                </NavLink>
+                ></NavLink>
 
-                <Flex ml="5%" mb="7%" flexDirection="column">
-                  <Flex flexDirection="row">
-                    <Text fontWeight="semibold" fontSize="1.3rem">
-                      {item.seller}
-                    </Text>
-                    <Tooltip hasArrow label="Este user está certificado!">
-                      <span>
-                        <Icon h="7" color="red" as={TiTick} />
-                      </span>
-                    </Tooltip>
+                <Flex
+                  justify="space-between"
+                  w="80%"
+                  ml="5%"
+                  flexDirection="column"
+                  h="100%"
+                >
+                  {" "}
+                  <Text fontWeight="semibold" fontSize="xl">
+                    {user?.publicInfo.name}
+                  </Text>
+                  <Flex justify="flex-start" flexDirection="row">
+                    <Button onClick={() => setNumberShow(!numberShow)} mr="5px">
+                      {numberShow ? (
+                        user?.publicInfo.number
+                      ) : (
+                        <Text>Número</Text>
+                      )}
+                    </Button>
+                    <Button onClick={onOpen}>Mensagem</Button>
                   </Flex>
-                  <Text>Registado desde:</Text>
-                  <Text>Last time online:</Text>
                 </Flex>
               </Flex>
 
-              <Button onClick={numberOn} mb="5px">
-                {userNumber}
-              </Button>
               <Modal isCentered isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
-                <ModalContent bg="#f5f5f5">
-                  <ModalHeader>Send {item.seller} a message</ModalHeader>
-                  <ModalCloseButton />
-                  <ModalBody>
-                    <Input h="30vh"></Input>
-                  </ModalBody>
-                  <ModalFooter>
-                    <Button>Send</Button>
-                  </ModalFooter>
-                </ModalContent>
+                <form onSubmit={sendMessage}>
+                  <ModalContent bg="#f5f5f5">
+                    <ModalHeader>
+                      Send {user?.publicInfo.name} a message
+                    </ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                      <Textarea name="mensagem" placeholder="A sua mensagem" />
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button type="submit">Send</Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </form>
               </Modal>
-              <Button onClick={onOpen}>Mensagem</Button>
             </Flex>
             <Flex
+              bg="white"
+              borderColor="#d2d3d4"
+              borderWidth="1px"
               flexDirection="column"
               p="5"
               borderRadius="5px"
               bg="white"
               mt="10%"
             >
-              <Text fontWeight="bold">{item.name}</Text>
-              <Text fontSize="1.2rem" fontWeight="bold">
-                {item.price}
+              <Text fontSize="2xl" fontWeight="bold">
+                {item.title}
               </Text>
-              <Text mt="5%">
-                Estou a vender a minha geforce toda bombada para comprar a nova
-                versão - a geforce bombadástica. Está como nova e roda LOL no
-                máximo mesmo tranquilo.
+              <Text fontSize="1.2rem" fontWeight="bold">
+                {item.price}€
+              </Text>
+              <Text isTruncated mt="5%">
+                {item.description}
               </Text>
             </Flex>
           </Flex>
@@ -178,20 +279,15 @@ export default function Article(props) {
         <Flex
           borderRadius="5px"
           p="5"
-          bg="white"
           flexDirection="column"
           mt="5%"
           w="76%"
+          bg="white"
+          borderColor="#d2d3d4"
+          borderWidth="1px"
         >
           <Heading>Descrição</Heading>
-          <Text mt="2%">
-            Aqui posso meter uma descrição do produto, se o user não quiser
-            meter nada podemos meter a descrição curta que aparece em cima ou
-            pode ficar até em vazio (mas penso que por bem seja melhor meter
-            algo).{"    "}Estou a vender a minha geforce toda bombada para
-            comprar a nova versão - a geforce bombadástica. Está como nova e
-            roda LOL no máximo mesmo tranquilo.
-          </Text>
+          <Text mt="2%">{item.description} </Text>
           <Spacer />
         </Flex>
       </Flex>

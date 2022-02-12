@@ -10,175 +10,120 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-  CloseButton,
+  FormErrorMessage,
+  FormLabel,
+  FormControl,
+  Input,
+  useToast,
 } from "@chakra-ui/react";
-import { isEmail } from "validator";
+import jwt_decode from "jwt-decode";
 import AuthService from "../services/authservice";
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
+import { useForm, Controller } from "react-hook-form";
 
 export default function SignUp() {
   const [isOpen, setOpen] = useState(false);
   const [registerIsOpen, setRegisterOpen] = useState(false);
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loginEmail, setLoginEmail] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
+
   const [message, setMessage] = useState("");
   const [successful, setSuccessful] = useState(true);
   const [loading, setLoading] = useState(false);
-  var form = React.useRef();
-  var checkBtn = React.useRef();
-  var loginForm = React.useRef();
-  var loginCheckBtn = React.useRef();
-  const initialRef = React.useRef();
-  const finalRef = React.useRef();
+  const { handleSubmit, control, reset } = useForm({
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+  const toast = useToast();
+
+  const {
+    handleSubmit: handleLoginSubmit,
+    control: controlLogin,
+    resetLogin,
+  } = useForm({
+    defaultLoginValues: {
+      loginEmail: "",
+      loginPassword: "",
+    },
+  });
+
   const history = useNavigate();
 
-  const required = (value) => {
-    if (!value) {
-      return (
-        <div className="alert alert-danger" role="alert">
-          This field is required!
-        </div>
-      );
-    }
-  };
+  function handleRegister(data) {
+    AuthService.register(data.username, data.email, data.password).then(
+      (response) => {
+        setMessage(response.data.message);
+        setSuccessful(true);
+        changeSignIn();
+        toast({
+          title: "Registado com sucesso.",
 
-  const vemail = (value) => {
-    if (!isEmail(value)) {
-      return (
-        <div className="alert alert-danger" role="alert">
-          This is not a valid email.
-        </div>
-      );
-    }
-  };
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+      },
+      (error) => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
 
-  const vusername = (value) => {
-    if (value.length < 3 || value.length > 20) {
-      return (
-        <div className="alert alert-danger" role="alert">
-          The username must be between 3 and 20 characters.
-        </div>
-      );
-    }
-  };
-
-  function vpassword(value) {
-    if (value.length < 6 || value.length > 40) {
-      return (
-        <div className="alert alert-danger" role="alert">
-          The password tem de ter entre 6 a 40 caracteres
-        </div>
-      );
-    }
+        setSuccessful(false);
+        setMessage(resMessage);
+      }
+    );
   }
 
-  function onChangeUsername(e) {
-    setUsername(e.target.value);
+  function handleLogin(data) {
+    AuthService.login(data.loginEmail, data.loginPassword).then(
+      (response) => {
+        const token = jwt_decode(response.Authorization);
+        console.log(token);
+        localStorage.setItem(
+          "currentUser",
+          JSON.stringify({
+            id: token.id,
+            email: data.loginEmail,
+          })
+        );
+        AuthService.myself().then(
+          (user) => {
+            history("/dashboard");
+            window.location.reload();
+            console.log(JSON.stringify(user));
+            //adicionar mais tarde publicInfo
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      },
+      (error) => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+
+        setLoading(false);
+        setMessage(resMessage);
+      }
+    );
   }
 
-  function onChangeEmail(e) {
-    setEmail(e.target.value);
-  }
-
-  function onChangeLoginEmail(e) {
-    setLoginEmail(e.target.value);
-  }
-
-  function onChangePassword(e) {
-    setPassword(e.target.value);
-  }
-
-  function onChangeLoginPassword(e) {
-    setLoginPassword(e.target.value);
-  }
-
-  function onChangeconfirmPassword(e) {
-    setConfirmPassword(e.target.value);
-  }
-
-  function handleRegister(e) {
-    e.preventDefault();
-
-    setMessage("");
-    setSuccessful(false);
-    form.validateAll();
-    console.log(form.getValues());
-    if (checkBtn.context._errors.length === 0) {
-      AuthService.register(username, email, password).then(
-        (response) => {
-          setMessage(response.data.message);
-          setSuccessful(true);
-        },
-        (error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-
-          setSuccessful(false);
-          setMessage(resMessage);
-        }
-      );
-    }
-  }
-
-  function handleLogin(e) {
-    e.preventDefault();
-
-    setMessage("");
-    setLoading(true);
-
-    loginForm.validateAll();
-    console.log(loginForm.getValues());
-
-    if (loginCheckBtn.context._errors.length === 0) {
-      AuthService.login(loginEmail, loginPassword).then(
-        () => {
-          history("/dashboard");
-          window.location.reload();
-        },
-        (error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-
-          setLoading(false);
-          setMessage(resMessage);
-        }
-      );
-    } else {
-      setLoading(false);
-    }
-  }
   function changeRegister() {
-    setLoginPassword("");
-    setLoginEmail("");
     onClose();
     registerOnOpen();
   }
 
   function changeSignIn() {
-    setUsername("");
-    setEmail("");
-    setPassword("");
-    setConfirmPassword("");
     onOpen();
     registerOnClose();
   }
@@ -203,8 +148,6 @@ export default function SignUp() {
     if (registerIsOpen) {
       return (
         <Modal
-          finalFocusRef={finalRef}
-          initialFocusRef={initialRef}
           isCentered
           isOpen={registerIsOpen}
           onClose={registerOnClose}
@@ -215,92 +158,61 @@ export default function SignUp() {
             <ModalHeader>Register</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <Form
-                onSubmit={handleRegister}
-                ref={(c) => {
-                  form = c;
-                }}
+              <form
+                key="registerform"
+                id="registerform"
+                onSubmit={handleSubmit(handleRegister)}
               >
-                <div>
-                  <div className="form-group">
-                    <label htmlFor="username">Username</label>
-                    <Input
-                      type="text"
-                      className="form-control"
-                      name="username"
-                      value={username}
-                      onChange={onChangeUsername}
-                      validations={[required, vusername]}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="email">Email</label>
-                    <Input
-                      type="text"
-                      className="form-control"
-                      name="email"
-                      value={email}
-                      onChange={onChangeEmail}
-                      validations={[required, vemail]}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <Input
-                      type="password"
-                      className="form-control"
-                      name="password"
-                      value={password}
-                      onChange={onChangePassword}
-                      validations={[required, vpassword]}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <Input
-                      type="password"
-                      className="form-control"
-                      name="ConfirmPassword"
-                      value={confirmPassword}
-                      onChange={onChangeconfirmPassword}
-                      validations={[required]}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <button
-                      className="btn btn-primary btn-block"
-                      disabled={loading}
-                    >
-                      {loading && (
-                        <span className="spinner-border spinner-border-sm"></span>
-                      )}
-                      <span>Registar</span>
-                    </button>
-                  </div>
-                </div>
-
-                {message && successful && (
-                  <Alert status="success">
-                    <AlertIcon />
-                    {message}
-                  </Alert>
-                )}
-                {message && !successful && (
-                  <Alert status="error">
-                    <AlertIcon />
-                    {message}
-                  </Alert>
-                )}
-                <CheckButton
-                  style={{ display: "none" }}
-                  ref={(c) => {
-                    checkBtn = c;
-                  }}
+                <Controller
+                  name="username"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <FormControl>
+                      <FormLabel htmlFor="username">Username</FormLabel>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                  )}
                 />
-              </Form>
+                <Controller
+                  name="email"
+                  control={control}
+                  rules={{ pattern: /^\S+@\S+\.\S+$/ }}
+                  render={({ field }) => (
+                    <FormControl>
+                      <FormLabel htmlFor="email">Email</FormLabel>
+                      <Input type="email" {...field} />
+                    </FormControl>
+                  )}
+                />
+                <Controller
+                  name="password"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <FormControl>
+                      <FormLabel htmlFor="password">Password</FormLabel>
+                      <Input type="password" {...field} />
+                    </FormControl>
+                  )}
+                />
+                <Controller
+                  name="confirmPassword"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <FormControl>
+                      <FormLabel htmlFor="confirmPassword">
+                        Confirmar Password
+                      </FormLabel>
+                      <Input type="password" {...field} />
+                    </FormControl>
+                  )}
+                />
+                <Button mt={4} variant="gamer" type="submit">
+                  Submit
+                </Button>
+              </form>
             </ModalBody>
 
             <ModalFooter>
@@ -330,61 +242,33 @@ export default function SignUp() {
           <ModalHeader>Sign In</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Form
-              onSubmit={handleLogin}
-              ref={(d) => {
-                loginForm = d;
-              }}
+            <form
+              onSubmit={handleLoginSubmit(handleLogin)}
+              key="loginform"
+              id="loginform"
             >
-              <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <Input
-                  type="text"
-                  className="form-control"
+              <FormControl>
+                <FormLabel htmlFor="loginEmail">Email</FormLabel>
+                <Controller
                   name="loginEmail"
-                  value={loginEmail}
-                  onChange={onChangeLoginEmail}
-                  validations={[required]}
+                  control={controlLogin}
+                  rules={{ required: true }}
+                  render={({ field }) => <Input type="email" {...field} />}
                 />
-              </div>
-              <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <Input
-                  type="password"
-                  className="form-control"
+              </FormControl>
+              <FormControl>
+                <FormLabel htmlFor="loginPassword">Password</FormLabel>
+                <Controller
                   name="loginPassword"
-                  value={loginPassword}
-                  onChange={onChangeLoginPassword}
-                  validations={[required]}
+                  control={controlLogin}
+                  rules={{ required: true }}
+                  render={({ field }) => <Input type="password" {...field} />}
                 />
-              </div>
-
-              <div className="form-group">
-                <button
-                  className="btn btn-primary btn-block"
-                  disabled={loading}
-                >
-                  {loading && (
-                    <span className="spinner-border spinner-border-sm"></span>
-                  )}
-                  <span>Login</span>
-                </button>
-              </div>
-
-              {message && (
-                <div className="form-group">
-                  <div className="alert alert-danger" role="alert">
-                    {message}
-                  </div>
-                </div>
-              )}
-              <CheckButton
-                style={{ display: "none" }}
-                ref={(d) => {
-                  loginCheckBtn = d;
-                }}
-              />
-            </Form>
+              </FormControl>
+              <Button mt={4} variant="gamer" type="submit">
+                Submit
+              </Button>
+            </form>
           </ModalBody>
 
           <ModalFooter>

@@ -1,29 +1,9 @@
-import {
-  Button,
-  Heading,
-  Box,
-  Container,
-  Text,
-  Flex,
-  Spacer,
-  Input,
-  HStack,
-  InputGroup,
-  InputRightElement,
-  Grid,
-  GridItem,
-  VStack,
-} from "@chakra-ui/react";
-import Card from "../components/card";
-import imageLandingPage from "../assets/imageLandingPage.png";
+import { Input, HStack, InputGroup, InputRightElement } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
 import gamerretail from "../assets/logogamer-removebg-preview.png";
 import { SearchIcon } from "@chakra-ui/icons";
-import { Icon } from "@chakra-ui/react";
-import { MdPersonOutline } from "react-icons/md";
-import geforce from "../assets/GEFORCE.jpg";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import SignupModal from "./SignupModal";
 import AuthService from "../services/authservice";
 import { render } from "@testing-library/react";
@@ -31,6 +11,13 @@ import UserBadge from "./userBadge";
 
 export default function Header() {
   //checks for token and returns header accordingly
+  const history = useNavigate();
+  function queryProduct(e) {
+    console.log(e.target.query.value);
+    history(`/home/search/${e.target.query.value}`);
+    window.location.reload();
+  }
+
   function DefineHeader() {
     if (AuthService.getCurrentUser()) {
       return (
@@ -42,14 +29,17 @@ export default function Header() {
           align="center"
           justify="space-evenly"
         >
-          <NavLink style={{ marginLeft: "5%" }} to="/">
+          <NavLink style={{ marginLeft: "5%" }} to="/home">
             <Image src={gamerretail} />
           </NavLink>
           <InputGroup w="60%">
-            <Input
-              placeholder="search for a product"
-              _placeholder={{ color: "grey" }}
-            />
+            <form onSubmit={queryProduct}>
+              <Input
+                name="query"
+                placeholder="search for a product"
+                _placeholder={{ color: "grey" }}
+              />
+            </form>
             <InputRightElement children={<SearchIcon />} color="black" />
           </InputGroup>
           <UserBadge />
@@ -65,14 +55,17 @@ export default function Header() {
         justify="space-evenly"
         bg="white"
       >
-        <NavLink style={{ marginLeft: "5%" }} to="/dashboard">
+        <NavLink style={{ marginLeft: "5%" }} to="/home">
           <Image src={gamerretail} />
         </NavLink>
         <InputGroup w="60%">
-          <Input
-            placeholder="search for a product"
-            _placeholder={{ color: "grey" }}
-          />
+          <form onSubmit={queryProduct}>
+            <Input
+              name="query"
+              placeholder="search for a product"
+              _placeholder={{ color: "grey" }}
+            />
+          </form>
           <InputRightElement children={<SearchIcon />} color="black" />
         </InputGroup>
         <SignupModal />

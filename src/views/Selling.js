@@ -13,28 +13,14 @@ import {
   FormLabel,
   InputGroup,
   InputRightElement,
-  Select,
+  useToast,
 } from "@chakra-ui/react";
+import Select from "react-select";
 import "./landingpage.css";
 import { useState, useEffect } from "react";
-import Card from "../components/card";
-import imageLandingPage from "../assets/imageLandingPage.png";
-import { Image } from "@chakra-ui/react";
-import { NavLink } from "react-router-dom";
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
-import NoAuthHeader from "../components/NoAuthHeader";
-import { useDisclosure } from "@chakra-ui/react";
+
 import Header from "../components/AuthHeader";
-import { AddIcon } from "@chakra-ui/icons";
-import { AiOutlineMail, AiOutlinePhone } from "react-icons/ai";
-import { HiOutlineLocationMarker } from "react-icons/hi";
-import Seller from "../assets/Seller.jpg";
-import { Icon } from "@chakra-ui/react";
-import StarRating from "../components/rating";
-import { AiFillEdit } from "react-icons/ai";
-import UserInfo from "../components/userInfo";
-import { useLocation } from "react-router-dom";
-import { HiOutlinePhotograph } from "react-icons/hi";
+
 import FileUpload from "../components/FileUpload";
 import { useNavigate } from "react-router-dom";
 import {
@@ -46,86 +32,212 @@ import {
   AutoCompleteGroupTitle,
 } from "@choc-ui/chakra-autocomplete";
 import { FiChevronRight, FiChevronDown } from "react-icons/fi";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import axios from "axios";
 
 export default function Selling() {
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm();
-  const [titulo, setTitulo] = useState("");
-  const [preco, setPreço] = useState("");
-  const [descriçao, setDescriçao] = useState("");
-  const [categoria, setCategoria] = useState("");
-  const [numero, setNumero] = useState("");
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
+  const API_URL = process.env.REACT_APP_API_URL;
+  const toast = useToast();
+
+  const { handleSubmit, register, control, reset, getValues } = useForm({
+    defaultValues: {
+      name: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+        ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.name
+        : "",
+      email: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+        ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.email
+        : "",
+      number: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+        ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.number
+        : "",
+    },
+  });
+
   const [newUserInfo, setNewUserInfo] = useState({
     profileImages: [],
   });
-  const [product, setProduct] = useState({
-    titulo: "",
-    preco: "",
-    descriçao: "",
-    categoria: "",
-    numero: "",
-    email: "",
-    imagens: [],
-  });
+
   const history = useNavigate();
-  const continents = {
-    africa: ["nigeria", "south africa"],
-    asia: ["japan", "south korea"],
-    europe: ["united kingdom", "russia"],
-  };
+  const options = [
+    {
+      label: "Armazenamento Interno",
+      options: [
+        { label: "SSD", value: "value_1" },
+        { label: "HDD", value: "value_2" },
+      ],
+    },
+    {
+      label: "Armazenamento Externo",
+      options: [
+        { label: "SSD", value: "value_3" },
+        { label: "HDD", value: "value_4" },
+        { label: "USB", value: "value_5" },
+      ],
+    },
+    {
+      label: "Componentes",
+      options: [
+        { label: "RAM", value: "value_6" },
+        { label: "CPU", value: "value_7" },
+        { label: "GPU", value: "value_8" },
+        { label: "Motherboard", value: "value_9" },
+      ],
+    },
+    {
+      label: "Outros",
+      options: [
+        { label: "Jogos", value: "value_10" },
+        { label: "Computadores", value: "value_11" },
+        { label: "Consolas", value: "value_12" },
+      ],
+    },
+  ];
+
+  function parseCategoryValue(value) {
+    switch (value) {
+      case "value_1":
+        return {
+          category: "Armazenamento Interno",
+          subcategory: "SSD",
+        };
+      case "value_2":
+        return {
+          category: "Armazenamento Interno",
+          subcategory: "HDD",
+        };
+      case "value_3":
+        return {
+          category: "Armazenamento Externo",
+          subcategory: "SSD",
+        };
+      case "value_4":
+        return {
+          category: "Armazenamento Externo",
+          subcategory: "HDD",
+        };
+      case "value_5":
+        return {
+          category: "Armazenamento Externo",
+          subcategory: "USB",
+        };
+      case "value_6":
+        return {
+          category: "Componentes",
+          subcategory: "RAM",
+        };
+      case "value_7":
+        return {
+          category: "Componentes",
+          subcategory: "CPU",
+        };
+      case "value_8":
+        return {
+          category: "Componentes",
+          subcategory: "GPU",
+        };
+      case "value_9":
+        return {
+          category: "Componentes",
+          subcategory: "Motherboard",
+        };
+      case "value_10":
+        return {
+          category: "Outros",
+          subcategory: "Jogos",
+        };
+      case "value_11":
+        return {
+          category: "Outros",
+          subcategory: "Computadores",
+        };
+      case "value_12":
+        return {
+          category: "Outros",
+          subcategory: "Consolas",
+        };
+
+        break;
+      default:
+        console.log(`Sorry, we are out of ${value}.`);
+    }
+  }
 
   const updateUploadedFiles = (files) =>
     setNewUserInfo({ ...newUserInfo, profileImages: files });
 
-  function SubmitProduct() {
-    console.log(titulo);
-    setProduct({
-      ...product,
-      titulo: "assa",
-      preco: preco,
-      descriçao: descriçao,
-      categoria: categoria,
-      imagens: newUserInfo.profileImages,
-    });
+  async function uploadImages(id, image) {
+    var formData = new FormData();
+    formData.set("image", image);
+    console.log(formData.get("image"));
+    await axios
+      .patch(API_URL + "items/" + id + "/images", formData)
+      .then((res) => {
+        console.log(res);
+      });
+  }
 
-    //POST request para o backend com os dados do produto
+  async function SubmitProduct(data) {
+    console.log("sup");
+    const imagens = newUserInfo.profileImages;
+    const token = localStorage.getItem("token");
+    var itemId = "";
 
+    //Para cada _value devolve uma cateogira e subcategoria
+    const categoria = parseCategoryValue(data.categoria.value);
+    axios.defaults.headers.common["Authorization"] = token;
+    {
+      try {
+        const response = await axios
+          .post(API_URL + "items", {
+            title: data.titulo,
+            description: data.descricao,
+            price: parseInt(data.price),
+            location: "Porto",
+            category: categoria.category,
+            subcategory: categoria.subcategory,
+          })
+          .then(
+            (res) => {
+              itemId = res.data.id;
+            },
+            (err) => {
+              toast({
+                title: "Erro",
+                description: "Ocorreu um erro ao submeter o produto",
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+              });
+            }
+          );
+        await Promise.all(
+          imagens.map(async (image) => {
+            await uploadImages(itemId, image);
+          })
+        );
+      } catch (err) {
+        console.log(err);
+        toast({
+          title: "Falhou a criar o item.",
+          description:
+            "Infelizmente não conseguimos criar o item, verfifique os dados e tente novamente. Se ainda não introduziu o seu contacto na dashboard, faça-lo!",
+          status: "Failed",
+          duration: 9000,
+          isClosable: true,
+        });
+      }
+    }
     history("/dashboard", { state: { index: 0 } });
-  }
-
-  function onChangeDescription(e) {
-    setDescriçao(e.target.value);
-  }
-
-  function onChangeEmail(e) {
-    setEmail(e.target.value);
-  }
-
-  function onChangeUsernames(e) {
-    setUsername(e.target.value);
-  }
-
-  function onChangeTitle(e) {
-    setTitulo(e.target.value);
-  }
-  function onChangeNumero(e) {
-    setNumero(e.target.value);
-  }
-
-  function onPreço(e) {
-    setPreço(e.target.value);
   }
 
   return (
     <Box align="center">
       <Header />
-      <form onSubmit={handleSubmit()}>
+      <form
+        key="productForm"
+        id="productForm"
+        onSubmit={handleSubmit(SubmitProduct)}
+      >
         <Flex
           borderRadius={10}
           borderWidth="1px"
@@ -139,50 +251,46 @@ export default function Selling() {
           w="60%"
         >
           <Text fontSize="2xl" fontWeight="bold">
-            Otimiza a pesquisa
+            Essenciais
           </Text>
           <Text>Escolhe o título que compradores irão ver!</Text>
-          <Input
-            w="40%"
-            variant="filled"
-            placeholder="p. ex. GeForce toda bombada"
-            {...register("titulo", { required: true, maxLength: 20 })}
-            value={titulo}
-            onChange={onChangeTitle}
+          <Controller
+            name="titulo"
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <Input
+                w="40%"
+                variant="filled"
+                placeholder="p. ex. GeForce toda bombada"
+                {...field}
+              />
+            )}
           />
-          {errors.titulo?.type == "required" && "É preciso um titulo!"}
-
-          {errors.titulo?.type == "maxLength" &&
-            "Titulo só pode ter 20 caracteres!"}
+          <Text>Preço</Text>
+          <Controller
+            name="price"
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <Input
+                type="number"
+                w="40%"
+                variant="filled"
+                placeholder="0.00€"
+                {...field}
+              />
+            )}
+          />
 
           <FormControl w="60">
-            <FormLabel>Categoria</FormLabel>
-            <AutoComplete openOnFocus>
-              <AutoCompleteInput
-                {...register("categoria", { required: true })}
-                variant="filled"
-              />
-              <AutoCompleteList>
-                {Object.entries(continents).map(
-                  ([continent, countries], co_id) => (
-                    <AutoCompleteGroup key={co_id} showDivider>
-                      <AutoCompleteGroupTitle textTransform="capitalize">
-                        {continent}
-                      </AutoCompleteGroupTitle>
-                      {countries.map((country, c_id) => (
-                        <AutoCompleteItem
-                          key={c_id}
-                          value={country}
-                          textTransform="capitalize"
-                        >
-                          {country}
-                        </AutoCompleteItem>
-                      ))}
-                    </AutoCompleteGroup>
-                  )
-                )}
-              </AutoCompleteList>
-            </AutoComplete>
+            <FormLabel mt="1%">Categoria</FormLabel>
+            <Controller
+              name="categoria"
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => <Select options={options} {...field} />}
+            />
             <FormHelperText>A categoria do teu produto</FormHelperText>
           </FormControl>
         </Flex>
@@ -231,23 +339,17 @@ export default function Selling() {
           <Text fontSize="2xl" fontWeight="bold">
             Descrição
           </Text>
-          <Textarea
-            {...register("descriçao", { required: true, maxLength: 800 })}
-            value={descriçao}
-            onChange={onChangeDescription}
-            placeholder="Descreve aqui o teu produto. Tens um limite de 800 caracteres!"
-          ></Textarea>
-          {errors.descriçao?.type == "required" &&
-            "É necessário uma descrição para o produto!"}
-          {errors.descriçao?.type == "maxLength" &&
-            "A descrição só pode ter 800 caracteres!"}
-          {descriçao.length > 800 ? (
-            <Text ml="5px" color="red">
-              {descriçao.length}/800
-            </Text>
-          ) : (
-            <Text ml="5px">{descriçao.length}/800</Text>
-          )}
+          <Controller
+            name="descricao"
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <Textarea
+                {...field}
+                placeholder="Descreve aqui o teu produto. Tens um limite de 800 caracteres!"
+              ></Textarea>
+            )}
+          />
         </Flex>
         <Flex
           borderRadius={10}
@@ -267,34 +369,39 @@ export default function Selling() {
           <Stack>
             <Box>
               <Text fontSize="sm">Nome</Text>
-              <Input
-                disabled
-                {...register("nome", { required: true })}
-                placeholder="Nome"
-                w="40%"
+              <Controller
+                name="name"
+                control={control}
+                render={({ field }) => (
+                  <Input disabled {...field} placeholder="Nome" w="40%" />
+                )}
               />
             </Box>
             <Box>
               <Text fontSize="sm">Número</Text>
-              <Input
-                disabled
-                {...register("numero", { required: true })}
-                placeholder="Número"
-                w="40%"
+              <Controller
+                name="number"
+                control={control}
+                render={({ field }) => (
+                  <Input disabled {...field} placeholder="Número" w="40%" />
+                )}
               />
             </Box>
             <Box>
               <Text fontSize="sm">Email</Text>
-              <Input
-                disabled
-                {...register("email", { required: true })}
-                placeholder="Email"
-                w="40%"
+              <Controller
+                name="email"
+                control={control}
+                render={({ field }) => (
+                  <Input disabled {...field} placeholder="Email" w="40%" />
+                )}
               />
             </Box>
           </Stack>
         </Flex>
-        <Input type="submit" />
+        <Button mt={4} variant="gamer" type="submit">
+          Submit
+        </Button>
       </form>
       <Box h="60px"></Box>
     </Box>
