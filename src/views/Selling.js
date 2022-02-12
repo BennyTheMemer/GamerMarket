@@ -168,7 +168,6 @@ export default function Selling() {
   async function uploadImages(id, image) {
     var formData = new FormData();
     formData.set("image", image);
-    console.log(formData.get("image"));
     await axios
       .patch(API_URL + "items/" + id + "/images", formData)
       .then((res) => {
@@ -177,7 +176,6 @@ export default function Selling() {
   }
 
   async function SubmitProduct(data) {
-    console.log("sup");
     const imagens = newUserInfo.profileImages;
     const token = localStorage.getItem("token");
     var itemId = "";
@@ -199,10 +197,11 @@ export default function Selling() {
           .then(
             (res) => {
               itemId = res.data.id;
+              console.log(itemId);
             },
             (err) => {
               toast({
-                title: "Erro",
+                title: "error",
                 description: "Ocorreu um erro ao submeter o produto",
                 status: "error",
                 duration: 9000,

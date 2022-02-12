@@ -62,6 +62,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.16.5",
-    "@babel/preset-env": "^7.16.5"
+    "@babel/preset-env": "^7.16.5",
+    "react-error-overlay": "6.0.9"
   }
 }
