@@ -62,16 +62,19 @@ export default function Header() {
         <NavLink style={{ marginLeft: "5%" }} to="/home">
           <Image src={gamerretail} />
         </NavLink>
-        <InputGroup w="60%">
-          <form onSubmit={queryProduct}>
+        <form
+          style={{ width: "80%", marginLeft: "5%" }}
+          onSubmit={queryProduct}
+        >
+          <InputGroup w="60%">
             <Input
               name="query"
               placeholder="search for a product"
               _placeholder={{ color: "grey" }}
             />
-          </form>
-          <InputRightElement children={<SearchIcon />} color="black" />
-        </InputGroup>
+            <InputRightElement children={<SearchIcon />} color="black" />
+          </InputGroup>
+        </form>
         <SignupModal />
       </HStack>
     );
