@@ -85,7 +85,6 @@ export default function Dashboard(props) {
     axios.get(API_URL + "messages/" + id).then((res) => {
       res.data.reverse();
       setMessages(res.data);
-      console.log(res.data);
       setReceivingUser(id);
     });
   }
@@ -177,8 +176,8 @@ export default function Dashboard(props) {
           <TabPanel>
             <Box align="center" w="100%">
               <SimpleGrid w="70%" spacing={10}>
-                <GridItem>
-                  {userItems.map((item) => (
+                {userItems.map((item) => (
+                  <GridItem>
                     <Card
                       title={item.title}
                       description={item.description}
@@ -192,25 +191,24 @@ export default function Dashboard(props) {
                       localidade={item.localidade}
                       removeFunction={removeItem}
                     />
-                  ))}
-                </GridItem>
-                <GridItem>
-                  <NavLink to={"/selling"}>
-                    <Button
-                      _hover={{ bg: "#c3c3c3", p: "1" }}
-                      align="center"
-                      justify="center"
-                      w="150px"
-                      h="150px"
-                      bg="white"
-                      borderColor="#d2d3d4"
-                      borderWidth="1px"
-                    >
-                      <AddIcon color="red.500" boxSize="50%" />
-                    </Button>
-                  </NavLink>
-                </GridItem>
+                  </GridItem>
+                ))}
               </SimpleGrid>
+              <NavLink to={"/selling"}>
+                <Button
+                  mt="10px"
+                  _hover={{ bg: "#c3c3c3", p: "1" }}
+                  align="center"
+                  justify="center"
+                  w="150px"
+                  h="150px"
+                  bg="white"
+                  borderColor="#d2d3d4"
+                  borderWidth="1px"
+                >
+                  <AddIcon color="red.500" boxSize="50%" />
+                </Button>
+              </NavLink>
             </Box>
           </TabPanel>
           <TabPanel align="center">
@@ -289,7 +287,7 @@ export default function Dashboard(props) {
                       );
                     })}
                   </Flex>
-                  <form autocomplete="off" onSubmit={sendMessage}>
+                  <form autoComplete="off" onSubmit={sendMessage}>
                     <Input name="mensagem" placeholder="A sua mensagem" />
 
                     <Button display="none" type="submit">
