@@ -265,9 +265,10 @@ export default function Dashboard(props) {
                             borderRadius="5"
                             border="1px"
                             borderColor="grey"
+                            bg="#a8fa9d"
                             align="center"
                             mb="4px"
-                            p="3"
+                            p="2"
                           >
                             <Text ml="5px">{message.content}</Text>
                           </Flex>
@@ -280,7 +281,9 @@ export default function Dashboard(props) {
                           border="1px"
                           borderColor="grey"
                           align="center"
+                          bg="#fa9d9d"
                           mb="4px"
+                          p="2"
                         >
                           <Text ml="5px">{message.content}</Text>
                         </Flex>
