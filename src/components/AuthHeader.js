@@ -39,7 +39,7 @@ export default function Header() {
             <InputGroup w="60%">
               <Input
                 name="query"
-                placeholder="search for a product"
+                placeholder="Pesquisa o teu produto"
                 _placeholder={{ color: "grey" }}
               />
               <InputRightElement children={<SearchIcon />} color="black" />

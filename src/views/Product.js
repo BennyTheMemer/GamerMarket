@@ -240,7 +240,7 @@ export default function Article(props) {
                 <form onSubmit={sendMessage}>
                   <ModalContent bg="#f5f5f5">
                     <ModalHeader>
-                      Send {user?.publicInfo.name} a message
+                      Envia uma mensagem a {user?.publicInfo.name}
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
