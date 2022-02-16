@@ -18,11 +18,12 @@ import {
   BreadcrumbLink,
   AspectRatio,
   Textarea,
+  Tooltip,
 } from "@chakra-ui/react";
 import "./landingpage.css";
 import { Image } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
-
+import { FiTwitter, FiFacebook, FiInstagram } from "react-icons/fi";
 import { Icon } from "@chakra-ui/react";
 import { AiOutlineArrowRight, AiOutlineArrowLeft } from "react-icons/ai";
 
@@ -182,8 +183,8 @@ export default function Article(props) {
               bg="white"
               borderColor="#d2d3d4"
               borderWidth="1px"
-              h="28%"
-              p="5"
+              h="22vh"
+              p="3"
               borderRadius="5px"
               w="100%"
               flexDirection="column"
@@ -203,11 +204,64 @@ export default function Article(props) {
                   flexDirection="column"
                   h="100%"
                 >
-                  {" "}
                   <Text fontWeight="semibold" fontSize="xl">
                     {user?.publicInfo.name}
-                  </Text>
-                  <Flex justify="flex-start" flexDirection="row">
+                  </Text>{" "}
+                  <Flex flexDirection="column" w="100%" h="100%">
+                    <Image
+                      borderRadius="full"
+                      boxSize="75px"
+                      fallbackSrc="https://via.placeholder.com/75"
+                      src={user?.publicInfo.image}
+                    />
+                    <Flex
+                      mt="5px"
+                      align="start"
+                      w="30%"
+                      justify="space-between"
+                    >
+                      {user?.publicInfo.twitter ? (
+                        <Tooltip
+                          shouldWrapChildren
+                          placement="top"
+                          label={`${user?.publicInfo.twitter}`}
+                        >
+                          <Icon as={FiTwitter} />
+                        </Tooltip>
+                      ) : (
+                        <Tooltip shouldWrapChildren placement="top">
+                          <Icon as={FiTwitter} />
+                        </Tooltip>
+                      )}
+                      {user?.publicInfo.facebook ? (
+                        <Tooltip
+                          shouldWrapChildren
+                          placement="top"
+                          label={`${user?.publicInfo.facebook}`}
+                        >
+                          <Icon as={FiFacebook} />
+                        </Tooltip>
+                      ) : (
+                        <Tooltip shouldWrapChildren placement="top">
+                          <Icon as={FiFacebook} />
+                        </Tooltip>
+                      )}
+                      {user?.publicInfo?.instagram ? (
+                        <Tooltip
+                          shouldWrapChildren
+                          placement="top"
+                          label={`${user?.publicInfo?.instagram}`}
+                        >
+                          <Icon as={FiInstagram} />
+                        </Tooltip>
+                      ) : (
+                        <Tooltip label="" shouldWrapChildren placement="top">
+                          <Icon as={FiInstagram} />
+                        </Tooltip>
+                      )}
+                    </Flex>
+                  </Flex>
+                  <Flex mt="5px" justify="flex-start" flexDirection="row">
                     <Button
                       variant="gamer"
                       onClick={() => setNumberShow(!numberShow)}
