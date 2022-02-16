@@ -94,12 +94,12 @@ export default function Explore() {
     let arr = [...items];
     if (e.target.value == "option1") {
       arr.sort((a, b) => a.Price - b.Price);
+      arr.reverse();
       console.log(arr);
       setItems(arr);
     }
     if (e.target.value == "option2") {
       arr.sort((a, b) => a.Price - b.Price);
-      arr.reverse();
       console.log(arr);
       setItems(arr);
     }
