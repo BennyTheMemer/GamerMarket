@@ -6,10 +6,11 @@ import {
   Box,
   Heading,
   Text,
+  AspectRatio,
 } from "@chakra-ui/react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { AiFillEdit } from "react-icons/ai";
+import { AiFillEdit, AiFillEye } from "react-icons/ai";
 import { Icon } from "@chakra-ui/react";
 import axios from "axios";
 
@@ -24,6 +25,7 @@ export default function Card({
   subcategory,
   id,
   removeFunction,
+  description,
   ...props
 }) {
   console.log(image);
@@ -38,63 +40,110 @@ export default function Card({
   }
 
   return (
-    <Flex
-      borderColor="#d2d3d4"
-      borderWidth="1px"
-      p="5"
-      bg="white"
-      justify="space-between"
-      h="100%"
-    >
-      <Flex justify="space-around" h="100%" w="100%">
-        <Flex h="100%" w="100%">
-          <Image boxSize="150px" src={image} />
+    <Flex h="100%" w="100%">
+      {" "}
+      {props.display ? (
+        <NavLink
+          style={{ display: "flex", height: "100%", width: "100%" }}
+          to={{
+            pathname: `/article/${id}`,
+            state: {
+              title,
+              price,
+              image,
+              localidade,
+              createdAt,
+              sellerId,
+              category,
+              subcategory,
+              id,
+            },
+          }}
+        >
+          <Flex
+            borderColor="#d2d3d4"
+            borderWidth="1px"
+            borderRadius="5px"
+            p="3"
+            bg="white"
+            align="center"
+            justify="center"
+            flexDirection="column"
+            w="100%"
+            h="100%"
+          >
+            <Text fontSize="xl" fontWeight="semibold">
+              {title}
+            </Text>
+            <AspectRatio minW="150px" maxW="560px" ratio={1}>
+              <Image borderRadius="5px" src={image} />
+            </AspectRatio>
+            <Text>{localidade}</Text>
 
-          <Flex ml="1%" flexDirection="column" justify="space-between">
-            <NavLink
-              style={{ height: "100%", width: "100%" }}
-              to={{
-                pathname: `/article/${id}`,
-                state: {
-                  title,
-                  price,
-                  image,
-                  localidade,
-                  createdAt,
-                  sellerId,
-                  category,
-                  subcategory,
-                  id,
-                },
-              }}
-            >
-              <Flex textAlign="left" flexDirection="column">
-                <Text fontSize="xl" fontWeight="semibold" color="black">
-                  {title}
-                </Text>
-                <Text fontWeight="bold" fontSize="large">
-                  {price}€
-                </Text>
-              </Flex>
-            </NavLink>
-            <Flex textAlign="left" flexDirection="column">
-              <Text>{localidade}</Text>
-              <Text>{parseDate(createdAt)}</Text>
-            </Flex>
+            <Text color="black" fontWeight="bold" fontSize="large">
+              {price}€
+            </Text>
+            <Text fontSize="sm" color="black">
+              {parseDate(createdAt)}
+            </Text>
           </Flex>
+        </NavLink>
+      ) : (
+        <Flex
+          borderColor="#d2d3d4"
+          borderWidth="1px"
+          borderRadius="5px"
+          bg="white"
+          p="3"
+          w="100%"
+        >
+          <NavLink
+            style={{ display: "flex", height: "100%", width: "100%" }}
+            to={{
+              pathname: `/article/${id}`,
+              state: {
+                title,
+                price,
+                image,
+                localidade,
+                createdAt,
+                sellerId,
+                category,
+                subcategory,
+                id,
+              },
+            }}
+          >
+            <Flex>
+              <AspectRatio display="block" minW="175px" maxW="750px" ratio="1">
+                <Image
+                  borderRadius="10px"
+                  boxSize="200px"
+                  objectFit="fill"
+                  src={image}
+                />
+              </AspectRatio>
+            </Flex>
+            <Flex ml="2%" flexDirection="column">
+              <Text fontSize="3xl">{title}</Text>
+              <Text color="black" fontSize="2xl" fontWeight="semibold">
+                € {price}
+              </Text>
+              <Flex>
+                <Box mt="1%" w="80%">
+                  <Text fontSize="xl" noOfLines={2} color="black">
+                    {description}
+                  </Text>
+                </Box>
+              </Flex>
+              <Flex align="flex-end" h="100%">
+                {" "}
+                <Text color="black">{parseDate(createdAt)}</Text>
+              </Flex>
+            </Flex>
+          </NavLink>
         </Flex>
-        <Flex justify="flex-end" h="100%" align="end" flexDirection="column">
-          {sellerId == JSON.parse(localStorage.getItem("currentUser"))?.id ? (
-            <Button variant="gamer" onClick={() => removeFunction(id)}>
-              Remover
-            </Button>
-          ) : (
-            <NavLink to={`/article/${id}`}>
-              <Button variant="gamer">Comprar</Button>
-            </NavLink>
-          )}
-        </Flex>
-      </Flex>
+      )}
     </Flex>
   );
 }

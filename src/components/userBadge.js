@@ -32,6 +32,7 @@ export default function UserBadge() {
             bg=""
             _active={{ bg: "" }}
             _hover={{ bg: "" }}
+            _focus={{ bg: "" }}
             as={Button}
           >
             <Flex w="100%" justify="space-around" align="center">

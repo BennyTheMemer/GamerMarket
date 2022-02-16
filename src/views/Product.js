@@ -3,13 +3,8 @@ import {
   Button,
   Heading,
   Box,
-  Container,
   Text,
   Flex,
-  HStack,
-  InputGroup,
-  Input,
-  InputRightElement,
   Spacer,
   Modal,
   ModalOverlay,
@@ -18,30 +13,20 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Tooltip,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  BreadcrumbSeparator,
-  VStack,
   AspectRatio,
   Textarea,
 } from "@chakra-ui/react";
 import "./landingpage.css";
 import { Image } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
-import gamerretail from "../assets/logogamer-removebg-preview.png";
-import { SearchIcon } from "@chakra-ui/icons";
+
 import { Icon } from "@chakra-ui/react";
-import { MdPersonOutline } from "react-icons/md";
 import { AiOutlineArrowRight, AiOutlineArrowLeft } from "react-icons/ai";
-import geforce from "../assets/GEFORCE.jpg";
-import { useLocation } from "react-router-dom";
-import Seller from "../assets/Seller.jpg";
-import NoAuthHeader from "../components/NoAuthHeader";
-import { ArrowBackIcon } from "@chakra-ui/icons";
+
 import "./productpage.css";
-import { TiTick } from "react-icons/ti";
 import Header from "../components/AuthHeader";
 import axios from "axios";
 
@@ -116,7 +101,7 @@ export default function Article(props) {
       <Header />
 
       <Flex m="3%" justify="center" w="100%">
-        <Flex textAlign="center" justifyItems="center" w="80%">
+        <Flex textAlign="center" justifyItems="center" w="82%">
           <Breadcrumb spacing="8px">
             <BreadcrumbItem>
               <BreadcrumbLink href="/home">Home</BreadcrumbLink>
@@ -172,7 +157,7 @@ export default function Article(props) {
               align="center"
               flexDirection="row"
             >
-              <Button onClick={controlDecrement}>
+              <Button variant="gamer" onClick={controlDecrement}>
                 <Icon as={AiOutlineArrowLeft} size="20px" />
               </Button>
               {item.images
@@ -183,7 +168,7 @@ export default function Article(props) {
                   ))
                 : ""}
 
-              <Button onClick={controlIncrement} ml="10px">
+              <Button variant="gamer" onClick={controlIncrement} ml="10px">
                 <Icon as={AiOutlineArrowRight} size="20px" />
               </Button>
             </Flex>
@@ -223,14 +208,20 @@ export default function Article(props) {
                     {user?.publicInfo.name}
                   </Text>
                   <Flex justify="flex-start" flexDirection="row">
-                    <Button onClick={() => setNumberShow(!numberShow)} mr="5px">
+                    <Button
+                      variant="gamer"
+                      onClick={() => setNumberShow(!numberShow)}
+                      mr="5px"
+                    >
                       {numberShow ? (
                         user?.publicInfo.number
                       ) : (
                         <Text>Número</Text>
                       )}
                     </Button>
-                    <Button onClick={onOpen}>Mensagem</Button>
+                    <Button variant="gamer" onClick={onOpen}>
+                      Mensagem
+                    </Button>
                   </Flex>
                 </Flex>
               </Flex>
@@ -247,7 +238,9 @@ export default function Article(props) {
                       <Textarea name="mensagem" placeholder="A sua mensagem" />
                     </ModalBody>
                     <ModalFooter>
-                      <Button type="submit">Send</Button>
+                      <Button variant="gamer" type="submit">
+                        Send
+                      </Button>
                     </ModalFooter>
                   </ModalContent>
                 </form>

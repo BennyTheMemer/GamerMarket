@@ -60,35 +60,33 @@ export default function Selling() {
   const history = useNavigate();
   const options = [
     {
-      label: "Armazenamento Interno",
-      options: [
-        { label: "SSD", value: "value_1" },
-        { label: "HDD", value: "value_2" },
-      ],
-    },
-    {
-      label: "Armazenamento Externo",
-      options: [
-        { label: "SSD", value: "value_3" },
-        { label: "HDD", value: "value_4" },
-        { label: "USB", value: "value_5" },
-      ],
-    },
-    {
       label: "Componentes",
       options: [
-        { label: "RAM", value: "value_6" },
-        { label: "CPU", value: "value_7" },
-        { label: "GPU", value: "value_8" },
-        { label: "Motherboard", value: "value_9" },
+        { label: "RAM", value: "value_1" },
+        { label: "CPU", value: "value_2" },
+        { label: "GPU", value: "value_3" },
+
+        { label: "Armazenamento", value: "value_4" },
+        { label: "Motherboard", value: "value_5" },
+        { label: "Fontes de Alimentação", value: "value_6" },
+      ],
+    },
+    {
+      label: "Periféricos",
+      options: [
+        { label: "Áudio", value: "value_7" },
+        { label: "Ratos", value: "value_8" },
+        { label: "Teclados", value: "value_9" },
+        { label: "Tapetes", value: "value_10" },
       ],
     },
     {
       label: "Outros",
       options: [
-        { label: "Jogos", value: "value_10" },
-        { label: "Computadores", value: "value_11" },
-        { label: "Consolas", value: "value_12" },
+        { label: "Jogos", value: "value_11" },
+        { label: "Acessórios", value: "value_12" },
+        { label: "Consolas", value: "value_13" },
+        { label: "Computadores", value: "value_14" },
       ],
     },
   ];
@@ -97,63 +95,73 @@ export default function Selling() {
     switch (value) {
       case "value_1":
         return {
-          category: "Armazenamento Interno",
-          subcategory: "SSD",
-        };
-      case "value_2":
-        return {
-          category: "Armazenamento Interno",
-          subcategory: "HDD",
-        };
-      case "value_3":
-        return {
-          category: "Armazenamento Externo",
-          subcategory: "SSD",
-        };
-      case "value_4":
-        return {
-          category: "Armazenamento Externo",
-          subcategory: "HDD",
-        };
-      case "value_5":
-        return {
-          category: "Armazenamento Externo",
-          subcategory: "USB",
-        };
-      case "value_6":
-        return {
           category: "Componentes",
           subcategory: "RAM",
         };
-      case "value_7":
+      case "value_2":
         return {
           category: "Componentes",
           subcategory: "CPU",
         };
-      case "value_8":
+      case "value_3":
         return {
           category: "Componentes",
           subcategory: "GPU",
         };
-      case "value_9":
+      case "value_4":
+        return {
+          category: "Componentes",
+          subcategory: "Armazenamento",
+        };
+      case "value_5":
         return {
           category: "Componentes",
           subcategory: "Motherboard",
         };
+      case "value_6":
+        return {
+          category: "Componentes",
+          subcategory: "Fontes de alimentação",
+        };
+      case "value_7":
+        return {
+          category: "Periféricos",
+          subcategory: "Áudio",
+        };
+      case "value_8":
+        return {
+          category: "Periféricos",
+          subcategory: "Ratos",
+        };
+      case "value_9":
+        return {
+          category: "Periféricos",
+          subcategory: "Teclados",
+        };
       case "value_10":
         return {
-          category: "Outros",
-          subcategory: "Jogos",
+          category: "Periféricos",
+          subcategory: "Tapetes",
         };
       case "value_11":
         return {
           category: "Outros",
-          subcategory: "Computadores",
+          subcategory: "Jogos",
         };
       case "value_12":
         return {
           category: "Outros",
+          subcategory: "Acessórios",
+        };
+      case "value_13":
+        return {
+          category: "Outros",
           subcategory: "Consolas",
+        };
+      case "value_14":
+        return {
+          category: "Outros",
+          subcategory: "Computadores",
         };
 
         break;

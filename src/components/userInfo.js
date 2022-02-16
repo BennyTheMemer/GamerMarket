@@ -46,6 +46,7 @@ import AuthService from "../services/authservice";
 
 export default function UserInfo() {
   const API_URL = process.env.REACT_APP_API_URL;
+
   const { handleSubmit, register, control, reset, getValues } = useForm({
     defaultValues: {
       name: JSON.parse(localStorage.getItem("currentUser")).publicInfo
@@ -59,6 +60,9 @@ export default function UserInfo() {
         : "",
       description: JSON.parse(localStorage.getItem("currentUser")).publicInfo
         ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.description
+        : "",
+      image: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+        ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.image
         : "",
     },
   });
@@ -75,10 +79,14 @@ export default function UserInfo() {
     description: JSON.parse(localStorage.getItem("currentUser")).publicInfo
       ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.description
       : "",
+    image: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+      ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.image
+      : "",
     //falta imagem, pedir ao Imp
   });
   const history = useNavigate();
   const [editMode, setEditMode] = useState(false);
+  const [userEditImage, setUserEditImage] = useState("");
 
   function changeToEditMode() {
     setEditMode(!editMode);
@@ -86,7 +94,7 @@ export default function UserInfo() {
 
   function setUserImage(e) {
     console.log(e.target.files);
-    setUser({ ...user, image: e.target.files[0] });
+    setUserEditImage(e.target.files[0]);
   }
 
   async function submitInfo(data) {
@@ -96,8 +104,9 @@ export default function UserInfo() {
     const number = data.number;
     const description = data.description;
     const formData = new FormData();
+
     formData.append("image", data.image[0]);
-    console.log(data.image[0]);
+    console.log("isto é a imagem" + data.image[0]);
     if (token) {
       axios.defaults.headers.common["Authorization"] = token;
       try {
@@ -110,11 +119,14 @@ export default function UserInfo() {
         await AuthService.myself();
 
         changeToEditMode();
-        window.location.reload();
       } catch (err) {
         console.log(err);
       } finally {
-        await axios.patch(API_URL + "users/image", formData);
+        if (data.image[0]) {
+          console.log("vou enviar esta fag");
+
+          await axios.patch(API_URL + "users/image", formData);
+        }
       }
     }
   }
@@ -142,7 +154,7 @@ export default function UserInfo() {
             <Flex w="100%" flexDirection="column">
               <Flex flexDirection="row">
                 <Flex flexDirection="column">
-                  {user.image ? (
+                  {userEditImage ? (
                     //mostrar aqui a imagem do user
                     <VStack>
                       <Image
@@ -150,7 +162,7 @@ export default function UserInfo() {
                         borderRadius="full"
                         boxSize="20vh"
                         fallbackSrc="https://via.placeholder.com/150"
-                        src={URL.createObjectURL(user.image)}
+                        src={URL.createObjectURL(userEditImage)}
                       />
                     </VStack>
                   ) : (
@@ -193,8 +205,6 @@ export default function UserInfo() {
                             _focus={{ borderColor: "red.600" }}
                             m="0"
                             p="0"
-                            borderWidth="1"
-                            borderColor="red.600"
                             variant="filled"
                             ml="2%"
                             {...field}
@@ -202,7 +212,7 @@ export default function UserInfo() {
                         )}
                       />
                     </Flex>
-                    <Flex w="100%" align="center">
+                    <Flex mt="3px" w="100%" align="center">
                       <Icon as={AiOutlinePhone} />
                       <Controller
                         name="number"
@@ -216,8 +226,6 @@ export default function UserInfo() {
                             _focus={{ borderColor: "red.600" }}
                             m="0"
                             p="0"
-                            borderWidth="1"
-                            borderColor="red.600"
                             ml="2%"
                             value={user.number ? user.number : ""}
                             placeholder={user.number ? "" : "Insira o numero"}
@@ -247,8 +255,6 @@ export default function UserInfo() {
                             _focus={{ borderColor: "red.600" }}
                             m="0"
                             p="0"
-                            borderWidth="1"
-                            borderColor="red.600"
                             fontWeight="bold"
                             fontSize="4xl"
                             variant="filled"
@@ -273,8 +279,6 @@ export default function UserInfo() {
                         _focus={{ borderColor: "red.600" }}
                         m="0"
                         p="0"
-                        borderWidth="1"
-                        borderColor="red.600"
                         fontSize="md"
                         placeholder="Here is a sample placeholder"
                         align="start"

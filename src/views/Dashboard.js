@@ -2,15 +2,10 @@ import {
   Button,
   Heading,
   Box,
-  Container,
   Text,
   Flex,
-  Spacer,
-  HStack,
   SimpleGrid,
   GridItem,
-  AspectRatio,
-  VStack,
   Stack,
   Accordion,
   AccordionItem,
@@ -18,47 +13,46 @@ import {
   AccordionPanel,
   AccordionIcon,
   Input,
-  Tooltip,
-  Grid,
-  Textarea,
+  Editable,
+  EditableInput,
+  EditablePreview,
+  Icon,
 } from "@chakra-ui/react";
 import "./landingpage.css";
 import { useState, useEffect, useCallback } from "react";
-import Card from "../components/card";
-import imageLandingPage from "../assets/imageLandingPage.png";
-import { Image } from "@chakra-ui/react";
+
 import { NavLink } from "react-router-dom";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
-import NoAuthHeader from "../components/NoAuthHeader";
-import { useDisclosure } from "@chakra-ui/react";
+
 import Header from "../components/AuthHeader";
 import { AddIcon } from "@chakra-ui/icons";
-import { AiOutlineMail, AiOutlinePhone } from "react-icons/ai";
-import { HiOutlineLocationMarker } from "react-icons/hi";
-import Seller from "../assets/Seller.jpg";
-import { Icon } from "@chakra-ui/react";
-import StarRating from "../components/rating";
-import { AiFillEdit } from "react-icons/ai";
+import { FiTwitter, FiFacebook, FiInstagram } from "react-icons/fi";
 import UserInfo from "../components/userInfo";
 import { useLocation } from "react-router-dom";
+import CardDashboard from "../components/cardDashboard";
+import Chat from "../components/Chat";
 import axios from "axios";
+import AuthService from "../services/authservice";
 
 export default function Dashboard(props) {
   let currentLocation = useLocation();
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  let user = JSON.parse(localStorage.getItem("currentUser")).publicInfo;
+  console.log(user);
   const [editMode, setEditMode] = useState(false);
   const [location, setLocation] = useState(
     currentLocation.state ? currentLocation.state.index : 1
   );
   const [userItems, setUserItems] = useState([]);
-  const [usersConnected, setUsersConnected] = useState([]);
-  const [receivingUser, setReceivingUser] = useState(null);
-  const [messages, setMessages] = useState([]);
+
   const API_URL = process.env.REACT_APP_API_URL;
 
-  const token = localStorage.getItem("token");
-  const currentUser = JSON.parse(localStorage.getItem("currentUser")).id;
+  function changeToEditMode() {
+    setEditMode(true);
+  }
+
+  function changePassword(data) {
+    console.log(data);
+  }
 
   async function getUserItems() {
     const token = localStorage.getItem("token");
@@ -69,51 +63,9 @@ export default function Dashboard(props) {
     });
   }
 
-  async function getUserMsgs() {
-    axios.defaults.headers.common["Authorization"] =
-      localStorage.getItem("token");
-
-    axios.get(API_URL + "messages").then((res) => {
-      setUsersConnected(res.data);
-    });
-  }
-
-  async function getMessages(id) {
-    axios.defaults.headers.common["Authorization"] =
-      localStorage.getItem("token");
-
-    axios.get(API_URL + "messages/" + id).then((res) => {
-      res.data.reverse();
-      setMessages(res.data);
-      setReceivingUser(id);
-    });
-  }
-
   useEffect(() => {
     getUserItems();
-    getUserMsgs();
   }, []); // <- add empty brackets here
-
-  function changeToEditMode() {
-    setEditMode(true);
-  }
-
-  function sendMessage(e) {
-    axios.defaults.headers.common["Authorization"] =
-      localStorage.getItem("token");
-    axios
-      .post(API_URL + "messages/" + receivingUser, {
-        content: e.target.mensagem.value,
-      })
-      .then((res) => {
-        console.log(res);
-      });
-    getMessages(receivingUser);
-  }
-
-  function changePassword(data) {
-    console.log(data);
-  }
 
   async function removeItem(id) {
     const token = localStorage.getItem("token");
@@ -129,6 +81,36 @@ export default function Dashboard(props) {
     } catch (err) {
       console.log(err);
     }
+  }
+
+  async function updateFacebook(e) {
+    const token = localStorage.getItem("token");
+
+    let facebook = e;
+    axios.defaults.headers.common["Authorization"] = token;
+    await axios.patch(API_URL + "users/public", {
+      facebook,
+    });
+  }
+
+  async function updateTwitter(e) {
+    const token = localStorage.getItem("token");
+
+    let twitter = e;
+    axios.defaults.headers.common["Authorization"] = token;
+    await axios.patch(API_URL + "users/public", {
+      twitter,
+    });
+  }
+
+  async function updateInstagram(e) {
+    const token = localStorage.getItem("token");
+
+    let instagram = e;
+    axios.defaults.headers.common["Authorization"] = token;
+    await axios.patch(API_URL + "users/public", {
+      instagram,
+    });
   }
 
   return (
@@ -174,11 +156,16 @@ export default function Dashboard(props) {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Box align="center" w="100%">
-              <SimpleGrid w="70%" spacing={10}>
+            <Flex
+              align="center"
+              flexDirection="column"
+              justify="center"
+              w="100%"
+            >
+              <SimpleGrid w="70%" spacing={6}>
                 {userItems.map((item) => (
                   <GridItem>
-                    <Card
+                    <CardDashboard
                       title={item.title}
                       description={item.description}
                       price={item.price}
@@ -209,103 +196,90 @@ export default function Dashboard(props) {
                   <AddIcon color="red.500" boxSize="50%" />
                 </Button>
               </NavLink>
-            </Box>
+            </Flex>
           </TabPanel>
           <TabPanel align="center">
-            <Flex h="75vh" justify="center" align="center" w="100%">
-              <Flex
-                p="3"
-                borderColor="#d2d3d4"
-                borderWidth="1px"
-                bg="white"
-                h="80%"
-                w="60%"
-                flexDirection="row"
-              >
-                <VStack w="40%" maxH="70vh" h="30vh" overflow="auto">
-                  {usersConnected?.map((user) => (
-                    <Flex
-                      borderColor="#d2d3d4"
-                      borderWidth="1px"
-                      bg="white"
-                      w="100%"
-                      align="center"
-                      p="1"
-                      _hover={{
-                        bg: "red.600",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => getMessages(user?.user.id)}
-                    >
-                      <Flex w="85%" align="center" justify="space-between">
-                        <Image
-                          boxSize="50px"
-                          src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"
-                        />
-                        <Text>{user?.user.publicInfo.name}</Text>
-                      </Flex>
-                    </Flex>
-                  ))}
-                </VStack>
-                <Box
-                  ml="5px"
-                  mr="5px"
-                  h="100%"
-                  borderWidth="1px"
-                  borderColor="#d2d3d4"
-                ></Box>
-                <Flex overflow="auto" h="100%" w="100%" flexDirection="column">
-                  <Flex justify="end" h="100%" flexDirection="column">
-                    {messages?.map((message) => {
-                      return currentUser === message.authorId ? (
-                        <Flex mb="2px" justify="end" w="100%">
-                          <Flex
-                            w="45%"
-                            h="100%"
-                            borderRadius="5"
-                            border="1px"
-                            borderColor="grey"
-                            bg="#a8fa9d"
-                            align="center"
-                            mb="4px"
-                            p="2"
-                          >
-                            <Text ml="5px">{message.content}</Text>
-                          </Flex>
-                        </Flex>
-                      ) : (
-                        <Flex
-                          w="45%"
-                          h="10%"
-                          borderRadius="5"
-                          border="1px"
-                          borderColor="grey"
-                          align="center"
-                          bg="#fa9d9d"
-                          mb="4px"
-                          p="2"
-                        >
-                          <Text ml="5px">{message.content}</Text>
-                        </Flex>
-                      );
-                    })}
-                  </Flex>
-                  <form autoComplete="off" onSubmit={sendMessage}>
-                    <Input name="mensagem" placeholder="A sua mensagem" />
-
-                    <Button display="none" type="submit">
-                      Send
-                    </Button>
-                  </form>
-                </Flex>
-              </Flex>
-            </Flex>
+            <Chat />
           </TabPanel>
           <TabPanel>
             <Box align="center" w="100%">
-              <UserInfo />
               <Heading mt="3%" color="black">
-                Informação Pessoal
+                Informação Pública
+              </Heading>
+
+              <UserInfo />
+              <Flex
+                mt="2%"
+                borderColor="#d2d3d4"
+                borderWidth="1px"
+                bg="white"
+                w="60%"
+                flexDirection="column"
+                justify="left"
+                p="3"
+              >
+                <Flex w="100%">
+                  <Text fontWeight="semibold">Redes sociais</Text>
+                </Flex>
+                <Flex mt="5px" w="100%" align="center" justify="space-between">
+                  <Flex w="100%" align="center">
+                    <Icon as={FiTwitter} size="20px" color="red.500" />
+                    <Editable
+                      w="40%"
+                      defaultValue={
+                        user.publicInfo?.twitter
+                          ? user.PublicInfo.twitter
+                          : "@Twitter"
+                      }
+                      onSubmit={(e) => {
+                        updateTwitter(e);
+                      }}
+                    >
+                      <EditablePreview />
+                      <EditableInput />
+                    </Editable>
+                  </Flex>
+                  <Flex w="100%" justify="center" align="center">
+                    {" "}
+                    <Icon as={FiInstagram} size="20px" color="red.500" />
+                    <Editable
+                      w="40%"
+                      defaultValue={
+                        user.publicInfo?.instagram
+                          ? user.PublicInfo.instagram
+                          : "@Instagram"
+                      }
+                      onSubmit={(e) => {
+                        updateInstagram(e);
+                      }}
+                    >
+                      <EditablePreview />
+                      <EditableInput />
+                    </Editable>
+                  </Flex>
+                  <Flex justify="flex-end" w="100%" align="center">
+                    <Icon as={FiFacebook} size="20px" color="red.500" />
+                    <Editable
+                      w="40%"
+                      _placeholder={{ color: "red" }}
+                      defaultValue={
+                        user.publicInfo?.facebook
+                          ? user.PublicInfo.facebook
+                          : "@Facebook"
+                      }
+                      onSubmit={(e) => {
+                        updateFacebook(e);
+                      }}
+                    >
+                      <EditablePreview />
+                      <EditableInput />
+                    </Editable>
+                  </Flex>
+                </Flex>
+              </Flex>
+
+              {/*<Heading mt="3%" color="black">
+                Informação Privada
               </Heading>
               <Stack
                 mt="3%"
@@ -495,6 +469,7 @@ export default function Dashboard(props) {
                   </Accordion>
                 </Flex>
               </Stack>
+                                */}
             </Box>
             <Box h="200px"></Box>
           </TabPanel>

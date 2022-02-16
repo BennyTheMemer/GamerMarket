@@ -177,7 +177,7 @@ export default function SignUp() {
                 <Controller
                   name="email"
                   control={control}
-                  rules={{ pattern: /^\S+@\S+\.\S+$/ }}
+                  rules={{ required: true, pattern: /^\S+@\S+\.\S+$/ }}
                   render={({ field }) => (
                     <FormControl>
                       <FormLabel htmlFor="email">Email</FormLabel>
@@ -188,7 +188,7 @@ export default function SignUp() {
                 <Controller
                   name="password"
                   control={control}
-                  rules={{ required: true }}
+                  rules={{ required: true, minLength: 8 }}
                   render={({ field }) => (
                     <FormControl>
                       <FormLabel htmlFor="password">Password</FormLabel>
