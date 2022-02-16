@@ -2,47 +2,27 @@ import {
   Button,
   Heading,
   Box,
-  Container,
   Text,
   Flex,
-  Spacer,
-  HStack,
-  SimpleGrid,
-  GridItem,
-  AspectRatio,
   VStack,
-  Stack,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
   Input,
-  Tooltip,
-  FormControl,
-  Badge,
   Textarea,
+  Tooltip,
+  InputGroup,
+  InputLeftElement,
 } from "@chakra-ui/react";
 import "./UserInfo.css";
-import { useState } from "react";
-import Card from "../components/card";
-import imageLandingPage from "../assets/imageLandingPage.png";
+import { useEffect, useState } from "react";
 import { Image } from "@chakra-ui/react";
-import { NavLink } from "react-router-dom";
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
-import NoAuthHeader from "../components/NoAuthHeader";
-import { useDisclosure } from "@chakra-ui/react";
-import Header from "../components/AuthHeader";
-import { AddIcon } from "@chakra-ui/icons";
 import { AiOutlineMail, AiOutlinePhone } from "react-icons/ai";
-import { HiOutlineLocationMarker } from "react-icons/hi";
 import { Icon } from "@chakra-ui/react";
-import StarRating from "../components/rating";
 import { AiFillEdit, AiFillSave, AiFillFileImage } from "react-icons/ai";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AuthService from "../services/authservice";
+import { MdSecurityUpdate } from "react-icons/md";
+import { FiTwitter, FiFacebook, FiInstagram } from "react-icons/fi";
 
 export default function UserInfo() {
   const API_URL = process.env.REACT_APP_API_URL;
@@ -64,6 +44,15 @@ export default function UserInfo() {
       image: JSON.parse(localStorage.getItem("currentUser")).publicInfo
         ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.image
         : "",
+      twitter: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+        ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.twitter
+        : "",
+      facebook: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+        ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.facebook
+        : "",
+      instagram: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+        ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.instagram
+        : "",
     },
   });
   const [user, setUser] = useState({
@@ -79,6 +68,16 @@ export default function UserInfo() {
     description: JSON.parse(localStorage.getItem("currentUser")).publicInfo
       ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.description
       : "",
+    twitter: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+      ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.twitter
+      : "",
+    facebook: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+      ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.facebook
+      : "",
+    instagram: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+      ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.instagram
+      : "",
+
     image: JSON.parse(localStorage.getItem("currentUser")).publicInfo
       ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.image
       : "",
@@ -96,6 +95,38 @@ export default function UserInfo() {
     console.log(e.target.files);
     setUserEditImage(e.target.files[0]);
   }
+  console.log(user);
+
+  useEffect(() => {
+    setUser({
+      name: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+        ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.name
+        : "",
+      email: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+        ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.email
+        : "",
+      number: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+        ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.number
+        : "",
+      description: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+        ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.description
+        : "",
+      twitter: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+        ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.twitter
+        : "",
+      facebook: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+        ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.facebook
+        : "",
+      instagram: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+        ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.instagram
+        : "",
+
+      image: JSON.parse(localStorage.getItem("currentUser")).publicInfo
+        ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.image
+        : "",
+      //falta imagem, pedir ao Imp
+    });
+  }, [editMode]);
 
   async function submitInfo(data) {
     const token = localStorage.getItem("token");
@@ -103,9 +134,12 @@ export default function UserInfo() {
     const email = data.email;
     const number = data.number;
     const description = data.description;
+    const twitter = data.twitter;
+    const facebook = data.facebook;
+    const instagram = data.instagram;
     const formData = new FormData();
-
     formData.append("image", data.image[0]);
+
     console.log("isto é a imagem" + data.image[0]);
     if (token) {
       axios.defaults.headers.common["Authorization"] = token;
@@ -115,18 +149,21 @@ export default function UserInfo() {
           email,
           number,
           description,
+          twitter,
+          facebook,
+          instagram,
         });
-        await AuthService.myself();
-
-        changeToEditMode();
+        AuthService.myself();
       } catch (err) {
         console.log(err);
       } finally {
-        if (data.image[0]) {
-          console.log("vou enviar esta fag");
-
+        try {
           await axios.patch(API_URL + "users/image", formData);
+          AuthService.myself();
+        } catch (err) {
+          console.log(err);
         }
+        changeToEditMode();
       }
     }
   }
@@ -291,6 +328,74 @@ export default function UserInfo() {
                       />
                     )}
                   />
+                  <Flex mt="5px" justify="space-around" w="100%">
+                    <Controller
+                      name="twitter"
+                      control={control}
+                      render={({ field }) => (
+                        <InputGroup>
+                          <InputLeftElement
+                            pointerEvents="none"
+                            children={<Icon as={FiTwitter} />}
+                          />
+                          <Input
+                            _active={{ borderColor: "red.600" }}
+                            _selected={{ borderColor: "red.600" }}
+                            _focus={{ borderColor: "red.600" }}
+                            m="0"
+                            fontWeight="bold"
+                            placeholder="twitter"
+                            variant="filled"
+                            {...field}
+                          />
+                        </InputGroup>
+                      )}
+                    />
+                    <Controller
+                      name="facebook"
+                      control={control}
+                      render={({ field }) => (
+                        <InputGroup>
+                          <InputLeftElement
+                            pointerEvents="none"
+                            children={<Icon as={FiFacebook} />}
+                          />
+                          <Input
+                            _active={{ borderColor: "red.600" }}
+                            _selected={{ borderColor: "red.600" }}
+                            _focus={{ borderColor: "red.600" }}
+                            m="0"
+                            fontWeight="bold"
+                            variant="filled"
+                            placeholder="facebook"
+                            {...field}
+                          />
+                        </InputGroup>
+                      )}
+                    />
+                    <Controller
+                      name="instagram"
+                      control={control}
+                      render={({ field }) => (
+                        <InputGroup>
+                          <InputLeftElement
+                            pointerEvents="none"
+                            children={<Icon as={FiInstagram} />}
+                          />
+                          <Input
+                            _active={{ borderColor: "red.600" }}
+                            _selected={{ borderColor: "red.600" }}
+                            _focus={{ borderColor: "red.600" }}
+                            placeholder="instagram"
+                            m="0"
+                            fontWeight="bold"
+                            variant="filled"
+                            {...field}
+                          />
+                        </InputGroup>
+                      )}
+                    />
+                  </Flex>
                 </Flex>
               </Flex>
               <Button mt={4} type="submit">
@@ -344,7 +449,7 @@ export default function UserInfo() {
             <Flex
               flexDirection="column"
               align="flex-start"
-              ml="5%"
+              ml="3%"
               w="70%"
               position="relative"
             >
@@ -360,15 +465,60 @@ export default function UserInfo() {
                   <Icon boxSize="100%" as={AiFillEdit} />
                 </Button>
               </Flex>
-              <Text align="start" mt="2%">
-                {user?.description ? (
-                  <Text>{user.description}</Text>
-                ) : (
-                  <Text color="grey">
-                    Ainda não tens uma descrição! Edita o teu perfil
-                  </Text>
-                )}
-              </Text>
+              <Box h="100%" w="100%">
+                <Text align="start" mt="2%">
+                  {user?.description ? (
+                    <Text>{user.description}</Text>
+                  ) : (
+                    <Text color="grey">
+                      Ainda não tens uma descrição! Edita o teu perfil
+                    </Text>
+                  )}
+                </Text>
+              </Box>
+              <Flex w="100%" justify="end">
+                <Flex align="end" w="15%" justify="space-between">
+                  {user?.twitter ? (
+                    <Tooltip
+                      shouldWrapChildren
+                      placement="top"
+                      label={`${user?.twitter}`}
+                    >
+                      <Icon as={FiTwitter} />
+                    </Tooltip>
+                  ) : (
+                    <Tooltip shouldWrapChildren placement="top">
+                      <Icon as={FiTwitter} />
+                    </Tooltip>
+                  )}
+                  {user?.facebook ? (
+                    <Tooltip
+                      shouldWrapChildren
+                      placement="top"
+                      label={`${user?.facebook}`}
+                    >
+                      <Icon as={FiFacebook} />
+                    </Tooltip>
+                  ) : (
+                    <Tooltip shouldWrapChildren placement="top">
+                      <Icon as={FiFacebook} />
+                    </Tooltip>
+                  )}
+                  {user?.instagram ? (
+                    <Tooltip
+                      shouldWrapChildren
+                      placement="top"
+                      label={`${user?.instagram}`}
+                    >
+                      <Icon as={FiInstagram} />
+                    </Tooltip>
+                  ) : (
+                    <Tooltip label="" shouldWrapChildren placement="top">
+                      <Icon as={FiInstagram} />
+                    </Tooltip>
+                  )}
+                </Flex>
+              </Flex>
             </Flex>
           </Flex>
         </Box>

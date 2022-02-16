@@ -26,7 +26,6 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 
 import Header from "../components/AuthHeader";
 import { AddIcon } from "@chakra-ui/icons";
-import { FiTwitter, FiFacebook, FiInstagram } from "react-icons/fi";
 import UserInfo from "../components/userInfo";
 import { useLocation } from "react-router-dom";
 import CardDashboard from "../components/cardDashboard";
@@ -36,23 +35,15 @@ import AuthService from "../services/authservice";
 
 export default function Dashboard(props) {
   let currentLocation = useLocation();
-  let user = JSON.parse(localStorage.getItem("currentUser")).publicInfo;
-  console.log(user);
-  const [editMode, setEditMode] = useState(false);
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("currentUser")).publicInfo
+  );
   const [location, setLocation] = useState(
     currentLocation.state ? currentLocation.state.index : 1
   );
   const [userItems, setUserItems] = useState([]);
 
   const API_URL = process.env.REACT_APP_API_URL;
-
-  function changeToEditMode() {
-    setEditMode(true);
-  }
-
-  function changePassword(data) {
-    console.log(data);
-  }
 
   async function getUserItems() {
     const token = localStorage.getItem("token");
@@ -81,36 +72,6 @@ export default function Dashboard(props) {
     } catch (err) {
       console.log(err);
     }
-  }
-
-  async function updateFacebook(e) {
-    const token = localStorage.getItem("token");
-
-    let facebook = e;
-    axios.defaults.headers.common["Authorization"] = token;
-    await axios.patch(API_URL + "users/public", {
-      facebook,
-    });
-  }
-
-  async function updateTwitter(e) {
-    const token = localStorage.getItem("token");
-
-    let twitter = e;
-    axios.defaults.headers.common["Authorization"] = token;
-    await axios.patch(API_URL + "users/public", {
-      twitter,
-    });
-  }
-
-  async function updateInstagram(e) {
-    const token = localStorage.getItem("token");
-
-    let instagram = e;
-    axios.defaults.headers.common["Authorization"] = token;
-    await axios.patch(API_URL + "users/public", {
-      instagram,
-    });
   }
 
   return (
@@ -208,75 +169,6 @@ export default function Dashboard(props) {
               </Heading>
 
               <UserInfo />
-              <Flex
-                mt="2%"
-                borderColor="#d2d3d4"
-                borderWidth="1px"
-                bg="white"
-                w="60%"
-                flexDirection="column"
-                justify="left"
-                p="3"
-              >
-                <Flex w="100%">
-                  <Text fontWeight="semibold">Redes sociais</Text>
-                </Flex>
-                <Flex mt="5px" w="100%" align="center" justify="space-between">
-                  <Flex w="100%" align="center">
-                    <Icon as={FiTwitter} size="20px" color="red.500" />
-                    <Editable
-                      w="40%"
-                      defaultValue={
-                        user.publicInfo?.twitter
-                          ? user.PublicInfo.twitter
-                          : "@Twitter"
-                      }
-                      onSubmit={(e) => {
-                        updateTwitter(e);
-                      }}
-                    >
-                      <EditablePreview />
-                      <EditableInput />
-                    </Editable>
-                  </Flex>
-                  <Flex w="100%" justify="center" align="center">
-                    {" "}
-                    <Icon as={FiInstagram} size="20px" color="red.500" />
-                    <Editable
-                      w="40%"
-                      defaultValue={
-                        user.publicInfo?.instagram
-                          ? user.PublicInfo.instagram
-                          : "@Instagram"
-                      }
-                      onSubmit={(e) => {
-                        updateInstagram(e);
-                      }}
-                    >
-                      <EditablePreview />
-                      <EditableInput />
-                    </Editable>
-                  </Flex>
-                  <Flex justify="flex-end" w="100%" align="center">
-                    <Icon as={FiFacebook} size="20px" color="red.500" />
-                    <Editable
-                      w="40%"
-                      _placeholder={{ color: "red" }}
-                      defaultValue={
-                        user.publicInfo?.facebook
-                          ? user.PublicInfo.facebook
-                          : "@Facebook"
-                      }
-                      onSubmit={(e) => {
-                        updateFacebook(e);
-                      }}
-                    >
-                      <EditablePreview />
-                      <EditableInput />
-                    </Editable>
-                  </Flex>
-                </Flex>
-              </Flex>
 
               {/*<Heading mt="3%" color="black">
                 Informação Privada

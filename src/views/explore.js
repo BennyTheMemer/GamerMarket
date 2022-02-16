@@ -47,6 +47,7 @@ export default function Explore() {
     Outros: ["Jogos", "Acessórios", "Consolas", "Computadores"],
   };
   const { category, subcategory, query } = useParams();
+  console.log(category);
 
   async function fetchItems() {
     console.log("isto é a categoria " + category);
@@ -89,18 +90,16 @@ export default function Explore() {
     }
   }
 
-  async function sortBy(e) {
-    console.log(e.target.value);
+  function sortBy(e) {
     let arr = [...items];
+    console.log(arr);
     if (e.target.value == "option1") {
-      arr.sort((a, b) => a.Price - b.Price);
-      arr.reverse();
-      console.log(arr);
+      arr.sort((a, b) => a.price - b.price);
       setItems(arr);
     }
     if (e.target.value == "option2") {
-      arr.sort((a, b) => a.Price - b.Price);
-      console.log(arr);
+      arr.sort((a, b) => a.price - b.price);
+      arr.reverse();
       setItems(arr);
     }
     if (e.target.value == "option3") {
@@ -109,6 +108,8 @@ export default function Explore() {
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       );
       console.log(arr);
+      arr.reverse();
+
       setItems(arr);
     }
     if (e.target.value == "option4") {

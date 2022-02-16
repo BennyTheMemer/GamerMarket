@@ -28,7 +28,6 @@ export default function Card({
   description,
   ...props
 }) {
-  console.log(image);
   function parseDate(unix_timestamp) {
     const dateObject = new Date(Date.parse(unix_timestamp));
 
