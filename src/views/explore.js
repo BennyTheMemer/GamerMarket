@@ -26,6 +26,9 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
+  Input,
+  InputGroup,
+  InputRightElement,
 } from "@chakra-ui/react";
 import "./landingpage.css";
 import { useEffect, useState, useRef } from "react";
@@ -47,6 +50,7 @@ import { AiOutlineArrowDown } from "react-icons/ai";
 import { IoIosArrowDown } from "react-icons/io";
 import { useDisclosure } from "@chakra-ui/react";
 import { BsGrid3X3Gap } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function Explore() {
@@ -56,6 +60,8 @@ export default function Explore() {
   const API_URL = process.env.REACT_APP_API_URL;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
+  const history = useNavigate();
+
   const categorias = {
     Componentes: [
       "RAM",
@@ -106,6 +112,11 @@ export default function Explore() {
         });
       }
     }
+  }
+
+  function queryProduct(e) {
+    history(`/home/search/${e.target.query.value}`);
+    window.location.reload();
   }
 
   async function removeItem(id) {
@@ -197,13 +208,14 @@ export default function Explore() {
     <Box h="100%" w="100%">
       <Header />
       <Drawer
+        display={["block", , , , "none"]}
         isOpen={isOpen}
         placement="right"
         onClose={onClose}
         finalFocusRef={btnRef}
       >
-        <DrawerOverlay />
-        <DrawerContent>
+        <DrawerOverlay display={["block", , , , "none"]} />
+        <DrawerContent display={["block", , , , "none"]}>
           <DrawerCloseButton />
 
           <DrawerBody bg="white">
@@ -229,7 +241,11 @@ export default function Explore() {
                 </Radio>
               </Stack>
             </RadioGroup>
-            <Accordion mt="5%">
+            <Heading mt="5%" size="md">
+              Categorias
+            </Heading>
+
+            <Accordion mt="1%">
               {Object.entries(categorias).map(([key, value]) => (
                 <AccordionItem>
                   <h2>
@@ -295,6 +311,19 @@ export default function Explore() {
                 </AccordionItem>
               ))}
             </Accordion>
+            <form
+              style={{ width: "100%", marginTop: "5%" }}
+              onSubmit={queryProduct}
+            >
+              <InputGroup w="100%">
+                <Input
+                  name="query"
+                  placeholder="Pesquisa o teu produto"
+                  _placeholder={{ color: "grey" }}
+                />
+                <InputRightElement children={<SearchIcon />} color="black" />
+              </InputGroup>
+            </form>
           </DrawerBody>
         </DrawerContent>
       </Drawer>
@@ -398,6 +427,7 @@ export default function Explore() {
               </Select>
               <Menu gutter="0" placement="bottom">
                 <MenuButton
+                  display={["block", , , , "none"]}
                   ref={btnRef}
                   onClick={onOpen}
                   as={Button}

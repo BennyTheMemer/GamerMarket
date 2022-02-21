@@ -28,7 +28,6 @@ export default function Header() {
   //checks for token and returns header accordingly
   const history = useNavigate();
   function queryProduct(e) {
-    console.log(e.target.query.value);
     history(`/home/search/${e.target.query.value}`);
     window.location.reload();
   }
