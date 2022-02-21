@@ -7,9 +7,28 @@ import {
   Grid,
   GridItem,
   Select,
+  Menu,
+  MenuItem,
+  MenuList,
+  MenuButton,
+  RadioGroup,
+  Radio,
+  Stack,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
 } from "@chakra-ui/react";
 import "./landingpage.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { createBreakpoints } from "@chakra-ui/theme-tools";
 import Card from "../components/card";
@@ -25,6 +44,8 @@ import { FaFilter } from "react-icons/fa";
 import { Icon } from "@chakra-ui/react";
 import { AiOutlineArrowUp, AiOutlineUnorderedList } from "react-icons/ai";
 import { AiOutlineArrowDown } from "react-icons/ai";
+import { IoIosArrowDown } from "react-icons/io";
+import { useDisclosure } from "@chakra-ui/react";
 import { BsGrid3X3Gap } from "react-icons/bs";
 import axios from "axios";
 
@@ -33,6 +54,8 @@ export default function Explore() {
   const [params, setParams] = useState({});
   const [display, setDisplay] = useState("list");
   const API_URL = process.env.REACT_APP_API_URL;
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = useRef();
   const categorias = {
     Componentes: [
       "RAM",
@@ -46,6 +69,7 @@ export default function Explore() {
 
     Outros: ["Jogos", "Acessórios", "Consolas", "Computadores"],
   };
+  const [value, setValue] = useState("1");
 
   const breakpoints = createBreakpoints({
     sm: "30em",
@@ -76,7 +100,9 @@ export default function Explore() {
       } else {
         await axios.get(API_URL + "items").then((res) => {
           console.log(res.data);
-          setItems(res.data);
+          const arr = res.data;
+          arr.sort((a, b) => a.price - b.price);
+          setItems(arr);
         });
       }
     }
@@ -98,9 +124,41 @@ export default function Explore() {
     }
   }
 
+  function sortByMobile(e) {
+    let arr = [...items];
+    console.log(e);
+    if (e == "option1") {
+      arr.sort((a, b) => a.price - b.price);
+      setItems(arr);
+    }
+    if (e == "option2") {
+      arr.sort((a, b) => a.price - b.price);
+      arr.reverse();
+      setItems(arr);
+    }
+    if (e == "option3") {
+      arr.sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+      console.log(arr);
+      arr.reverse();
+
+      setItems(arr);
+    }
+    if (e == "option4") {
+      arr.sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+      console.log(arr);
+      arr.reverse();
+      setItems(arr);
+    }
+  }
+
   function sortBy(e) {
     let arr = [...items];
-    console.log(arr);
     if (e.target.value == "option1") {
       arr.sort((a, b) => a.price - b.price);
       setItems(arr);
@@ -138,10 +196,112 @@ export default function Explore() {
   return (
     <Box h="100%" w="100%">
       <Header />
+      <Drawer
+        isOpen={isOpen}
+        placement="right"
+        onClose={onClose}
+        finalFocusRef={btnRef}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+
+          <DrawerBody bg="white">
+            <Heading size="md">Organizar por</Heading>
+            <RadioGroup
+              defaultValue="1"
+              mt="2%"
+              onChange={(e) => sortByMobile(e)}
+              value={value}
+            >
+              <Stack ml="2%" w="100%">
+                <Radio borderColor="red" value="option1">
+                  Preço, mais barato
+                </Radio>
+                <Radio colorScheme="red" value="option2">
+                  Preço, mais caro
+                </Radio>
+                <Radio colorScheme="red" value="option3">
+                  Data, mais recente
+                </Radio>
+                <Radio colorScheme="red" value="option4">
+                  Data, mais antigo
+                </Radio>
+              </Stack>
+            </RadioGroup>
+            <Accordion mt="5%">
+              {Object.entries(categorias).map(([key, value]) => (
+                <AccordionItem>
+                  <h2>
+                    <AccordionButton>
+                      <Box flex="1" textAlign="left">
+                        {key}
+                      </Box>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel bg="white" pb={4}>
+                    <RadioGroup>
+                      <Stack>
+                        {value.map((item) =>
+                          item === subcategory ? (
+                            <NavLink
+                              key={key + item}
+                              to={`/home/${key}/${item}`}
+                            >
+                              <Flex
+                                borderBottom="1px"
+                                borderColor="#d2d3d4"
+                                p="2"
+                                align="center"
+                              >
+                                <Text
+                                  _hover={{
+                                    color: "red",
+                                    textDecoration: "underline",
+                                  }}
+                                  color="red"
+                                >
+                                  {item}
+                                </Text>
+                              </Flex>
+                            </NavLink>
+                          ) : (
+                            <NavLink
+                              key={key + item}
+                              to={`/home/${key}/${item}`}
+                            >
+                              <Flex
+                                borderBottom="1px"
+                                borderColor="#d2d3d4"
+                                p="2"
+                                align="center"
+                              >
+                                <Text
+                                  _hover={{
+                                    color: "red",
+                                    textDecoration: "underline",
+                                  }}
+                                >
+                                  {item}
+                                </Text>
+                              </Flex>
+                            </NavLink>
+                          )
+                        )}
+                      </Stack>
+                    </RadioGroup>
+                  </AccordionPanel>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
 
       <Flex justify="flex-end"></Flex>
       <Grid mt="5vh" ml="5%" mr="5%" templateColumns="repeat(6, 1fr)">
-        <GridItem maxH="76vh" colSpan={1}>
+        <GridItem display={["none", , , , "block"]} maxH="76vh" colSpan={1}>
           {Object.entries(categorias).map(([key, value]) => (
             <Flex
               borderColor="#d2d3d4"
@@ -197,7 +357,7 @@ export default function Explore() {
             </Flex>
           ))}
         </GridItem>
-        <GridItem colSpan={5}>
+        <GridItem colSpan={["6", , , , "5"]}>
           <Flex
             borderColor="#d2d3d4"
             borderWidth="1px"
@@ -210,7 +370,7 @@ export default function Explore() {
             w="90%"
             h="5vh"
           >
-            <Flex justify="space-around" w="5%">
+            <Flex justify="space-around" w={["25%", , , , "5%"]}>
               <Button onClick={() => setDisplay("list")} bg="">
                 {" "}
                 <Icon as={AiOutlineUnorderedList} />
@@ -220,13 +380,30 @@ export default function Explore() {
               </Button>
             </Flex>
             <Flex w="100%" align="center" justify="end">
-              <Text fontWeight="semibold">Ordenar por</Text>
-              <Select onChange={(e) => sortBy(e)} ml="1%" w="20%">
+              <Text display={["none", , , , "inline"]} fontWeight="semibold">
+                Ordenar por
+              </Text>
+              <Select
+                display={["none", , , , "inline"]}
+                _active={{ bg: "0" }}
+                _focus={{ bg: "0" }}
+                onChange={(e) => sortBy(e)}
+                ml="1%"
+                w="20%"
+              >
                 <option value="option1">Preço, mais barato</option>
                 <option value="option2">Preço, mais caro</option>
                 <option value="option3">Data, mais recente</option>
                 <option value="option4">Data, mais antigo</option>
               </Select>
+              <Menu gutter="0" placement="bottom">
+                <MenuButton
+                  ref={btnRef}
+                  onClick={onOpen}
+                  as={Button}
+                  rightIcon={<AiOutlineUnorderedList />}
+                ></MenuButton>
+              </Menu>
             </Flex>
           </Flex>
           {display === "grid" ? (
