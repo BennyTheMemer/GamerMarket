@@ -15,8 +15,16 @@ import AuthService from "../services/authservice";
 import { render } from "@testing-library/react";
 import UserBadge from "./userBadge";
 import ComponentsMenu from "./ComponentsMenu";
+import { createBreakpoints } from "@chakra-ui/theme-tools";
 
 export default function Header() {
+  const breakpoints = createBreakpoints({
+    sm: "30em",
+    md: "48em",
+    lg: "62em",
+    xl: "80em",
+    "2xl": "96em",
+  });
   //checks for token and returns header accordingly
   const history = useNavigate();
   function queryProduct(e) {
@@ -75,7 +83,7 @@ export default function Header() {
           style={{ width: "80%", marginLeft: "5%" }}
           onSubmit={queryProduct}
         >
-          <InputGroup w="60%">
+          <InputGroup w={["100%", , , , "80%"]}>
             <Input
               name="query"
               placeholder="search for a product"

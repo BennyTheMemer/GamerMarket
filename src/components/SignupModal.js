@@ -292,26 +292,28 @@ export default function SignUp() {
   }
 
   return (
-    <Container align="center" w={{ base: "100%", sm: "50%" }}>
+    <Container align="center" w={["20%", , , , "40%"]}>
       <>{isModal()}</>
       <Button onClick={onOpen} variant="register">
         <Flex w="100%" align="center">
           <Icon
-            h={{ base: 12, sm: 8 }}
-            w={{ base: 12, sm: 8 }}
+            h={["8", , , , "12"]}
+            w={["8", , , , "12"]}
             as={MdPersonOutline}
             color="black"
           />
-          <Box w="90%">
+          <Box display={["none", , , "inline"]}>
             <Text
               fontSize={{ base: "1rem", md: "0.9rem", xl: "1rem" }}
               color="grey"
+              mb="0"
             >
               Welcome
             </Text>
             <Text
               fontSize={{ base: "1rem", md: "0.9rem", xl: "1rem" }}
               color="black"
+              mb="0"
             >
               Sign In / Register
             </Text>

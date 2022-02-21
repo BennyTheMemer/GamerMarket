@@ -39,6 +39,7 @@ export default function Article(props) {
   const API_URL = process.env.REACT_APP_API_URL;
   const [user, setUser] = useState(null);
   const [numberShow, setNumberShow] = useState(false);
+  console.log(user);
 
   var [currentImageIndex, setCurrentImageIndex] = useState(0);
   console.log(currentImageIndex);

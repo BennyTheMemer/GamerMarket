@@ -11,7 +11,7 @@ import {
 import "./landingpage.css";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
+import { createBreakpoints } from "@chakra-ui/theme-tools";
 import Card from "../components/card";
 import imageLandingPage from "../assets/imageLandingPage.png";
 import { Image } from "@chakra-ui/react";
@@ -46,6 +46,14 @@ export default function Explore() {
 
     Outros: ["Jogos", "Acessórios", "Consolas", "Computadores"],
   };
+
+  const breakpoints = createBreakpoints({
+    sm: "30em",
+    md: "48em",
+    lg: "62em",
+    xl: "80em",
+    "2xl": "96em",
+  });
   const { category, subcategory, query } = useParams();
   console.log(category);
 

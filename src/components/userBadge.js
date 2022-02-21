@@ -13,12 +13,19 @@ import {
 } from "@chakra-ui/react";
 import { NavLink, useNavigate } from "react-router-dom";
 import AuthService from "../services/authservice";
+import { createBreakpoints } from "@chakra-ui/theme-tools";
 
 export default function UserBadge() {
   const user = AuthService.getCurrentUser();
   const history = useNavigate();
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-
+  const breakpoints = createBreakpoints({
+    sm: "30em",
+    md: "48em",
+    lg: "62em",
+    xl: "80em",
+    "2xl": "96em",
+  });
   async function logout() {
     await AuthService.logout();
     history("/");
