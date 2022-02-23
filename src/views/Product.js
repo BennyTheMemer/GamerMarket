@@ -126,13 +126,75 @@ export default function Article(props) {
         </Flex>
       </Flex>
       <Heading ml="12%">{item.title}</Heading>
+
       <Flex
         mt="10px"
         justify="space-between"
         align="center"
         flexDirection="column"
       >
-        <Flex justify="space-around" w="80%">
+        <Flex
+          display={{ base: "flex", lg: "none" }}
+          flexDirection="column"
+          w="80%"
+          h="100%"
+        >
+          <Flex
+            bg="white"
+            borderColor="#d2d3d4"
+            borderWidth="1px"
+            h="22vh"
+            p="3"
+            borderRadius="5px"
+            w="100%"
+            flexDirection="column"
+          >
+            <Flex h="100%" w="100%" flexDirection="row">
+              <NavLink
+                to={{
+                  pathname: `/user/${user?.id}`,
+                  state: { name: "bernardo" },
+                }}
+              ></NavLink>
+
+              <Flex
+                justify="space-between"
+                w="80%"
+                ml="5%"
+                flexDirection="column"
+                h="100%"
+              >
+                <Text fontWeight="semibold" fontSize="xl">
+                  {user?.publicInfo.name}
+                </Text>{" "}
+                <Flex justify="space-between" w="100%" h="100%">
+                  <Image
+                    borderRadius="full"
+                    boxSize="75px"
+                    fallbackSrc="https://via.placeholder.com/75"
+                    src={user?.publicInfo.image}
+                  />
+                  <Flex mt="5px" justify="flex-start" flexDirection="column">
+                    <Button
+                      variant="gamer"
+                      onClick={() => setNumberShow(!numberShow)}
+                    >
+                      {numberShow ? (
+                        user?.publicInfo.number
+                      ) : (
+                        <Text>Número</Text>
+                      )}
+                    </Button>
+                    <Button variant="gamer" onClick={onOpen}>
+                      Mensagem
+                    </Button>
+                  </Flex>
+                </Flex>
+              </Flex>
+            </Flex>
+          </Flex>
+        </Flex>
+        <Flex mt="3%" justify="space-around" w="80%">
           <Box
             bg="white"
             borderColor="#d2d3d4"
@@ -158,6 +220,7 @@ export default function Article(props) {
               justify="center"
               align="center"
               flexDirection="row"
+              mt="20px"
             >
               <Button variant="gamer" onClick={controlDecrement}>
                 <Icon as={AiOutlineArrowLeft} size="20px" />
@@ -294,7 +357,7 @@ export default function Article(props) {
                     </ModalBody>
                     <ModalFooter>
                       <Button variant="gamer" type="submit">
-                        Send
+                        Enviar
                       </Button>
                     </ModalFooter>
                   </ModalContent>
@@ -329,7 +392,7 @@ export default function Article(props) {
           p="5"
           flexDirection="column"
           mt="5%"
-          w="76%"
+          w="80%"
           bg="white"
           borderColor="#d2d3d4"
           borderWidth="1px"

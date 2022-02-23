@@ -33,7 +33,7 @@ export default function LandingPage(props) {
 
       <Flex justify="space-between" mt="5%">
         <Flex flexDirection="column" ml="5%" mr="5%">
-          <Heading color="black" fontSize="3.3rem">
+          <Heading color="black" fontSize="3rem">
             Bem-vindo ao melhor mercado P2P de gaming
           </Heading>
           <Text

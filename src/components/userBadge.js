@@ -32,7 +32,7 @@ export default function UserBadge() {
   }
 
   return (
-    <Box w="12%">
+    <Box w={["100px", , , , "12%"]}>
       <Menu bg="white">
         <Flex>
           <MenuButton
@@ -45,10 +45,16 @@ export default function UserBadge() {
             <Flex w="100%" justify="space-around" align="center">
               <Image
                 borderRadius="100%"
-                boxSize="5vh"
+                boxSize={["30px", "40px", "50px", "60px"]}
+                src={currentUser.publicInfo.image}
                 fallbackSrc="https://via.placeholder.com/150"
               />
-              <Text ml="4px" isTruncated color="black">
+              <Text
+                display={["none", , , , "inline"]}
+                ml="4px"
+                isTruncated
+                color="black"
+              >
                 {currentUser.username}
               </Text>
             </Flex>

@@ -1,6 +1,10 @@
 import { extendTheme } from "@chakra-ui/react";
 
 const theme = extendTheme({
+  fonts: {
+    body: "Roboto, system-ui, sans-serif",
+    heading: "Roboto, system-ui, sans-serif",
+  },
   shadows: {
     outline: "0 0 0 1px",
   },
@@ -15,10 +19,10 @@ const theme = extendTheme({
     },
     red: {
       500: "#ff0000",
-      600: "#b80000",
-      700: "#8f0000",
-      800: "#630000",
-      900: "#380000",
+      600: "#ed2603",
+      700: "#c41c00",
+      800: "#9b0000",
+      900: "#7f0000",
     },
     brand: {
       500: "#fdea33",
@@ -104,7 +108,7 @@ const theme = extendTheme({
           textTransform: "uppercase",
           letterSpacing: "tight",
           _hover: {
-            bgColor: "brand.500",
+            bgColor: "#ed2603",
             color: "gray.900",
           },
         },
@@ -124,6 +128,7 @@ const theme = extendTheme({
         h: "100%",
         w: "100%",
         color: "black",
+        fontFamily: "Poppins,sans-serif;",
       },
     },
   },

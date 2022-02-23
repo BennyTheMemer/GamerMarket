@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { createBreakpoints } from "@chakra-ui/theme-tools";
 
 export default function Chat() {
   const [usersConnected, setUsersConnected] = useState([]);
@@ -16,6 +17,13 @@ export default function Chat() {
   const [messages, setMessages] = useState([]);
   const currentUser = JSON.parse(localStorage.getItem("currentUser")).id;
   console.log(usersConnected);
+  const breakpoints = createBreakpoints({
+    sm: "30em",
+    md: "48em",
+    lg: "62em",
+    xl: "80em",
+    "2xl": "96em",
+  });
 
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -48,7 +56,6 @@ export default function Chat() {
       localStorage.getItem("token");
 
     axios.get(API_URL + "messages/" + id).then((res) => {
-      res.data.reverse();
       setMessages(res.data);
       setReceivingUser(id);
     });
@@ -66,7 +73,7 @@ export default function Chat() {
         borderWidth="1px"
         bg="white"
         h="80%"
-        w="60%"
+        w={["100%", , , , "60%"]}
         flexDirection="row"
       >
         <VStack w="40%" maxH="70vh" h="30vh">
@@ -87,19 +94,30 @@ export default function Chat() {
                   }}
                   onClick={() => getMessages(user?.user.id)}
                 >
-                  <Flex w="85%" align="center" justify="space-between">
+                  <Flex
+                    justify="center"
+                    w="100%"
+                    align="center"
+                    textAlign="start"
+                  >
                     <Image
+                      borderRadius="50%"
                       boxSize="50px"
-                      src=""
+                      src={user?.user.publicInfo.image}
                       fallbackSrc="https://i.imgur.com/X2JkUjq.png"
                     />
-                    <Text>{user?.user.publicInfo.name}</Text>
+                    <Flex w="100%" display={["none", , , , "inline"]}>
+                      <Text ml="2%" noOfLines={2}>
+                        {user?.user.publicInfo.name}
+                      </Text>
+                    </Flex>
                   </Flex>
                 </Flex>
               ) : (
                 <Flex
                   borderColor="#d2d3d4"
                   borderWidth="1px"
+                  borderRadius="10px"
                   bg="white"
                   w="100%"
                   align="center"
@@ -110,13 +128,18 @@ export default function Chat() {
                   }}
                   onClick={() => getMessages(user?.user.id)}
                 >
-                  <Flex w="85%" align="center" justify="space-between">
+                  <Flex align="center" w="85%" textAlign="start">
                     <Image
+                      borderRadius="50%"
                       boxSize="50px"
-                      src=""
+                      src={user?.user.publicInfo.image}
                       fallbackSrc="https://i.imgur.com/X2JkUjq.png"
                     />
-                    <Text>{user?.user.publicInfo.name}</Text>
+                    <Flex display={["none", , , , "inline"]} w="100%">
+                      <Text ml="2%" noOfLines={2}>
+                        {user?.user.publicInfo.name}
+                      </Text>
+                    </Flex>
                   </Flex>
                 </Flex>
               )
@@ -133,7 +156,7 @@ export default function Chat() {
           borderColor="#d2d3d4"
         ></Box>
         <Flex h="100%" w="100%" flexDirection="column">
-          <Flex overflow="auto" h="100%" flexDirection="column">
+          <Flex overflow="auto" h="100%" flexDirection="column-reverse">
             {messages?.map((message) => {
               return currentUser === message.authorId ? (
                 <Flex mb="2px" justify="end" w="100%">
@@ -148,22 +171,26 @@ export default function Chat() {
                     mb="4px"
                     p="2"
                   >
-                    <Text ml="5px">{message.content}</Text>
+                    <Text fontSize={["sm", , , ,]} ml="5px">
+                      {message.content}
+                    </Text>
                   </Flex>
                 </Flex>
               ) : (
                 <Flex
                   w="45%"
-                  h="10%"
+                  h="100%"
                   borderRadius="5"
                   border="1px"
                   borderColor="grey"
                   align="center"
-                  bg="#fa9d9d"
                   mb="4px"
                   p="2"
+                  bg="#fa9d9d"
                 >
-                  <Text ml="5px">{message.content}</Text>
+                  <Text fontSize={["sm", , , ,]} ml="5px">
+                    {message.content}
+                  </Text>
                 </Flex>
               );
             })}

@@ -52,7 +52,7 @@ export default function Header() {
               style={{ width: "60%", marginLeft: "5%" }}
               onSubmit={queryProduct}
             >
-              <InputGroup w="100%">
+              <InputGroup display={["none", , , , "block"]} w="100%">
                 <Input
                   name="query"
                   placeholder="Pesquisa o teu produto"

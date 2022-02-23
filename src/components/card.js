@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { AiFillEdit, AiFillEye } from "react-icons/ai";
 import { Icon } from "@chakra-ui/react";
 import axios from "axios";
+import { createBreakpoints } from "@chakra-ui/theme-tools";
 
 export default function Card({
   title,
@@ -28,6 +29,13 @@ export default function Card({
   description,
   ...props
 }) {
+  const breakpoints = createBreakpoints({
+    sm: "30em",
+    md: "48em",
+    lg: "62em",
+    xl: "80em",
+    "2xl": "96em",
+  });
   function parseDate(unix_timestamp) {
     const dateObject = new Date(Date.parse(unix_timestamp));
 
@@ -43,7 +51,7 @@ export default function Card({
       {" "}
       {props.display ? (
         <NavLink
-          style={{ display: "flex", height: "100%", width: "100%" }}
+          style={{ display: "flex", width: "100%", height: "100%" }}
           to={{
             pathname: `/article/${id}`,
             state: {
@@ -68,18 +76,20 @@ export default function Card({
             align="center"
             justify="center"
             flexDirection="column"
-            w="100%"
             h="100%"
+            w="100%"
           >
-            <Text fontSize="xl" fontWeight="semibold">
-              {title}
-            </Text>
-            <AspectRatio minW="150px" maxW="560px" ratio={1}>
+            <Box>
+              <Text fontSize="100%" fontWeight="semibold">
+                {title}
+              </Text>
+            </Box>
+            <AspectRatio minW="100px" maxW="100px" ratio={1}>
               <Image borderRadius="5px" src={image} />
             </AspectRatio>
             <Text>{localidade}</Text>
 
-            <Text color="black" fontWeight="bold" fontSize="large">
+            <Text color="black" fontWeight="bold" fontSize="md">
               {price}€
             </Text>
             <Text fontSize="sm" color="black">
@@ -88,60 +98,73 @@ export default function Card({
           </Flex>
         </NavLink>
       ) : (
-        <Flex
-          borderColor="#d2d3d4"
-          borderWidth="1px"
-          borderRadius="5px"
-          bg="white"
-          p="3"
-          w="100%"
+        <NavLink
+          style={{
+            display: "flex",
+            height: "100%",
+            width: "100%",
+          }}
+          to={{
+            pathname: `/article/${id}`,
+            state: {
+              title,
+              price,
+              image,
+              localidade,
+              createdAt,
+              sellerId,
+              category,
+              subcategory,
+              id,
+            },
+          }}
         >
-          <NavLink
-            style={{ display: "flex", height: "100%", width: "100%" }}
-            to={{
-              pathname: `/article/${id}`,
-              state: {
-                title,
-                price,
-                image,
-                localidade,
-                createdAt,
-                sellerId,
-                category,
-                subcategory,
-                id,
-              },
-            }}
+          <Flex
+            borderColor="#d2d3d4"
+            borderWidth="1px"
+            borderRadius="5px"
+            flexDirection={["column", , , , "row"]}
+            p="3"
+            w="100%"
+            justify={["center", , , , "start"]}
+            align={["center", , , , "start"]}
           >
-            <Flex>
-              <AspectRatio display="block" minW="175px" maxW="750px" ratio="1">
+            <Flex align={["center", , , , "flex"]} flexDirection="column">
+              <AspectRatio
+                display="block"
+                minW="150px"
+                maxW={["150px", , , , "750px"]}
+                ratio="1"
+              >
                 <Image
                   borderRadius="10px"
-                  boxSize="200px"
+                  boxSize={["200px"]}
                   objectFit="fill"
                   src={image}
                 />
               </AspectRatio>
             </Flex>
             <Flex ml="2%" flexDirection="column">
-              <Text fontSize="3xl">{title}</Text>
+              <Text fontSize={["2xl", , , , "3xl"]}>{title}</Text>
               <Text color="black" fontSize="2xl" fontWeight="semibold">
                 € {price}
               </Text>
               <Flex>
-                <Box mt="1%" w="80%">
-                  <Text fontSize="xl" noOfLines={2} color="black">
+                <Box display={["none", , , , "inline"]} w="80%">
+                  <Text fontSize="md" noOfLines={2} color="black">
                     {description}
                   </Text>
                 </Box>
               </Flex>
               <Flex align="flex-end" h="100%">
                 {" "}
-                <Text color="black">{parseDate(createdAt)}</Text>
+                <Text display={["none", , , , "block"]} color="black">
+                  {parseDate(createdAt)}
+                </Text>
               </Flex>
             </Flex>
-          </NavLink>
-        </Flex>
+          </Flex>
+        </NavLink>
       )}
     </Flex>
   );

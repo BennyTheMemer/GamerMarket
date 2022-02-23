@@ -23,6 +23,7 @@ import axios from "axios";
 import AuthService from "../services/authservice";
 import { MdSecurityUpdate } from "react-icons/md";
 import { FiTwitter, FiFacebook, FiInstagram } from "react-icons/fi";
+import { createBreakpoints } from "@chakra-ui/theme-tools";
 
 export default function UserInfo() {
   const API_URL = process.env.REACT_APP_API_URL;
@@ -86,6 +87,13 @@ export default function UserInfo() {
   const history = useNavigate();
   const [editMode, setEditMode] = useState(false);
   const [userEditImage, setUserEditImage] = useState("");
+  const breakpoints = createBreakpoints({
+    sm: "30em",
+    md: "48em",
+    lg: "62em",
+    xl: "80em",
+    "2xl": "96em",
+  });
 
   function changeToEditMode() {
     setEditMode(!editMode);
@@ -176,10 +184,9 @@ export default function UserInfo() {
           borderWidth="1px"
           p="4"
           bg="white"
-          w="60%"
+          w={["90%", , , , "60%"]}
           mt="3%"
           color="black"
-          w="60%"
           mt="3%"
         >
           <form
@@ -189,7 +196,30 @@ export default function UserInfo() {
             display="flex"
           >
             <Flex w="100%" flexDirection="column">
-              <Flex flexDirection="row">
+              <Flex flexDirection={["column", , , , "row"]}>
+                <Flex
+                  display={["block", , , , "none"]}
+                  justify="center"
+                  align="center"
+                >
+                  <Controller
+                    name="name"
+                    control={control}
+                    render={({ field }) => (
+                      <Input
+                        _active={{ borderColor: "red.600" }}
+                        _selected={{ borderColor: "red.600" }}
+                        _focus={{ borderColor: "red.600" }}
+                        m="0"
+                        p="0"
+                        fontWeight="bold"
+                        fontSize="4xl"
+                        variant="filled"
+                        {...field}
+                      />
+                    )}
+                  />
+                </Flex>
                 <Flex flexDirection="column">
                   {userEditImage ? (
                     //mostrar aqui a imagem do user
@@ -214,7 +244,12 @@ export default function UserInfo() {
                       />
                     </VStack>
                   )}
-                  <Flex align="center" justify="center" flexDirection="row">
+
+                  <Flex
+                    align="center"
+                    justify="center"
+                    flexDirection={["column", , , , "row"]}
+                  >
                     <input
                       {...register("image")}
                       accept="image/*"
@@ -227,6 +262,31 @@ export default function UserInfo() {
                     <label htmlFor="file">
                       Upload <Icon as={AiFillFileImage} size="20px" />
                     </label>
+                  </Flex>
+                  <Flex display={["block", , , , "none"]}>
+                    <Controller
+                      name="description"
+                      control={control}
+                      rules={{ maxLenght: 200 }}
+                      render={({ field }) => (
+                        <Textarea
+                          _active={{ borderColor: "red.600" }}
+                          _selected={{ borderColor: "red.600" }}
+                          _focus={{ borderColor: "red.600" }}
+                          m="0"
+                          p="0"
+                          fontSize="md"
+                          placeholder="Here is a sample placeholder"
+                          align="start"
+                          mt="2%"
+                          h="100%"
+                          w="100%"
+                          variant="filled"
+                          size="sm"
+                          {...field}
+                        />
+                      )}
+                    />
                   </Flex>
                   <Flex mt="5" flexDirection="column">
                     <Flex w="100%" align="center">
@@ -280,8 +340,16 @@ export default function UserInfo() {
                   w="70%"
                   position="relative"
                 >
-                  <Flex w="100%" justify="space-between">
-                    <Flex justify="center" align="center">
+                  <Flex
+                    flexDirection={["column", , , , "row"]}
+                    w="100%"
+                    justify="space-between"
+                  >
+                    <Flex
+                      display={["none", , , , "inline"]}
+                      justify="center"
+                      align="center"
+                    >
                       <Controller
                         name="name"
                         control={control}
@@ -301,7 +369,11 @@ export default function UserInfo() {
                       />
                     </Flex>
 
-                    <Button w="8%" onClick={changeToEditMode}>
+                    <Button
+                      display={["none", , , , "block"]}
+                      w="8%"
+                      onClick={changeToEditMode}
+                    >
                       <Icon boxSize="100%" as={AiFillEdit} />
                     </Button>
                   </Flex>
@@ -311,6 +383,7 @@ export default function UserInfo() {
                     rules={{ maxLenght: 200 }}
                     render={({ field }) => (
                       <Textarea
+                        display={["none", , , , "block"]}
                         _active={{ borderColor: "red.600" }}
                         _selected={{ borderColor: "red.600" }}
                         _focus={{ borderColor: "red.600" }}
@@ -328,12 +401,12 @@ export default function UserInfo() {
                       />
                     )}
                   />
-                  <Flex mt="5px" justify="space-around" w="100%">
+                  <Flex mt="5px" flexDirection="column">
                     <Controller
                       name="twitter"
                       control={control}
                       render={({ field }) => (
-                        <InputGroup>
+                        <InputGroup w="100%">
                           <InputLeftElement
                             pointerEvents="none"
                             children={<Icon as={FiTwitter} />}
@@ -405,17 +478,36 @@ export default function UserInfo() {
           </form>
         </Box>
       ) : (
-        <Box
+        <Flex
+          bg="white"
           borderColor="#d2d3d4"
+          borderRadius="5px"
           borderWidth="1px"
           p="4"
-          bg="white"
-          w="60%"
+          w={["90%", , , , "60%"]}
           mt="3%"
           color="black"
+          textAlign={["center", , , ,]}
         >
-          <Flex flexDirection="row">
-            <Flex flexDirection="column">
+          <Flex flexDirection={["column", , , , "row"]} w="100%">
+            <Flex
+              display={["flex", , , , "none"]}
+              flexDirection="row"
+              w="100%"
+              textAlign="center"
+              justify="center"
+            >
+              <Heading>{user?.name}</Heading>
+              <Button bg="none" w="10%" onClick={changeToEditMode}>
+                <Icon boxSize="25px" as={AiFillEdit} />
+              </Button>
+            </Flex>
+            <Flex
+              justify="center"
+              align={["center", , , , "flex-start"]}
+              w={["100%", , , , "35%"]}
+              flexDirection="column"
+            >
               <Image
                 mt="10px"
                 borderRadius="full"
@@ -423,9 +515,9 @@ export default function UserInfo() {
                 fallbackSrc="https://via.placeholder.com/150"
                 src={user.image ? user.image : ""}
               />
-              <Flex mt="5" flexDirection="column">
-                <Flex w="100%" align="center">
-                  <Icon as={AiOutlineMail} />
+              <Flex w="100%" mt="5" flexDirection="column">
+                <Flex align="center" w="100%">
+                  <Icon boxSize="20px" color="red.600" as={AiOutlineMail} />
                   {user?.email ? (
                     <Text ml="2%">{user?.email}</Text>
                   ) : (
@@ -434,8 +526,8 @@ export default function UserInfo() {
                     </Text>
                   )}
                 </Flex>
-                <Flex w="100%" align="center">
-                  <Icon as={AiOutlinePhone} />
+                <Flex align="center" w="100%">
+                  <Icon boxSize="20px" color="red.600" as={AiOutlinePhone} />
                   {user?.number ? (
                     <Text ml="2%">{user.number}</Text>
                   ) : (
@@ -449,23 +541,31 @@ export default function UserInfo() {
             <Flex
               flexDirection="column"
               align="flex-start"
-              ml="3%"
-              w="70%"
-              position="relative"
+              w="100%"
+              h="100%"
+              display={["block", , , , "block"]}
             >
               <Flex w="100%" justify="space-between">
-                <Flex justify="center" align="center">
+                <Flex
+                  display={["none", , , , "inline"]}
+                  justify="center"
+                  align="center"
+                >
                   {user?.name ? (
                     <Heading> {user.name} </Heading>
                   ) : (
                     <Heading color="grey"> Adiciona um nome </Heading>
                   )}
                 </Flex>
-                <Button w="8%" onClick={changeToEditMode}>
+                <Button
+                  display={["none", , , , "block"]}
+                  w="8%"
+                  onClick={changeToEditMode}
+                >
                   <Icon boxSize="100%" as={AiFillEdit} />
                 </Button>
               </Flex>
-              <Box h="100%" w="100%">
+              <Box display={["none", , , , "block"]} h="60%" w="100%">
                 <Text align="start" mt="2%">
                   {user?.description ? (
                     <Text>{user.description}</Text>
@@ -476,52 +576,67 @@ export default function UserInfo() {
                   )}
                 </Text>
               </Box>
-              <Flex w="100%" justify="end">
-                <Flex align="end" w="15%" justify="space-between">
-                  {user?.twitter ? (
+              <Flex mt="3%" w={["100%", , , , "60%"]} justify="space-between">
+                {user?.twitter ? (
+                  <Flex align="center" justify="center">
                     <Tooltip
                       shouldWrapChildren
                       placement="top"
                       label={`${user?.twitter}`}
                     >
-                      <Icon as={FiTwitter} />
+                      <Icon boxSize="20px" color="red.600" as={FiTwitter} />
                     </Tooltip>
-                  ) : (
-                    <Tooltip shouldWrapChildren placement="top">
-                      <Icon as={FiTwitter} />
-                    </Tooltip>
-                  )}
-                  {user?.facebook ? (
+                    <Flex>
+                      <Text ml="2px">{user?.twitter}</Text>
+                    </Flex>
+                  </Flex>
+                ) : (
+                  <Tooltip shouldWrapChildren placement="top">
+                    <Icon boxSize="20px" color="red.600" as={FiTwitter} />
+                  </Tooltip>
+                )}
+                {user?.facebook ? (
+                  <Flex ml="2%">
                     <Tooltip
                       shouldWrapChildren
                       placement="top"
                       label={`${user?.facebook}`}
                     >
-                      <Icon as={FiFacebook} />
+                      <Icon boxSize="20px" color="red.600" as={FiFacebook} />
                     </Tooltip>
-                  ) : (
+                    <Flex>
+                      <Text>{user?.facebook}</Text>
+                    </Flex>
+                  </Flex>
+                ) : (
+                  <Flex ml="2%">
                     <Tooltip shouldWrapChildren placement="top">
-                      <Icon as={FiFacebook} />
+                      <Icon boxSize="20px" color="red.600" as={FiFacebook} />
                     </Tooltip>
-                  )}
-                  {user?.instagram ? (
+                  </Flex>
+                )}
+                {user?.instagram ? (
+                  <Flex ml="2%">
                     <Tooltip
                       shouldWrapChildren
                       placement="top"
                       label={`${user?.instagram}`}
                     >
-                      <Icon as={FiInstagram} />
+                      <Icon boxSize="20px" color="red.600" as={FiInstagram} />
                     </Tooltip>
-                  ) : (
-                    <Tooltip label="" shouldWrapChildren placement="top">
-                      <Icon as={FiInstagram} />
-                    </Tooltip>
-                  )}
-                </Flex>
+                    <Flex>
+                      <Text ml="2px">{user?.instagram}</Text>
+                    </Flex>
+                  </Flex>
+                ) : (
+                  <Tooltip label="" shouldWrapChildren placement="top">
+                    <Icon boxSize="20px" color="red.600" as={FiInstagram} />
+                  </Tooltip>
+                )}
               </Flex>
             </Flex>
           </Flex>
-        </Box>
+        </Flex>
       )}
     </>
   );

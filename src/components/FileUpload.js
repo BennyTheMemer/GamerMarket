@@ -21,6 +21,8 @@ import {
   Grid,
   Textarea,
   Stack,
+  Image,
+  AspectRatio,
 } from "@chakra-ui/react";
 
 const DEFAULT_MAX_FILE_SIZE_IN_BYTES = 500000;
@@ -75,14 +77,13 @@ const FileUpload = ({
   };
 
   return (
-    <>
+    <Flex flexDirection="column" w="100%" align="center">
+      <DragDropText>Drag and drop your files anywhere or</DragDropText>
+      <UploadFileBtn type="button" onClick={handleUploadBtnClick}>
+        <i className="fas fa-file-upload" />
+        <span> Upload {otherProps.multiple ? "files" : "a file"}</span>
+      </UploadFileBtn>
       <FileUploadContainer>
-        <InputLabel>{label}</InputLabel>
-        <DragDropText>Drag and drop your files anywhere or</DragDropText>
-        <UploadFileBtn type="button" onClick={handleUploadBtnClick}>
-          <i className="fas fa-file-upload" />
-          <span> Upload {otherProps.multiple ? "files" : "a file"}</span>
-        </UploadFileBtn>
         <FormField
           type="file"
           ref={fileInputField}
@@ -91,40 +92,47 @@ const FileUpload = ({
           value=""
           {...otherProps}
         />
-        <FilePreviewContainer>
-          <Grid mt="2%" templateColumns="repeat(4, 1fr)" gap={6}>
-            {Object.keys(files).map((fileName, index) => {
-              let file = files[fileName];
-              let isImageFile = file.type.split("/")[0] === "image";
-              return (
-                <GridItem w="200px" h="200px">
-                  <PreviewContainer key={fileName}>
-                    <div>
-                      {isImageFile && (
-                        <ImagePreview
+        <Grid
+          mt="2%"
+          w="100%"
+          h="100%"
+          templateColumns={["repeat(2,1fr)", , , , "repeat(4, 1fr)"]}
+          gap={["1", , , , "6"]}
+          align="center"
+        >
+          {Object.keys(files).map((fileName, index) => {
+            let file = files[fileName];
+            let isImageFile = file.type.split("/")[0] === "image";
+            return (
+              <GridItem justify="center">
+                <PreviewContainer key={fileName}>
+                  <Flex h="100%" w="100%" align="center" justify="center">
+                    {isImageFile && (
+                      <AspectRatio minW={["100px", , , , "200px"]} ratio={1}>
+                        <Image
                           src={URL.createObjectURL(file)}
                           alt={`file preview ${index}`}
                         />
-                      )}
-                      <FileMetaData isImageFile={isImageFile}>
-                        <span>{file.name}</span>
-                        <aside>
-                          <span>{convertBytesToKB(file.size)} kb</span>
-                          <RemoveFileIcon
-                            className="fas fa-trash-alt"
-                            onClick={() => removeFile(fileName)}
-                          />
-                        </aside>
-                      </FileMetaData>
-                    </div>
-                  </PreviewContainer>
-                </GridItem>
-              );
-            })}
-          </Grid>
-        </FilePreviewContainer>
+                      </AspectRatio>
+                    )}
+                    <FileMetaData isImageFile={isImageFile}>
+                      <span>{file.name}</span>
+                      <aside>
+                        <span>{convertBytesToKB(file.size)} kb</span>
+                        <RemoveFileIcon
+                          className="fas fa-trash-alt"
+                          onClick={() => removeFile(fileName)}
+                        />
+                      </aside>
+                    </FileMetaData>
+                  </Flex>
+                </PreviewContainer>
+              </GridItem>
+            );
+          })}
+        </Grid>
       </FileUploadContainer>
-    </>
+    </Flex>
   );
 };
 

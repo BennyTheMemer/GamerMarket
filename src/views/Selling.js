@@ -255,7 +255,7 @@ export default function Selling() {
           p="5"
           flexDirection="column"
           bg="white"
-          w="60%"
+          w={["85%", , , , "60%"]}
         >
           <Text fontSize="2xl" fontWeight="bold">
             Essenciais
@@ -296,7 +296,11 @@ export default function Selling() {
               name="categoria"
               control={control}
               rules={{ required: true }}
-              render={({ field }) => <Select options={options} {...field} />}
+              render={({ field }) => (
+                <Box w="90%">
+                  <Select options={options} {...field} />
+                </Box>
+              )}
             />
             <FormHelperText>A categoria do teu produto</FormHelperText>
           </FormControl>
@@ -311,7 +315,7 @@ export default function Selling() {
           p="5"
           flexDirection="column"
           bg="white"
-          w="60%"
+          w={["85%", , , , "60%"]}
         >
           <Box>
             <Text fontSize="2xl" fontWeight="bold">
@@ -341,7 +345,7 @@ export default function Selling() {
           p="5"
           flexDirection="column"
           bg="white"
-          w="60%"
+          w={["85%", , , , "60%"]}
         >
           <Text fontSize="2xl" fontWeight="bold">
             Descrição
@@ -368,7 +372,7 @@ export default function Selling() {
           p="5"
           flexDirection="column"
           bg="white"
-          w="60%"
+          w={["85%", , , , "60%"]}
         >
           <Text fontSize="2xl" fontWeight="bold">
             Dados de contacto

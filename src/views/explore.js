@@ -29,13 +29,14 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  IconButton,
 } from "@chakra-ui/react";
 import "./landingpage.css";
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { createBreakpoints } from "@chakra-ui/theme-tools";
 import Card from "../components/card";
-import imageLandingPage from "../assets/imageLandingPage.png";
+import imarideLandingPage from "../assets/imageLandingPage.png";
 import { Image } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
 import { ArrowBackIcon, ArrowDownIcon, SearchIcon } from "@chakra-ui/icons";
@@ -51,6 +52,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { useDisclosure } from "@chakra-ui/react";
 import { BsGrid3X3Gap } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { GoSettings } from "react-icons/go";
 import axios from "axios";
 
 export default function Explore() {
@@ -273,10 +275,10 @@ export default function Explore() {
                               >
                                 <Text
                                   _hover={{
-                                    color: "red",
+                                    color: "brand.600",
                                     textDecoration: "underline",
                                   }}
-                                  color="red"
+                                  color="brand.600"
                                 >
                                   {item}
                                 </Text>
@@ -399,14 +401,27 @@ export default function Explore() {
             w="90%"
             h="5vh"
           >
-            <Flex justify="space-around" w={["25%", , , , "5%"]}>
-              <Button onClick={() => setDisplay("list")} bg="">
-                {" "}
-                <Icon as={AiOutlineUnorderedList} />
-              </Button>
-              <Button onClick={() => setDisplay("grid")} bg="">
-                <Icon as={BsGrid3X3Gap} />
-              </Button>
+            <Flex align="center" justify="space-around" w={["25%", , , , "5%"]}>
+              <IconButton
+                icon={<Icon as={AiOutlineUnorderedList} />}
+                size="sm"
+                bg="none"
+                _focus={{ bg: "black", color: "white" }}
+                _hover={{ bg: "black", color: "white" }}
+                _active={{ bg: "black", color: "white" }}
+                onClick={() => setDisplay("list")}
+              />
+
+              <IconButton
+                icon={<Icon as={BsGrid3X3Gap} />}
+                bg="none"
+                ml="4%"
+                _focus={{ bg: "black", color: "white" }}
+                _hover={{ bg: "black", color: "white" }}
+                _active={{ bg: "black", color: "white" }}
+                onClick={() => setDisplay("grid")}
+                size="sm"
+              />
             </Flex>
             <Flex w="100%" align="center" justify="end">
               <Text display={["none", , , , "inline"]} fontWeight="semibold">
@@ -431,7 +446,13 @@ export default function Explore() {
                   ref={btnRef}
                   onClick={onOpen}
                   as={Button}
-                  rightIcon={<AiOutlineUnorderedList />}
+                  bg="white"
+                  size="sm"
+                  _active={{ bg: "none", border: "none" }}
+                  _focus={{ bg: "none", border: "none" }}
+                  align="center"
+                  justify="center"
+                  rightIcon={<GoSettings />}
                 ></MenuButton>
               </Menu>
             </Flex>
@@ -446,10 +467,10 @@ export default function Explore() {
               ml="4%"
               w="90%"
               gap={2}
-              templateColumns={"repeat(5,1fr)"}
+              templateColumns={["repeat(2,1fr)", , , , "repeat(5,1fr)"]}
             >
               {items.map((item) => (
-                <GridItem>
+                <GridItem w="100%">
                   <Card
                     display="grid"
                     title={item.title}

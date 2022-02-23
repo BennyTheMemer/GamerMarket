@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { AiFillEdit, AiFillEye } from "react-icons/ai";
 import { Icon } from "@chakra-ui/react";
 import axios from "axios";
+import { createBreakpoints } from "@chakra-ui/theme-tools";
 
 export default function CardDashboard({
   title,
@@ -38,6 +39,13 @@ export default function CardDashboard({
     const year = dateObject.toLocaleString("pt-PT", { year: "numeric" }); // 2019
     return day + " " + month + " " + year;
   }
+  const breakpoints = createBreakpoints({
+    sm: "30em",
+    md: "48em",
+    lg: "62em",
+    xl: "80em",
+    "2xl": "96em",
+  });
 
   return (
     <Flex h="100%" w="100%">
@@ -48,9 +56,13 @@ export default function CardDashboard({
         bg="white"
         p="3"
         w="100%"
+        flexDirection={["column", , , , "row"]}
       >
-        <Flex>
-          <AspectRatio display="block" minW="175px" maxW="750px" ratio="1">
+        <Text fontSize="xl" display={["inline", , , , "none"]}>
+          {title}
+        </Text>
+        <Flex align={["center", , , ,]} justify={["center", , , ,]}>
+          <AspectRatio display="block" minW="130px" maxW="750px" ratio="1">
             <Image
               borderRadius="10px"
               boxSize="200px"
@@ -59,15 +71,25 @@ export default function CardDashboard({
             />
           </AspectRatio>
         </Flex>
-        <Flex w="100%" ml="2%" flexDirection="column">
-          <Text fontSize="3xl">{title}</Text>
+        <Flex ml={["0", , , , "2%"]} w="100%" flexDirection="column">
+          <Text display={["none", , , , "inline"]} fontSize="3xl">
+            {title}
+          </Text>
 
-          <Text color="black" fontSize="2xl" fontWeight="semibold">
+          <Text
+            color="black"
+            fontSize={["xl", , , , "2xl"]}
+            fontWeight="semibold"
+          >
             € {price}
           </Text>
           <Flex>
-            <Box mt="1%" w="90%">
-              <Text fontSize="xl" noOfLines={2} color="black">
+            <Box
+              display={["none", , , , "block"]}
+              mt={["0", , , , "1%"]}
+              w="90%"
+            >
+              <Text fontSize="sm" noOfLines={1} color="black">
                 {description}
               </Text>
             </Box>
@@ -80,8 +102,12 @@ export default function CardDashboard({
             flexDirection="column"
           ></Flex>
         </Flex>
-        <Flex align="flex-end" justify="end" w="100%">
-          <Button variant="gamer" onClick={() => removeFunction(id)}>
+        <Flex
+          justify={["flex-start", , , , "flex-end"]}
+          align={[, , , , "end"]}
+          w="100%"
+        >
+          <Button variant="gamer" ml="0" onClick={() => removeFunction(id)}>
             Remover
           </Button>
         </Flex>

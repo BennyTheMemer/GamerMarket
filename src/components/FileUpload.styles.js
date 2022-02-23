@@ -132,6 +132,7 @@ export const UploadFileBtn = styled.button`
 
 export const FilePreviewContainer = styled.article`
   margin-bottom: 35px;
+  display: flex;
 
   span {
     font-size: 14px;
@@ -167,6 +168,9 @@ export const FileMetaData = styled.div`
     display: flex;
     justify-content: space-between;
   }
+  @media only screen and (max-width: 600px) {
+    font-size: 10px;
+  }
 `;
 
 export const RemoveFileIcon = styled.i`
@@ -198,11 +202,11 @@ export const PreviewContainer = styled.section`
   }
 
   @media only screen and (max-width: 750px) {
-    width: 25%;
+    width: 100%;
   }
 
   @media only screen and (max-width: 500px) {
-    width: 50%;
+    width: 100%;
   }
 
   @media only screen and (max-width: 400px) {
