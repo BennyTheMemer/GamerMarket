@@ -154,7 +154,6 @@ export default function Explore() {
         (a, b) =>
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       );
-      console.log(arr);
       arr.reverse();
 
       setItems(arr);
@@ -164,8 +163,7 @@ export default function Explore() {
         (a, b) =>
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       );
-      console.log(arr);
-      arr.reverse();
+
       setItems(arr);
     }
   }
