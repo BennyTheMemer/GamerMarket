@@ -38,10 +38,16 @@ export default function ComponentsMenu() {
 
   const { category, subcategory, query } = useParams();
 
-  useOutsideClick({
-    ref: ref,
-    handler: () => setOpen(false),
-  });
+  useOutsideClick(
+    {
+      ref: ref,
+      handler: () => setOpen(false),
+    },
+    {
+      ref: ref2,
+      handler: () => setOpen2(false),
+    }
+  );
 
   const history = useNavigate();
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -71,6 +77,7 @@ export default function ComponentsMenu() {
         gutter="0"
         placement="top"
         isOpen={isOpen2}
+        ref={ref2}
       >
         <MenuButton
           bg="white"
@@ -81,7 +88,6 @@ export default function ComponentsMenu() {
           _active={{ bg: "white", color: "red" }}
           _focus={{ bg: "white" }}
           onMouseEnter={() => setOpen2(true)}
-          onMouseLeave={() => setOpen2(false)}
           display={["inline", , , , "none"]}
         >
           Gaming
