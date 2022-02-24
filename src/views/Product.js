@@ -81,18 +81,32 @@ export default function Article(props) {
     console.log(index);
     if (index >= 0) {
       setCurrentImageIndex(index);
-      setSubArray(item.images.slice(index, index + 3));
+      if (index + 3 > item.images.length) {
+        console.log("hi3hi3hi3");
+        setSelectImage(item.images[index]);
+
+        return;
+      } else {
+        setSubArray(item.images.slice(index, index + 3));
+        setSelectImage(item.images[index]);
+      }
     }
-    setSelectImage(item.images[index]);
   }
 
   function controlIncrement() {
     const index = currentImageIndex + 1;
     if (index < item.images.length) {
       setCurrentImageIndex(index);
-      setSubArray(item.images.slice(index, index + 3));
+      if (index + 3 > item.images.length) {
+        console.log("hi3hi3hi3");
+        setSelectImage(item.images[index]);
+
+        return;
+      } else {
+        setSubArray(item.images.slice(index, index + 3));
+        setSelectImage(item.images[index]);
+      }
     }
-    setSelectImage(item.images[index]);
     console.log(selectedImage);
   }
 
