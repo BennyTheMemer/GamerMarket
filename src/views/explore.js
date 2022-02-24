@@ -225,10 +225,9 @@ export default function Explore() {
               defaultValue="1"
               mt="2%"
               onChange={(e) => sortByMobile(e)}
-              value={value}
             >
               <Stack ml="2%" w="100%">
-                <Radio borderColor="red" value="option1">
+                <Radio colorScheme="red" value="option1">
                   Preço, mais barato
                 </Radio>
                 <Radio colorScheme="red" value="option2">
