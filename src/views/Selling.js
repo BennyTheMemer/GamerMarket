@@ -198,14 +198,21 @@ export default function Selling() {
             title: data.titulo,
             description: data.descricao,
             price: parseInt(data.price),
-            location: "Porto",
+            location: data.localidade,
             category: categoria.category,
             subcategory: categoria.subcategory,
           })
           .then(
             (res) => {
               itemId = res.data.id;
-              console.log(itemId);
+              toast({
+                title: "sucesso",
+                description:
+                  "O seu produto foi submetido com sucesso. Vai ser reencaminhado",
+                status: "success",
+                duration: 9000,
+                isClosable: true,
+              });
             },
             (err) => {
               toast({
@@ -405,6 +412,16 @@ export default function Selling() {
                 control={control}
                 render={({ field }) => (
                   <Input disabled {...field} placeholder="Email" w="40%" />
+                )}
+              />
+            </Box>
+            <Box>
+              <Text fontSize="sm">Nome</Text>
+              <Controller
+                name="localidade"
+                control={control}
+                render={({ field }) => (
+                  <Input {...field} placeholder="Localidade" w="40%" />
                 )}
               />
             </Box>

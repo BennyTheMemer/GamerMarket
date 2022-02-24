@@ -39,6 +39,7 @@ export default function Article(props) {
   const API_URL = process.env.REACT_APP_API_URL;
   const [user, setUser] = useState(null);
   const [numberShow, setNumberShow] = useState(false);
+  const [subArray, setSubArray] = useState([]);
   console.log(user);
 
   var [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -52,6 +53,13 @@ export default function Article(props) {
     await axios.get(API_URL + "items/" + id).then((res) => {
       setItem(res.data);
       setUser(res.data.seller);
+      console.log(res.data.images.length);
+      if (res.data.images.length > 3) {
+        console.log("hu3");
+        setSubArray(res.data.images.slice(0, 3));
+      } else {
+        setSubArray(res.data.images);
+      }
       setSelectImage(res.data.images[0]);
     });
   }
@@ -73,14 +81,19 @@ export default function Article(props) {
     console.log(index);
     if (index >= 0) {
       setCurrentImageIndex(index);
+      setSubArray(item.images.slice(index, index + 3));
     }
+    setSelectImage(item.images[index]);
   }
 
   function controlIncrement() {
     const index = currentImageIndex + 1;
     if (index < item.images.length) {
       setCurrentImageIndex(index);
+      setSubArray(item.images.slice(index, index + 3));
     }
+    setSelectImage(item.images[index]);
+    console.log(selectedImage);
   }
 
   function sendMessage(e) {
@@ -174,7 +187,7 @@ export default function Article(props) {
                     fallbackSrc="https://via.placeholder.com/75"
                     src={user?.publicInfo.image}
                   />
-                  <Flex mt="5px" justify="flex-start" flexDirection="column">
+                  <Flex justify="flex-start" flexDirection="column">
                     <Button
                       variant="gamer"
                       onClick={() => setNumberShow(!numberShow)}
@@ -207,7 +220,7 @@ export default function Article(props) {
             bg="white"
           >
             {item.images ? (
-              <AspectRatio maxW="400px" minW="100px" ratio={1.4}>
+              <AspectRatio objectFit="contain" minW="100px" ratio={1.4}>
                 <Image borderRadius="5" src={item.images[currentImageIndex]} />
               </AspectRatio>
             ) : (
@@ -225,12 +238,29 @@ export default function Article(props) {
               <Button variant="gamer" onClick={controlDecrement}>
                 <Icon as={AiOutlineArrowLeft} size="20px" />
               </Button>
-              {item.images
-                ? item.images.map((image, index) => (
-                    <AspectRatio ml="10px" minW="85px" ratio={1}>
-                      <Image src={image} />
-                    </AspectRatio>
-                  ))
+              {subArray
+                ? subArray.map((image, index) =>
+                    image === selectedImage ? (
+                      <AspectRatio
+                        borderColor="red.600"
+                        borderWidth="2px"
+                        borderRadius="5"
+                        ml="10px"
+                        minW={["58px", , , , "150px"]}
+                        ratio={1}
+                      >
+                        <Image borderRadius="5" src={image} />
+                      </AspectRatio>
+                    ) : (
+                      <AspectRatio
+                        ml="10px"
+                        minW={["58px", , , , "150px"]}
+                        ratio={1}
+                      >
+                        <Image borderRadius="5" src={image} />
+                      </AspectRatio>
+                    )
+                  )
                 : ""}
 
               <Button variant="gamer" onClick={controlIncrement} ml="10px">
@@ -241,13 +271,13 @@ export default function Article(props) {
           <Flex
             display={{ base: "none", lg: "flex" }}
             flexDirection="column"
-            w="30%"
+            w="25%"
           >
             <Flex
               bg="white"
               borderColor="#d2d3d4"
               borderWidth="1px"
-              h="22vh"
+              h="16vh"
               p="3"
               borderRadius="5px"
               w="100%"
@@ -266,12 +296,8 @@ export default function Article(props) {
                   w="80%"
                   ml="5%"
                   flexDirection="column"
-                  h="100%"
                 >
-                  <Text fontWeight="semibold" fontSize="xl">
-                    {user?.publicInfo.name}
-                  </Text>{" "}
-                  <Flex flexDirection="column" w="100%" h="100%">
+                  <Flex w="100%">
                     <Image
                       borderRadius="full"
                       boxSize="75px"
@@ -279,53 +305,63 @@ export default function Article(props) {
                       src={user?.publicInfo.image}
                     />
                     <Flex
-                      mt="5px"
-                      align="start"
-                      w="30%"
+                      ml="5%"
                       justify="space-between"
+                      flexDirection="column"
+                      w="100%"
                     >
-                      {user?.publicInfo.twitter ? (
-                        <Tooltip
-                          shouldWrapChildren
-                          placement="top"
-                          label={`${user?.publicInfo.twitter}`}
-                        >
-                          <Icon as={FiTwitter} />
-                        </Tooltip>
-                      ) : (
-                        <Tooltip shouldWrapChildren placement="top">
-                          <Icon as={FiTwitter} />
-                        </Tooltip>
-                      )}
-                      {user?.publicInfo.facebook ? (
-                        <Tooltip
-                          shouldWrapChildren
-                          placement="top"
-                          label={`${user?.publicInfo.facebook}`}
-                        >
-                          <Icon as={FiFacebook} />
-                        </Tooltip>
-                      ) : (
-                        <Tooltip shouldWrapChildren placement="top">
-                          <Icon as={FiFacebook} />
-                        </Tooltip>
-                      )}
-                      {user?.publicInfo?.instagram ? (
-                        <Tooltip
-                          shouldWrapChildren
-                          placement="top"
-                          label={`${user?.publicInfo?.instagram}`}
-                        >
-                          <Icon as={FiInstagram} />
-                        </Tooltip>
-                      ) : (
-                        <Tooltip label="" shouldWrapChildren placement="top">
-                          <Icon as={FiInstagram} />
-                        </Tooltip>
-                      )}
+                      <Text fontWeight="semibold" fontSize="xl">
+                        {user?.publicInfo.name}
+                      </Text>{" "}
+                      <Flex
+                        mt="5px"
+                        align="start"
+                        w="30%"
+                        justify="space-between"
+                      >
+                        {user?.publicInfo.twitter ? (
+                          <Tooltip
+                            shouldWrapChildren
+                            placement="top"
+                            label={`${user?.publicInfo.twitter}`}
+                          >
+                            <Icon as={FiTwitter} />
+                          </Tooltip>
+                        ) : (
+                          <Tooltip shouldWrapChildren placement="top">
+                            <Icon as={FiTwitter} />
+                          </Tooltip>
+                        )}
+                        {user?.publicInfo.facebook ? (
+                          <Tooltip
+                            shouldWrapChildren
+                            placement="top"
+                            label={`${user?.publicInfo.facebook}`}
+                          >
+                            <Icon as={FiFacebook} />
+                          </Tooltip>
+                        ) : (
+                          <Tooltip shouldWrapChildren placement="top">
+                            <Icon as={FiFacebook} />
+                          </Tooltip>
+                        )}
+                        {user?.publicInfo?.instagram ? (
+                          <Tooltip
+                            shouldWrapChildren
+                            placement="top"
+                            label={`${user?.publicInfo?.instagram}`}
+                          >
+                            <Icon as={FiInstagram} />
+                          </Tooltip>
+                        ) : (
+                          <Tooltip label="" shouldWrapChildren placement="top">
+                            <Icon as={FiInstagram} />
+                          </Tooltip>
+                        )}
+                      </Flex>
                     </Flex>
                   </Flex>
-                  <Flex mt="5px" justify="flex-start" flexDirection="row">
+                  <Flex justify="flex-start" flexDirection="row">
                     <Button
                       variant="gamer"
                       onClick={() => setNumberShow(!numberShow)}
@@ -380,7 +416,7 @@ export default function Article(props) {
               <Text fontSize="1.2rem" fontWeight="bold">
                 {item.price}€
               </Text>
-              <Text isTruncated mt="5%">
+              <Text noOfLines={2} mt="5%">
                 {item.description}
               </Text>
             </Flex>

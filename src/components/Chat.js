@@ -16,7 +16,6 @@ export default function Chat() {
   const [receivingUser, setReceivingUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const currentUser = JSON.parse(localStorage.getItem("currentUser")).id;
-  console.log(usersConnected);
   const breakpoints = createBreakpoints({
     sm: "30em",
     md: "48em",
@@ -24,7 +23,7 @@ export default function Chat() {
     xl: "80em",
     "2xl": "96em",
   });
-
+  console.log(receivingUser);
   const API_URL = process.env.REACT_APP_API_URL;
 
   async function sendMessage(e) {
@@ -51,13 +50,14 @@ export default function Chat() {
     });
   }
 
-  async function getMessages(id) {
+  async function getMessages(user) {
+    console.log("este é o user" + user);
     axios.defaults.headers.common["Authorization"] =
       localStorage.getItem("token");
 
-    axios.get(API_URL + "messages/" + id).then((res) => {
+    axios.get(API_URL + "messages/" + user.id).then((res) => {
       setMessages(res.data);
-      setReceivingUser(id);
+      setReceivingUser(user);
     });
   }
 
@@ -92,7 +92,7 @@ export default function Chat() {
                     bg: "red.600",
                     cursor: "pointer",
                   }}
-                  onClick={() => getMessages(user?.user.id)}
+                  onClick={() => getMessages(user?.user)}
                 >
                   <Flex
                     justify="center"
@@ -126,9 +126,14 @@ export default function Chat() {
                     bg: "red.600",
                     cursor: "pointer",
                   }}
-                  onClick={() => getMessages(user?.user.id)}
+                  onClick={() => getMessages(user?.user)}
                 >
-                  <Flex align="center" w="85%" textAlign="start">
+                  <Flex
+                    justify="center"
+                    align="center"
+                    w="100%"
+                    textAlign="start"
+                  >
                     <Image
                       borderRadius="50%"
                       boxSize="50px"
@@ -156,6 +161,8 @@ export default function Chat() {
           borderColor="#d2d3d4"
         ></Box>
         <Flex h="100%" w="100%" flexDirection="column">
+          <Flex>{receivingUser?.publicInfo.name}</Flex>
+
           <Flex overflow="auto" h="100%" flexDirection="column-reverse">
             {messages?.map((message) => {
               return currentUser === message.authorId ? (

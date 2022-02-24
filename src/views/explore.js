@@ -63,6 +63,7 @@ export default function Explore() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
   const history = useNavigate();
+  console.log(items);
 
   const categorias = {
     Componentes: [
@@ -429,6 +430,7 @@ export default function Explore() {
                 display={["none", , , , "inline"]}
                 _active={{ bg: "0" }}
                 _focus={{ bg: "0" }}
+                borderWidth="0px"
                 onChange={(e) => sortBy(e)}
                 ml="1%"
                 w="20%"
@@ -459,16 +461,14 @@ export default function Explore() {
             <Grid
               mt="10px"
               bg="white"
-              borderColor="#d2d3d4"
               borderRadius="5px"
-              borderWidth="1px"
               ml="4%"
               w="90%"
               gap={2}
               templateColumns={["repeat(2,1fr)", , , , "repeat(5,1fr)"]}
             >
               {items.map((item) => (
-                <GridItem w="100%">
+                <GridItem>
                   <Card
                     display="grid"
                     title={item.title}
@@ -480,7 +480,7 @@ export default function Explore() {
                     id={item.id}
                     sellerId={item.sellerId}
                     createdAt={item.createdAt}
-                    localidade={item.localidade}
+                    localidade={item.location}
                     removeFunction={removeItem}
                   />
                 </GridItem>
@@ -489,9 +489,6 @@ export default function Explore() {
           ) : (
             <Grid
               bg="white"
-              borderColor="#d2d3d4"
-              borderWidth="1px"
-              p="4"
               borderRadius="5px"
               gap={10}
               ml="4%"
@@ -511,7 +508,7 @@ export default function Explore() {
                     id={item.id}
                     sellerId={item.sellerId}
                     createdAt={item.createdAt}
-                    localidade={item.localidade}
+                    localidade={item.location}
                     removeFunction={removeItem}
                   />
                 </GridItem>
@@ -520,6 +517,7 @@ export default function Explore() {
           )}
         </GridItem>
       </Grid>
+      <Box h="120px"></Box>
     </Box>
   );
 }

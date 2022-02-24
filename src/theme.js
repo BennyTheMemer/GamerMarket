@@ -124,7 +124,6 @@ const theme = extendTheme({
   styles: {
     global: {
       "html, body, root": {
-        bg: "#f2f4f5",
         h: "100%",
         w: "100%",
         color: "black",

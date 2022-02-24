@@ -7,6 +7,8 @@ import {
   Heading,
   Text,
   AspectRatio,
+  Wrap,
+  WrapItem,
 } from "@chakra-ui/react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -14,6 +16,7 @@ import { AiFillEdit, AiFillEye } from "react-icons/ai";
 import { Icon } from "@chakra-ui/react";
 import axios from "axios";
 import { createBreakpoints } from "@chakra-ui/theme-tools";
+import { BsFillExclamationOctagonFill } from "react-icons/bs";
 
 export default function Card({
   title,
@@ -47,7 +50,7 @@ export default function Card({
   }
 
   return (
-    <Flex h="100%" w="100%">
+    <Flex>
       {" "}
       {props.display ? (
         <NavLink
@@ -78,16 +81,23 @@ export default function Card({
             flexDirection="column"
             h="100%"
             w="100%"
+            overflow="hidden"
           >
-            <Box>
-              <Text fontSize="100%" fontWeight="semibold">
+            <Flex textAlign="center">
+              <Heading
+                fontSize={["sm", , , , "none"]}
+                fontWeight={["semibold", , , , "bold"]}
+                color="black"
+                w="120px"
+                noOfLines={1}
+                mb="5px"
+              >
                 {title}
-              </Text>
-            </Box>
+              </Heading>
+            </Flex>
             <AspectRatio minW="100px" maxW="100px" ratio={1}>
               <Image borderRadius="5px" src={image} />
             </AspectRatio>
-            <Text>{localidade}</Text>
 
             <Text color="black" fontWeight="bold" fontSize="md">
               {price}€
@@ -95,6 +105,7 @@ export default function Card({
             <Text fontSize="sm" color="black">
               {parseDate(createdAt)}
             </Text>
+            <Text>{localidade}</Text>
           </Flex>
         </NavLink>
       ) : (
@@ -129,7 +140,24 @@ export default function Card({
             justify={["center", , , , "start"]}
             align={["center", , , , "start"]}
           >
-            <Flex align={["center", , , , "flex"]} flexDirection="column">
+            <Flex
+              textAlign={["center", , , , "start"]}
+              align={["center", , , , "flex"]}
+              flexDirection="column"
+            >
+              <Box display={["block", , , , "none"]}>
+                <Heading
+                  fontSize={["md", , , , "none"]}
+                  fontWeight={["bold", , , , "bold"]}
+                  color="black"
+                  noOfLines={1}
+                  w="190px"
+                  mb="5px"
+                >
+                  {title}
+                </Heading>
+              </Box>
+
               <AspectRatio
                 display="block"
                 minW="150px"
@@ -144,8 +172,17 @@ export default function Card({
                 />
               </AspectRatio>
             </Flex>
-            <Flex ml="2%" flexDirection="column">
-              <Text fontSize={["2xl", , , , "3xl"]}>{title}</Text>
+            <Flex
+              h="100%"
+              justify="space-between"
+              ml="2%"
+              flexDirection="column"
+            >
+              <Box display={["none", , , , "block"]}>
+                <Text fontWeight="semibold" isTruncated>
+                  {title}
+                </Text>
+              </Box>
               <Text color="black" fontSize="2xl" fontWeight="semibold">
                 € {price}
               </Text>
@@ -156,11 +193,12 @@ export default function Card({
                   </Text>
                 </Box>
               </Flex>
-              <Flex align="flex-end" h="100%">
+              <Flex flexDirection="column" justify="end" align="start" h="100%">
                 {" "}
-                <Text display={["none", , , , "block"]} color="black">
+                <Text fontSize="sm" color="black">
                   {parseDate(createdAt)}
                 </Text>
+                <Text color="black">{localidade}</Text>
               </Flex>
             </Flex>
           </Flex>
