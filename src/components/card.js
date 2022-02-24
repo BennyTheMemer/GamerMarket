@@ -174,12 +174,13 @@ export default function Card({
             </Flex>
             <Flex
               h="100%"
+              w="100%"
               justify="space-between"
               ml="2%"
               flexDirection="column"
             >
-              <Box display={["none", , , , "block"]}>
-                <Text fontWeight="semibold" isTruncated>
+              <Box w="100%" display={["none", , , , "flex"]}>
+                <Text h="100%" w="85%" fontWeight="semibold" noOfLine={1}>
                   {title}
                 </Text>
               </Box>
