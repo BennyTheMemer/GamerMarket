@@ -40,10 +40,8 @@ export default function Article(props) {
   const [user, setUser] = useState(null);
   const [numberShow, setNumberShow] = useState(false);
   const [subArray, setSubArray] = useState([]);
-  console.log(user);
 
   var [currentImageIndex, setCurrentImageIndex] = useState(0);
-  console.log(currentImageIndex);
 
   async function getItems() {
     let re = "[^/]+$";
@@ -82,7 +80,6 @@ export default function Article(props) {
     if (index >= 0) {
       setCurrentImageIndex(index);
       if (index + 3 > item.images.length) {
-        console.log("hi3hi3hi3");
         setSelectImage(item.images[index]);
 
         return;
@@ -98,7 +95,6 @@ export default function Article(props) {
     if (index < item.images.length) {
       setCurrentImageIndex(index);
       if (index + 3 > item.images.length) {
-        console.log("hi3hi3hi3");
         setSelectImage(item.images[index]);
 
         return;
@@ -111,11 +107,8 @@ export default function Article(props) {
   }
 
   function sendMessage(e) {
-    console.log("É este o content?" + e.target.mensagem.value);
-
     axios.defaults.headers.common["Authorization"] =
       localStorage.getItem("token");
-    console.log(user.id);
     axios
       .post(API_URL + "messages/" + user.id, {
         content: e.target.mensagem.value,
@@ -216,6 +209,47 @@ export default function Article(props) {
                       Mensagem
                     </Button>
                   </Flex>
+                </Flex>
+                <Flex mt="5px" align="start" w="30%" justify="space-between">
+                  {user?.publicInfo.twitter ? (
+                    <Tooltip
+                      shouldWrapChildren
+                      placement="top"
+                      label={`${user?.publicInfo.twitter}`}
+                    >
+                      <Icon as={FiTwitter} />
+                    </Tooltip>
+                  ) : (
+                    <Tooltip shouldWrapChildren placement="top">
+                      <Icon as={FiTwitter} />
+                    </Tooltip>
+                  )}
+                  {user?.publicInfo.facebook ? (
+                    <Tooltip
+                      shouldWrapChildren
+                      placement="top"
+                      label={`${user?.publicInfo.facebook}`}
+                    >
+                      <Icon as={FiFacebook} />
+                    </Tooltip>
+                  ) : (
+                    <Tooltip shouldWrapChildren placement="top">
+                      <Icon as={FiFacebook} />
+                    </Tooltip>
+                  )}
+                  {user?.publicInfo?.instagram ? (
+                    <Tooltip
+                      shouldWrapChildren
+                      placement="top"
+                      label={`${user?.publicInfo?.instagram}`}
+                    >
+                      <Icon as={FiInstagram} />
+                    </Tooltip>
+                  ) : (
+                    <Tooltip label="" shouldWrapChildren placement="top">
+                      <Icon as={FiInstagram} />
+                    </Tooltip>
+                  )}
                 </Flex>
               </Flex>
             </Flex>
