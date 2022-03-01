@@ -47,7 +47,7 @@ import Header from "../components/AuthHeader";
 import { FaFilter } from "react-icons/fa";
 import { Icon } from "@chakra-ui/react";
 import { AiOutlineArrowUp, AiOutlineUnorderedList } from "react-icons/ai";
-import { AiOutlineArrowDown } from "react-icons/ai";
+import { AiOutlineArrowDown, AiOutlineArrowLeft } from "react-icons/ai";
 import { IoIosArrowDown } from "react-icons/io";
 import { useDisclosure } from "@chakra-ui/react";
 import { BsGrid3X3Gap } from "react-icons/bs";
@@ -88,11 +88,17 @@ export default function Explore() {
     "2xl": "96em",
   });
   const { category, subcategory, query } = useParams();
-  console.log(category);
 
   async function fetchItems() {
     console.log("isto é a categoria " + category);
-    if (category) {
+    if (category && !subcategory) {
+      await axios.get(API_URL + `items/category/${category}/`).then((res) => {
+        console.log(res);
+        setItems(res.data);
+      });
+      return;
+    }
+    if (subcategory) {
       await axios
         .get(API_URL + `items/category/${category}/${subcategory}`)
         .then((res) => {
@@ -328,7 +334,6 @@ export default function Explore() {
         </DrawerContent>
       </Drawer>
 
-      <Flex justify="flex-end"></Flex>
       <Grid mt="5vh" ml="5%" mr="5%" templateColumns="repeat(6, 1fr)">
         <GridItem display={["none", , , , "block"]} maxH="76vh" colSpan={1}>
           {Object.entries(categorias).map(([key, value]) => (
@@ -387,6 +392,25 @@ export default function Explore() {
           ))}
         </GridItem>
         <GridItem colSpan={["6", , , , "5"]}>
+          <Menu display={["block", , , , "none"]} gutter="0" placement="bottom">
+            <MenuButton
+              display={["flex", , , , "none"]}
+              ref={btnRef}
+              onClick={onOpen}
+              as={Button}
+              ml="4%"
+              w="90%"
+              bg="white"
+              borderColor="#d2d3d4"
+              borderWidth="1px"
+              borderRadius="5px"
+              _active={{ bg: "none", borderColor: "red" }}
+              rightIcon={<AiOutlineArrowDown />}
+            >
+              {" "}
+              Procurar por
+            </MenuButton>
+          </Menu>
           <Flex
             borderColor="#d2d3d4"
             borderWidth="1px"
@@ -398,6 +422,7 @@ export default function Explore() {
             ml="4%"
             w="90%"
             h="5vh"
+            mt="10px"
           >
             <Flex align="center" justify="space-around" w={["25%", , , , "5%"]}>
               <IconButton
@@ -439,21 +464,6 @@ export default function Explore() {
                 <option value="option3">Data, mais recente</option>
                 <option value="option4">Data, mais antigo</option>
               </Select>
-              <Menu gutter="0" placement="bottom">
-                <MenuButton
-                  display={["block", , , , "none"]}
-                  ref={btnRef}
-                  onClick={onOpen}
-                  as={Button}
-                  bg="white"
-                  size="sm"
-                  _active={{ bg: "none", border: "none" }}
-                  _focus={{ bg: "none", border: "none" }}
-                  align="center"
-                  justify="center"
-                  rightIcon={<GoSettings />}
-                ></MenuButton>
-              </Menu>
             </Flex>
           </Flex>
           {display === "grid" ? (

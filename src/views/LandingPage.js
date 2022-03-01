@@ -2,14 +2,11 @@ import {
   Button,
   Heading,
   Box,
-  Container,
   Text,
   Flex,
-  Spacer,
-  HStack,
   SimpleGrid,
   GridItem,
-  AspectRatio,
+  Icon,
 } from "@chakra-ui/react";
 import "./landingpage.css";
 import Card from "../components/card";
@@ -21,6 +18,11 @@ import { createBreakpoints } from "@chakra-ui/theme-tools";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import homepage from "../assets/homepage12.jpg";
+import handshake from "../assets/handshake.svg";
+import { FaRegHandshake } from "react-icons/fa";
+import { RiMoneyEuroCircleLine } from "react-icons/ri";
+import { AiOutlineSearch } from "react-icons/ai";
 
 export default function LandingPage(props) {
   const [params, setParams] = useState({});
@@ -72,15 +74,24 @@ export default function LandingPage(props) {
     <Box w="100%">
       <Header />
 
-      <Flex justify="space-between" mt="5%">
-        <Flex flexDirection="column" ml="5%" mr="5%">
-          <Heading color="black" fontSize="3rem">
+      <Flex
+        backgroundPosition="center"
+        backgroundRepeat="no-repeat"
+        backgroundSize="cover"
+        backgroundColor="#290307"
+        backgroundBlendMode="screen"
+        backgroundImage={homepage}
+        justify="space-between"
+        h={["60vh", , , , "90vh"]}
+      >
+        <Flex mt="15%" flexDirection="column" ml="5%" mr="5%">
+          <Heading color="black" fontSize={["2.5rem", , , , "3rem"]}>
             Bem-vindo ao melhor mercado P2P de gaming
           </Heading>
           <Text
-            color="grey"
-            fontWeight="semi-bold"
-            fontSize="1.5rem"
+            color="white"
+            fontWeight="semibold"
+            fontSize={["1.3rem", , , , "1.5rem"]}
             w={["65%"]}
             mt="4%"
           >
@@ -90,8 +101,8 @@ export default function LandingPage(props) {
           <NavLink to="/home">
             <Button
               value={props.isOpen}
-              fontSize="1rem"
-              h="5vh"
+              fontSize="0.7rem"
+              h={["5vh", , , , "4vh"]}
               variant="gamer"
               mt="7vh"
             >
@@ -99,12 +110,42 @@ export default function LandingPage(props) {
             </Button>
           </NavLink>
         </Flex>
-        <Image
-          boxSize={["60%", "60%", "30%", "60%", "40%"]}
-          display={["none", "none", "none", , "block"]}
-          mr="5%"
-          src={imageLandingPage}
-        />
+      </Flex>
+      <Flex
+        display={["none", , , , "flex"]}
+        ml="5%"
+        mr="5%"
+        justify="space-between"
+        mt="2%"
+        h="6vh"
+      >
+        <Flex>
+          <Icon as={AiOutlineSearch} boxSize="3rem" color="red" />
+          <Flex ml="5px" flexDirection="column">
+            <Text fontWeight="semibold">Encontra o que precisas</Text>
+            <Text color="grey">Temos tudo para gamers</Text>
+          </Flex>
+        </Flex>
+        <Flex>
+          <Icon as={RiMoneyEuroCircleLine} boxSize="3rem" color="red" />
+          <Flex ml="5px" flexDirection="column">
+            <Text fontWeight="semibold">Paga apenas pelo produto</Text>
+            <Text color="grey">Não existem taxas adicionais</Text>
+          </Flex>
+        </Flex>
+
+        <Flex>
+          <Icon as={FaRegHandshake} boxSize="3rem" color="red" />
+          <Flex ml="12px" flexDirection="column">
+            <Text fontWeight="semibold">Fecha o negócio de forma segura</Text>
+            <Text color="grey">
+              Segue as nossas{" "}
+              <Text as="span" color="grey" fontWeight="semibold">
+                <NavLink to="/guidelines">guidelines</NavLink>
+              </Text>{" "}
+            </Text>
+          </Flex>
+        </Flex>
       </Flex>
       <Flex mt="2%" ml="5%">
         <Heading>Produtos</Heading>

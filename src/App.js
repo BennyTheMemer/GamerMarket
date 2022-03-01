@@ -24,6 +24,7 @@ function App() {
             element={<Explore />}
             path="/home/:category/:subcategory"
           ></Route>
+          <Route element={<Explore />} path="/home/:category/"></Route>
           <Route element={<Explore />} path="/home/search/:query"></Route>
           <Route element={<Explore />} path="/home"></Route>
           <Route element={<Article />} path="/article/:id"></Route>
