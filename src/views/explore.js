@@ -36,15 +36,11 @@ import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { createBreakpoints } from "@chakra-ui/theme-tools";
 import Card from "../components/card";
-import imarideLandingPage from "../assets/imageLandingPage.png";
-import { Image } from "@chakra-ui/react";
+
 import { NavLink } from "react-router-dom";
 import { ArrowBackIcon, ArrowDownIcon, SearchIcon } from "@chakra-ui/icons";
-import geforce from "../assets/GEFORCE.jpg";
-import { Link } from "react-router-dom";
-import NoAuthHeader from "../components/NoAuthHeader";
+
 import Header from "../components/AuthHeader";
-import { FaFilter } from "react-icons/fa";
 import { Icon } from "@chakra-ui/react";
 import { AiOutlineArrowUp, AiOutlineUnorderedList } from "react-icons/ai";
 import { AiOutlineArrowDown, AiOutlineArrowLeft } from "react-icons/ai";

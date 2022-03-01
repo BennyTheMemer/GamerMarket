@@ -15,7 +15,6 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import Card from "../components/card";
-import imageLandingPage from "../assets/imageLandingPage.png";
 import { Image } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
 import gamerretail from "../assets/logogamer-removebg-preview.png";

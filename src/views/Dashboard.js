@@ -2,21 +2,9 @@ import {
   Button,
   Heading,
   Box,
-  Text,
   Flex,
   SimpleGrid,
   GridItem,
-  Stack,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-  Input,
-  Editable,
-  EditableInput,
-  EditablePreview,
-  Icon,
 } from "@chakra-ui/react";
 import "./landingpage.css";
 import { useState, useEffect, useCallback } from "react";

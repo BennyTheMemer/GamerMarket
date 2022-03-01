@@ -10,8 +10,6 @@ import {
 } from "@chakra-ui/react";
 import "./landingpage.css";
 import Card from "../components/card";
-import imageLandingPage from "../assets/imageLandingPage.png";
-import { Image } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
 import Header from "../components/AuthHeader";
 import { createBreakpoints } from "@chakra-ui/theme-tools";
