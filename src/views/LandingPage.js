@@ -7,6 +7,7 @@ import {
   SimpleGrid,
   GridItem,
   Icon,
+  Image,
 } from "@chakra-ui/react";
 import "./landingpage.css";
 import Card from "../components/card";
@@ -16,8 +17,7 @@ import { createBreakpoints } from "@chakra-ui/theme-tools";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import homepage from "../assets/homepage12.jpg";
-import handshake from "../assets/handshake.svg";
+import homepage from "../assets/homepage.jpeg";
 import { FaRegHandshake } from "react-icons/fa";
 import { RiMoneyEuroCircleLine } from "react-icons/ri";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -72,22 +72,15 @@ export default function LandingPage(props) {
     <Box w="100%">
       <Header />
 
-      <Flex
-        backgroundPosition="center"
-        backgroundRepeat="no-repeat"
-        backgroundSize="cover"
-        backgroundColor="#290307"
-        backgroundBlendMode="screen"
-        backgroundImage={homepage}
-        justify="space-between"
-        h={["60vh", , , , "90vh"]}
-      >
-        <Flex mt="15%" flexDirection="column" ml="5%" mr="5%">
+      <Flex mt="6%" justify="space-between" h={["60vh", , , , "50vh"]}>
+        <Flex flexDirection="column" ml="5%" mr="5%">
           <Heading color="black" fontSize={["2.5rem", , , , "3rem"]}>
             Bem-vindo ao melhor mercado P2P de gaming
           </Heading>
           <Text
-            color="white"
+            color="grey"
+            fontWeight="semi-bold"
+            fontSize="1.5rem"
             fontWeight="semibold"
             fontSize={["1.3rem", , , , "1.5rem"]}
             w={["65%"]}
@@ -99,6 +92,8 @@ export default function LandingPage(props) {
           <NavLink to="/home">
             <Button
               value={props.isOpen}
+              fontSize="1rem"
+              h="5vh"
               fontSize="0.7rem"
               h={["5vh", , , , "4vh"]}
               variant="gamer"
@@ -108,6 +103,13 @@ export default function LandingPage(props) {
             </Button>
           </NavLink>
         </Flex>
+        <Image
+          h="75%"
+          w="35%"
+          display={["none", "none", "none", , "block"]}
+          mr="5%"
+          src={homepage}
+        />
       </Flex>
       <Flex
         display={["none", , , , "flex"]}
