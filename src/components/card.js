@@ -151,7 +151,7 @@ export default function Card({
                   fontWeight={["bold", , , , "bold"]}
                   color="black"
                   noOfLines={1}
-                  w="190px"
+                  w="180px"
                   mb="5px"
                 >
                   {title}

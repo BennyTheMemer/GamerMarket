@@ -107,6 +107,9 @@ export default function Article(props) {
   }
 
   function sendMessage(e) {
+    if (!localStorage.getItem("token")) {
+      return alert("Você precisa estar logado para enviar uma mensagem");
+    }
     axios.defaults.headers.common["Authorization"] =
       localStorage.getItem("token");
     axios
