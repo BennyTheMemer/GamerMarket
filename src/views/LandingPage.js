@@ -165,6 +165,7 @@ export default function LandingPage(props) {
                 sellerId={item.sellerId}
                 category={item.category}
                 subcategory={item.subcategory}
+                description={item.description}
                 id={item.id}
               />
             </GridItem>
