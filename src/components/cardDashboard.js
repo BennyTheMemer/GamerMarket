@@ -1,18 +1,5 @@
-import {
-  Button,
-  Divider,
-  Flex,
-  Image,
-  Box,
-  Heading,
-  Text,
-  AspectRatio,
-} from "@chakra-ui/react";
-import { NavLink, useLocation } from "react-router-dom";
+import { Button, Flex, Image, Box, Text, AspectRatio } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import { AiFillEdit, AiFillEye } from "react-icons/ai";
-import { Icon } from "@chakra-ui/react";
-import axios from "axios";
 import { createBreakpoints } from "@chakra-ui/theme-tools";
 
 export default function CardDashboard({

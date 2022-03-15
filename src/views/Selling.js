@@ -2,36 +2,23 @@ import {
   Box,
   Text,
   Flex,
-  GridItem,
   Input,
-  Grid,
-  Textarea,
   Button,
   Stack,
   FormControl,
   FormHelperText,
   FormLabel,
-  InputGroup,
-  InputRightElement,
   useToast,
 } from "@chakra-ui/react";
 import Select from "react-select";
 import "./landingpage.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import Header from "../components/AuthHeader";
 
 import FileUpload from "../components/FileUpload";
 import { useNavigate } from "react-router-dom";
-import {
-  AutoComplete,
-  AutoCompleteInput,
-  AutoCompleteItem,
-  AutoCompleteList,
-  AutoCompleteGroup,
-  AutoCompleteGroupTitle,
-} from "@choc-ui/chakra-autocomplete";
-import { FiChevronRight, FiChevronDown } from "react-icons/fi";
+
 import { useForm, Controller } from "react-hook-form";
 import MyEditor from "../components/MyEditor";
 import axios from "axios";

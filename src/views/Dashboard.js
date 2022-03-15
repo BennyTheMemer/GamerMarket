@@ -7,7 +7,7 @@ import {
   GridItem,
 } from "@chakra-ui/react";
 import "./landingpage.css";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 import { NavLink } from "react-router-dom";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
@@ -19,7 +19,6 @@ import { useLocation } from "react-router-dom";
 import CardDashboard from "../components/cardDashboard";
 import Chat from "../components/Chat";
 import axios from "axios";
-import AuthService from "../services/authservice";
 
 export default function Dashboard(props) {
   let currentLocation = useLocation();

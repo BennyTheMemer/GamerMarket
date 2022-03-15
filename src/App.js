@@ -1,5 +1,3 @@
-import logo from "./logo.svg";
-import { Box } from "@chakra-ui/react";
 import "./App.css";
 import React from "react";
 import LandingPage from "./views/LandingPage";
