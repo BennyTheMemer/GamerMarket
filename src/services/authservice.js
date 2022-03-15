@@ -69,7 +69,6 @@ class AuthService {
       if (token) {
         axios.defaults.headers.common["Authorization"] = token;
         axios.get(API_URL + "myself").then((response) => {
-          console.log("yoyoyo" + response.data);
           localStorage.setItem("currentUser", JSON.stringify(response.data));
         });
       } else {

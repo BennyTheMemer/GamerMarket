@@ -1,9 +1,11 @@
-import { Button, Divider, Flex, VStack } from "@chakra-ui/react";
+import { Button, Divider, Flex, VStack, Text, Heading } from "@chakra-ui/react";
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import AuthService from "../services/authservice";
 
 export default function AdminPage() {
   const [items, setItems] = useState([]);
+  const [users, setUsers] = useState([]);
   const API_URL = process.env.REACT_APP_API_URL;
 
   console.log(items);
@@ -17,7 +19,18 @@ export default function AdminPage() {
     });
   }
 
+  function fetchUsers() {
+    const token = localStorage.getItem("token");
+    axios.defaults.headers.common["Authorization"] = token;
+
+    axios.get(API_URL + "users").then((res) => {
+      console.log(res.data);
+      setUsers(res.data);
+    });
+  }
+
   function removeItem(id) {
+    AuthService.myself();
     const token = localStorage.getItem("token");
     try {
       axios.defaults.headers.common["Authorization"] = token;
@@ -34,11 +47,13 @@ export default function AdminPage() {
 
   useEffect(() => {
     fetchItems();
+    fetchUsers();
   }, []);
 
   return (
-    <Flex>
+    <Flex flexDirection="column">
       <Flex h="200px" bg="grey"></Flex>
+      <Heading>Items</Heading>
       <VStack>
         {items.map((item) => (
           <Flex
@@ -53,6 +68,7 @@ export default function AdminPage() {
             align="center"
             mb="10px"
           >
+            <Text>{item.id}</Text>
             <Flex>
               <img src={item.images[0]} alt="item" width="100px" />
             </Flex>
