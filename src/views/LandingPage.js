@@ -80,8 +80,6 @@ export default function LandingPage(props) {
           <Text
             color="grey"
             fontWeight="semi-bold"
-            fontSize="1.5rem"
-            fontWeight="semibold"
             fontSize={["1.3rem", , , , "1.5rem"]}
             w={["65%"]}
             mt="4%"
@@ -93,8 +91,6 @@ export default function LandingPage(props) {
             <Button
               value={props.isOpen}
               fontSize="1rem"
-              h="5vh"
-              fontSize="0.7rem"
               h={["5vh", , , , "4vh"]}
               variant="gamer"
               mt="7vh"

@@ -26,7 +26,7 @@ import { NavLink } from "react-router-dom";
 import { FiTwitter, FiFacebook, FiInstagram } from "react-icons/fi";
 import { Icon } from "@chakra-ui/react";
 import { AiOutlineArrowRight, AiOutlineArrowLeft } from "react-icons/ai";
-
+import parse from "html-react-parser";
 import "./productpage.css";
 import Header from "../components/AuthHeader";
 import axios from "axios";
@@ -40,9 +40,10 @@ export default function Article(props) {
   const [user, setUser] = useState(null);
   const [numberShow, setNumberShow] = useState(false);
   const [subArray, setSubArray] = useState([]);
+  const parser = new DOMParser();
 
   var [currentImageIndex, setCurrentImageIndex] = useState(0);
-
+  console.log(item.description);
   async function getItems() {
     let re = "[^/]+$";
 
@@ -53,7 +54,6 @@ export default function Article(props) {
       setUser(res.data.seller);
       console.log(res.data.images.length);
       if (res.data.images.length > 3) {
-        console.log("hu3");
         setSubArray(res.data.images.slice(0, 3));
       } else {
         setSubArray(res.data.images);
@@ -268,7 +268,6 @@ export default function Article(props) {
             h={{ base: "80%", lg: "60%" }}
             w={{ base: "100%", lg: "60%" }}
             p="5"
-            bg="white"
           >
             {item.images ? (
               <AspectRatio objectFit="contain" minW="100px" ratio={1.4}>
@@ -284,7 +283,6 @@ export default function Article(props) {
               justify="center"
               align="center"
               flexDirection="row"
-              mt="20px"
             >
               <Button variant="gamer" onClick={controlDecrement}>
                 <Icon as={AiOutlineArrowLeft} size="20px" />
@@ -458,7 +456,6 @@ export default function Article(props) {
               flexDirection="column"
               p="5"
               borderRadius="5px"
-              bg="white"
               mt="10%"
             >
               <Text fontSize="2xl" fontWeight="bold">
@@ -468,7 +465,10 @@ export default function Article(props) {
                 {item.price}€
               </Text>
               <Text noOfLines={2} mt="5%">
-                {item.description}
+                {
+                  parser.parseFromString(item.description, "text/html").body
+                    .firstChild.textContent
+                }
               </Text>
             </Flex>
           </Flex>
@@ -485,7 +485,13 @@ export default function Article(props) {
           borderWidth="1px"
         >
           <Heading>Descrição</Heading>
-          <Text mt="2%">{item.description} </Text>
+          <Text
+            dangerouslySetInnerHTML={{
+              __html: `${item.description}`,
+            }}
+            mt="2%"
+            ml="1%"
+          ></Text>
           <Spacer />
         </Flex>
       </Flex>

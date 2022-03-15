@@ -33,6 +33,7 @@ import {
 } from "@choc-ui/chakra-autocomplete";
 import { FiChevronRight, FiChevronDown } from "react-icons/fi";
 import { useForm, Controller } from "react-hook-form";
+import MyEditor from "../components/MyEditor";
 import axios from "axios";
 
 export default function Selling() {
@@ -184,6 +185,7 @@ export default function Selling() {
   }
 
   async function SubmitProduct(data) {
+    console.log("dadada", data);
     const imagens = newUserInfo.profileImages;
     const token = localStorage.getItem("token");
     var itemId = "";
@@ -358,15 +360,10 @@ export default function Selling() {
             Descrição
           </Text>
           <Controller
+            render={({ field }) => <MyEditor {...field} />}
             name="descricao"
+            valueName="editorState"
             control={control}
-            rules={{ required: true }}
-            render={({ field }) => (
-              <Textarea
-                {...field}
-                placeholder="Descreve aqui o teu produto. Tens um limite de 800 caracteres!"
-              ></Textarea>
-            )}
           />
         </Flex>
         <Flex

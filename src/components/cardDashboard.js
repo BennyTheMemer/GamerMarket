@@ -46,6 +46,7 @@ export default function CardDashboard({
     xl: "80em",
     "2xl": "96em",
   });
+  const parser = new DOMParser();
 
   return (
     <Flex h="100%" w="100%">
@@ -90,7 +91,10 @@ export default function CardDashboard({
               w="90%"
             >
               <Text fontSize="sm" noOfLines={1} color="black">
-                {description}
+                {
+                  parser.parseFromString(description, "text/html").body
+                    .firstChild.textContent
+                }{" "}
               </Text>
             </Box>
           </Flex>

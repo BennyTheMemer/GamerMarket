@@ -11,6 +11,7 @@ export const FileUploadContainer = styled.section`
   align-items: center;
   background-color: white;
   width: 100%;
+  min-height: 20vh;
 `;
 
 export const FormField = styled.input`

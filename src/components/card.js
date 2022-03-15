@@ -39,6 +39,8 @@ export default function Card({
     xl: "80em",
     "2xl": "96em",
   });
+  const parser = new DOMParser();
+
   function parseDate(unix_timestamp) {
     const dateObject = new Date(Date.parse(unix_timestamp));
 
@@ -190,7 +192,10 @@ export default function Card({
               <Flex>
                 <Box display={["none", , , , "inline"]} w="80%">
                   <Text fontSize="md" noOfLines={2} color="black">
-                    {description}
+                    {
+                      parser.parseFromString(description, "text/html").body
+                        .firstChild.textContent
+                    }
                   </Text>
                 </Box>
               </Flex>
