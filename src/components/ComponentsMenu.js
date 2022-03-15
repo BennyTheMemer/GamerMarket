@@ -1,18 +1,13 @@
 import {
   Button,
-  Image,
   Box,
   Text,
   Flex,
   Menu,
   MenuButton,
   MenuList,
-  MenuItem,
-  MenuGroup,
-  MenuDivider,
   VStack,
   Heading,
-  StackDivider,
   Accordion,
   AccordionItem,
   AccordionButton,
@@ -22,7 +17,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useDisclosure, useOutsideClick } from "@chakra-ui/react";
+import { useOutsideClick } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import AuthService from "../services/authservice";
 import { ChevronDownIcon } from "@chakra-ui/icons";
@@ -177,7 +172,7 @@ export default function ComponentsMenu() {
         </MenuButton>
         <MenuList w="35vw" bg="white" display="flex" flexDirection="horizontal">
           {Object.entries(categorias).map(([key, value]) => (
-            <Flex w="100%" p="4" key={key}>
+            <Flex w="100%" p="4" key={key + value}>
               <VStack w="100%" align="left">
                 <Heading fontSize="1.3rem">{key}</Heading>
                 <Box h="1px" bg="grey"></Box>

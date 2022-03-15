@@ -112,7 +112,7 @@ export default function Dashboard(props) {
             >
               <SimpleGrid w="70%" spacing={6}>
                 {userItems.map((item) => (
-                  <GridItem>
+                  <GridItem key={item.id}>
                     <CardDashboard
                       title={item.title}
                       description={item.description}

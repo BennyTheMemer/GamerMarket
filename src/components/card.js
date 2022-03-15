@@ -1,22 +1,7 @@
-import {
-  Button,
-  Divider,
-  Flex,
-  Image,
-  Box,
-  Heading,
-  Text,
-  AspectRatio,
-  Wrap,
-  WrapItem,
-} from "@chakra-ui/react";
-import { NavLink, useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { AiFillEdit, AiFillEye } from "react-icons/ai";
-import { Icon } from "@chakra-ui/react";
-import axios from "axios";
+import { Flex, Image, Box, Heading, Text, AspectRatio } from "@chakra-ui/react";
+import { NavLink } from "react-router-dom";
+
 import { createBreakpoints } from "@chakra-ui/theme-tools";
-import { BsFillExclamationOctagonFill } from "react-icons/bs";
 
 export default function Card({
   title,
