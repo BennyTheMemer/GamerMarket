@@ -23,7 +23,6 @@ export default function Chat() {
     xl: "80em",
     "2xl": "96em",
   });
-  console.log(receivingUser);
   const API_URL = process.env.REACT_APP_API_URL;
 
   async function sendMessage(e) {

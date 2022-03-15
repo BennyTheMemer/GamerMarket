@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./views/Dashboard";
 import Selling from "./views/Selling";
 import AdminPage from "./views/AdminPage";
+import EditItem from "./views/EditItem";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route element={<Article />} path="/article/:id"></Route>
           <Route element={<Dashboard />} path="/dashboard"></Route>
           <Route element={<Selling />} path="/selling" />
+          <Route element={<EditItem />} path="/item/edit" />
         </Routes>
       </Router>
     </ThemeProvider>

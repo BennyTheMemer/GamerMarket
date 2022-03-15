@@ -1,8 +1,16 @@
 import React, { useState } from "react";
 import { render } from "react-dom";
-import { EditorState, convertToRaw } from "draft-js";
+import {
+  EditorState,
+  ContentState,
+  convertToRaw,
+  convertFromHTML,
+  convertFromRaw,
+} from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
+
 import "./MyEditor.css";
 
 function uploadImageCallBack(file) {
@@ -25,10 +33,21 @@ function uploadImageCallBack(file) {
 }
 
 export default function MyEditor(props) {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const blocksFromHTML = props.value ? convertFromHTML(props.value) : undefined;
+  const state = blocksFromHTML
+    ? ContentState.createFromBlockArray(
+        blocksFromHTML.contentBlocks,
+        blocksFromHTML.entityMap
+      )
+    : undefined;
+  const [editorState, setEditorState] = useState(
+    props.value
+      ? EditorState.createWithContent(state)
+      : EditorState.createEmpty()
+  );
+
   const onEditorStateChange = (editorState) => {
     setEditorState(editorState);
-    console.log("PROPS ==> ", props);
     return props.onChange(
       draftToHtml(convertToRaw(editorState.getCurrentContent()))
     );

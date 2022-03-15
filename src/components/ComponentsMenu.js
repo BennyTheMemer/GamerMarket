@@ -183,7 +183,7 @@ export default function ComponentsMenu() {
                 <Box h="1px" bg="grey"></Box>
                 {value.map((item) => (
                   <NavLink
-                    textAlign="left"
+                    textalign="left"
                     key={key + item}
                     to={`/home/${key}/${item}`}
                   >

@@ -19,7 +19,7 @@ export default function CardDashboard({
   title,
   price,
   image,
-  localidade,
+  location,
   createdAt,
   sellerId,
   category,
@@ -29,7 +29,6 @@ export default function CardDashboard({
   description,
   ...props
 }) {
-  console.log(image);
   function parseDate(unix_timestamp) {
     const dateObject = new Date(Date.parse(unix_timestamp));
 
@@ -47,7 +46,6 @@ export default function CardDashboard({
     "2xl": "96em",
   });
   const parser = new DOMParser();
-
   return (
     <Flex h="100%" w="100%">
       <Flex
@@ -111,6 +109,21 @@ export default function CardDashboard({
           align={[, , , , "end"]}
           w="100%"
         >
+          <Link
+            to="/item/edit"
+            state={{
+              title: title,
+              price: price,
+              image: image,
+              localidade: location,
+              id: id,
+              description: description,
+            }}
+          >
+            <Button bg="lightgreen" borderRadius="20px" color="darkgreen">
+              Editar
+            </Button>
+          </Link>
           <Button variant="gamer" ml="0" onClick={() => removeFunction(id)}>
             Remover
           </Button>
