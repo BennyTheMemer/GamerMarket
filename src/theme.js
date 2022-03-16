@@ -84,7 +84,15 @@ const theme = extendTheme({
             color: "black",
           },
         },
-
+        edit: {
+          color: "red.600",
+          bgColor: "white",
+          border: "1px solid red.600",
+          borderRadius: "2xl",
+          fontSize: "sm",
+          textTransform: "uppercase",
+          letterSpacing: "tight",
+        },
         gamer: {
           color: "white",
           bgColor: "red.600",
