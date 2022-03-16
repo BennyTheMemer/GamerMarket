@@ -228,9 +228,9 @@ export default function Selling() {
       } catch (err) {
         console.log(err);
         toast({
-          title: "Falhou a criar o item.",
+          title: "Falhou a dar upload a imagens.",
           description:
-            "Infelizmente não conseguimos criar o item, verfifique os dados e tente novamente. Se ainda não introduziu o seu contacto na dashboard, faça-lo!",
+            "Verifica que o formato das tuas imagens estão em jpeg e png!",
           status: "Failed",
           duration: 9000,
           isClosable: true,
