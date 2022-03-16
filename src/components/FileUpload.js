@@ -86,6 +86,7 @@ const FileUpload = ({
       <FileUploadContainer>
         <FormField
           type="file"
+          accept="image/png, image/jpeg"
           ref={fileInputField}
           onChange={handleNewFileUpload}
           title=""
