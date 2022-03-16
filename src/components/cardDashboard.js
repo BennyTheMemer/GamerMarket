@@ -34,46 +34,46 @@ export default function CardDashboard({
   });
   const parser = new DOMParser();
   return (
-    <NavLink
-      style={{ display: "flex", width: "100%", height: "100%" }}
-      to={{
-        pathname: `/article/${id}`,
-        state: {
-          title,
-          price,
-          image,
-          location,
-          createdAt,
-          sellerId,
-          category,
-          subcategory,
-          id,
-        },
-      }}
-    >
-      <Flex h="100%" w="100%">
-        <Flex
-          borderColor="#d2d3d4"
-          borderWidth="1px"
-          borderRadius="5px"
-          bg="white"
-          p="3"
-          w="100%"
-          flexDirection={["column", , , , "row"]}
+    <Flex h="100%" w="100%">
+      <Flex
+        borderColor="#d2d3d4"
+        borderWidth="1px"
+        borderRadius="5px"
+        bg="white"
+        p="3"
+        w="100%"
+        flexDirection={["column", , , , "row"]}
+      >
+        <Text fontSize="xl" display={["inline", , , , "none"]}>
+          {title}
+        </Text>
+        <Flex align={["center", , , ,]} justify={["center", , , ,]}>
+          <AspectRatio display="block" minW="130px" maxW="750px" ratio="1">
+            <Image
+              borderRadius="10px"
+              boxSize="200px"
+              objectFit="fill"
+              src={image}
+            />
+          </AspectRatio>
+        </Flex>
+        <NavLink
+          style={{ display: "flex", width: "100%", height: "100%" }}
+          to={{
+            pathname: `/article/${id}`,
+            state: {
+              title,
+              price,
+              image,
+              location,
+              createdAt,
+              sellerId,
+              category,
+              subcategory,
+              id,
+            },
+          }}
         >
-          <Text fontSize="xl" display={["inline", , , , "none"]}>
-            {title}
-          </Text>
-          <Flex align={["center", , , ,]} justify={["center", , , ,]}>
-            <AspectRatio display="block" minW="130px" maxW="750px" ratio="1">
-              <Image
-                borderRadius="10px"
-                boxSize="200px"
-                objectFit="fill"
-                src={image}
-              />
-            </AspectRatio>
-          </Flex>
           <Flex ml={["0", , , , "2%"]} w="100%" flexDirection="column">
             <Text display={["none", , , , "inline"]} fontSize="3xl">
               {title}
@@ -108,30 +108,31 @@ export default function CardDashboard({
               flexDirection="column"
             ></Flex>
           </Flex>
-          <Flex
-            justify={["flex-start", , , , "flex-end"]}
-            align={[, , , , "end"]}
-            w="100%"
+        </NavLink>
+
+        <Flex
+          justify={["flex-start", , , , "flex-end"]}
+          align={[, , , , "end"]}
+          w="100%"
+        >
+          <Link
+            to="/item/edit"
+            state={{
+              title: title,
+              price: price,
+              image: image,
+              localidade: location,
+              id: id,
+              description: description,
+            }}
           >
-            <Link
-              to="/item/edit"
-              state={{
-                title: title,
-                price: price,
-                image: image,
-                localidade: location,
-                id: id,
-                description: description,
-              }}
-            >
-              <Button variant="edit">Editar</Button>
-            </Link>
-            <Button variant="gamer" ml="0" onClick={() => removeFunction(id)}>
-              Remover
-            </Button>
-          </Flex>
+            <Button variant="edit">Editar</Button>
+          </Link>
+          <Button variant="gamer" ml="0" onClick={() => removeFunction(id)}>
+            Remover
+          </Button>
         </Flex>
       </Flex>
-    </NavLink>
+    </Flex>
   );
 }
