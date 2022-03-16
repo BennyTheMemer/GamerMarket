@@ -27,7 +27,14 @@ export default function Selling() {
   const API_URL = process.env.REACT_APP_API_URL;
   const toast = useToast();
 
-  const { handleSubmit, register, control, reset, getValues } = useForm({
+  const {
+    handleSubmit,
+    register,
+    control,
+    reset,
+    getValues,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       name: JSON.parse(localStorage.getItem("currentUser")).publicInfo
         ? JSON.parse(localStorage.getItem("currentUser")).publicInfo.name
@@ -260,7 +267,7 @@ export default function Selling() {
           <Controller
             name="titulo"
             control={control}
-            rules={{ required: true }}
+            rules={{ required: true, maxLength: 80 }}
             render={({ field }) => (
               <Input
                 w="40%"
@@ -270,6 +277,12 @@ export default function Selling() {
               />
             )}
           />
+          {errors.titulo && errors.titulo.type === "required" && (
+            <span>O produto precisa de um titulo!</span>
+          )}
+          {errors.titulo && errors.titulo.type === "maxLength" && (
+            <span>Só podes usar 80 caracteres</span>
+          )}
           <Text>Preço</Text>
           <Controller
             name="price"
@@ -347,11 +360,18 @@ export default function Selling() {
             Descrição
           </Text>
           <Controller
+            rules={{ required: true, minLength: 20, maxLength: 2000 }}
             render={({ field }) => <MyEditor {...field} />}
             name="descricao"
             valueName="editorState"
             control={control}
           />
+          {errors.descricao && errors.descricao.type === "minLength" && (
+            <span>A descrição precisa de pelo menos 20 caracteres!</span>
+          )}
+          {errors.descricao && errors.descricao.type === "maxLength" && (
+            <span>Só podes usar 2000 caracteres</span>
+          )}
         </Flex>
         <Flex
           borderRadius={10}
