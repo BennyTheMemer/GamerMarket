@@ -231,7 +231,7 @@ export default function Selling() {
           title: "Falhou a dar upload a imagens.",
           description:
             "Verifica que o formato das tuas imagens estão em jpeg e png!",
-          status: "Failed",
+          status: "error",
           duration: 9000,
           isClosable: true,
         });
