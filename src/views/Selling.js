@@ -337,11 +337,7 @@ export default function Selling() {
           </Box>
 
           <Flex w="100%" h="100%">
-            <FileUpload
-              updateFilesCb={updateUploadedFiles}
-              accept=".jpg,.png,.jpeg"
-              multiple
-            />
+            <FileUpload updateFilesCb={updateUploadedFiles} multiple />
           </Flex>
         </Flex>
         <Flex
