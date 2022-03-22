@@ -46,7 +46,7 @@ export default function UserBadge() {
               <Image
                 borderRadius="100%"
                 boxSize={["30px", "40px", "50px", "60px"]}
-                src={currentUser.publicInfo.image}
+                src={currentUser.publicInfo?.image}
                 fallbackSrc="https://via.placeholder.com/150"
               />
               <Text
